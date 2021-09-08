@@ -12,10 +12,12 @@ public:
     bool Initialize();
     void Loop();
     void ExitGame();
+    
 private:
     bool m_IsRunning = true;
     SDL_Renderer* m_pRenderer = nullptr;
     SDL_Window* m_pWindow = nullptr;
+    SDL_Texture* m_pTexture;
     //Font m_Font;
     // vector<shared_ptr<GameObject>> m_AllGameObjects;
 };
