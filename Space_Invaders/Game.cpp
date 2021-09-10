@@ -7,6 +7,7 @@ Game::~Game()
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
     SDL_CloseAudio();
+    SpaceInvader::FreeSurfaces();
 }
 
 bool Game::Initialize()
@@ -70,6 +71,12 @@ void Game::Loop()
 
         Update(1.0f / 60.0f);
         Render();
+        
+        if (SpaceInvader::ExitGame == true)
+        {
+            ExitGame();
+        }
+
     }
 }
 
@@ -119,10 +126,6 @@ void Game::CreateObject()
 
     // inicjalizacja Space Invaderow
     float PosX = 0.0f, PosY = 0.0f;
-    // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
-    // ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
-    // z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
-    // 800 pikseli szerokosci ekranu rozdysponowane
 
     SpaceInvader::LoadTexture();
 
@@ -136,3 +139,8 @@ void Game::CreateObject()
         }
     }
 }
+
+// SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
+// ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
+// z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
+// 800 pikseli szerokosci ekranu
