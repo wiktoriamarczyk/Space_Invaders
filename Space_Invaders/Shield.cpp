@@ -6,8 +6,8 @@ Shield::Shield( float PosX, float PosY)
 {
     m_StartingPointPosition.x = PosX;
     m_StartingPointPosition.y = PosY;
-    m_ObjectSize.x = INVADER_WIDTH;
-    m_ObjectSize.y = INVADER_HEIGHT;
+    m_ObjectSize.x = OBJECT_WIDTH;
+    m_ObjectSize.y = OBJECT_HEIGHT;
 
     m_TextureDestructionLevel = {9, 33, 230, 190};
     //m_TextureDestructionLevel = { 320, 33, 162, 190 };

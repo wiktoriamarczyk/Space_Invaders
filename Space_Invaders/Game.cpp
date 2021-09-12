@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SpaceInvader.h"
 #include "Shield.h"
+#include "Gun.h"
 
 Game::~Game()
 {
@@ -126,6 +127,10 @@ void Game::CreateObject()
 {
     m_AllGameObjects.clear();
 
+    // inicjalizacja broni
+    shared_ptr<Gun> MyGun = make_shared<Gun>();
+    MyGun->InitializeGun(m_pRenderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT);
+
     float PosX = 0.0f, PosY = 0.0f;
 
     // inicjalizacja Space Invaderow
@@ -149,6 +154,8 @@ void Game::CreateObject()
             m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY));
         }
     }
+
+    m_AllGameObjects.push_back(move(MyGun));
 }
 
 // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
