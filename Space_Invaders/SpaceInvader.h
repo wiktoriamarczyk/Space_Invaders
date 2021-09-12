@@ -4,13 +4,12 @@
 class SpaceInvader : public GameObject
 {
 public:
-    SpaceInvader(SDL_Renderer* pRenderer, float PosX, float PosY);
-    ~SpaceInvader();
+    SpaceInvader(float PosX, float PosY);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
-    SDL_Texture* GetTexture(SDL_Renderer* pRenderer);
-    static void LoadTexture();
-    static void FreeSurfaces();
+    SDL_Texture* GetTexture();
+    static void InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer);
+    static void DestroyTextures();
     static bool ExitGame;
 
 private:
@@ -22,8 +21,11 @@ private:
     static int m_NumOfInvaders;
     static bool m_ChangeDirectionX;
     bool m_ChangeDirectionY = false;
-    static SDL_Surface* m_pImage1;
-    static SDL_Surface* m_pImage2;
-    static SDL_Surface* m_pImage3;
+
+    static SDL_Surface* m_pImage;
+    static SDL_Texture* m_pTexture1;
+    static SDL_Texture* m_pTexture2;
+    static SDL_Texture* m_pTexture3;
+
 };
 

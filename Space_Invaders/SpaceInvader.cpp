@@ -4,18 +4,20 @@ bool SpaceInvader::m_ChangeDirectionX = false;
 int SpaceInvader::m_NumOfInvaders = 0;
 float SpaceInvader::m_Speed = INVADER_SPEED;
 
-SDL_Surface* SpaceInvader::m_pImage1 = nullptr;
-SDL_Surface* SpaceInvader::m_pImage2 = nullptr;
-SDL_Surface* SpaceInvader::m_pImage3 = nullptr;
+SDL_Surface* SpaceInvader::m_pImage = nullptr;
+
+SDL_Texture* SpaceInvader::m_pTexture1 = nullptr;
+SDL_Texture* SpaceInvader::m_pTexture2 = nullptr;
+SDL_Texture* SpaceInvader::m_pTexture3 = nullptr;
 
 bool SpaceInvader::ExitGame = false;
 
-SpaceInvader::SpaceInvader(SDL_Renderer* pRenderer, float PosX, float PosY)
+SpaceInvader::SpaceInvader(float PosX, float PosY)
 {
     m_InvaderID = m_NumOfInvaders;
     m_NumOfInvaders++;
 
-    m_pTexture = GetTexture(pRenderer);
+    m_pTexture = GetTexture();
 
     m_StartingPointPosition.x = PosX;
     m_StartingPointPosition.y = PosY;
@@ -24,17 +26,12 @@ SpaceInvader::SpaceInvader(SDL_Renderer* pRenderer, float PosX, float PosY)
     m_ObjectSize.y = INVADER_HEIGHT;
 }
 
-SpaceInvader::~SpaceInvader()
-{
-    SDL_DestroyTexture(m_pTexture);
-}
-
 void SpaceInvader::Update(float DeltaTime)
 {
     float FrameDistance = m_Speed * DeltaTime;
     vec2 ObjectTopLeftCorner = m_StartingPointPosition;
     vec2 ObjectBottomRightCorner = m_StartingPointPosition + m_ObjectSize;
-    vec2  tempPos = m_StartingPointPosition;
+    vec2 tempPos = m_StartingPointPosition;
 
     if (!m_ChangeDirectionX)
     {
@@ -88,54 +85,48 @@ void SpaceInvader::Update(float DeltaTime)
     }
     
     // =TODO= jesli Invader zostanie postrzelony -> m_Speed++
- 
 }
 
 void SpaceInvader::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect dstrect = { m_StartingPointPosition.x, m_StartingPointPosition.y, m_ObjectSize.x, m_ObjectSize.y };
+    SDL_Rect dstrect = { int(m_StartingPointPosition.x), int(m_StartingPointPosition.y), int(m_ObjectSize.x), int(m_ObjectSize.y) };
     //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     // SDL_RenderFillRect(pRenderer, &dstrect);
-    SDL_RenderCopy(pRenderer, m_pTexture, &m_MovementRect , &dstrect);
+    SDL_RenderCopy(pRenderer, m_pTexture, &m_MovementRect, &dstrect);
 }
 
-SDL_Texture* SpaceInvader::GetTexture(SDL_Renderer* pRenderer)
+SDL_Texture* SpaceInvader::GetTexture()
 {
     // to trza zrobic jakos matematycznie, bo sie patrzec na to nie da ¯\_(ツ)_/¯
     if (m_InvaderID <= 12)
     {
-        m_pTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage1);
+        m_pTexture = m_pTexture1;
     }
     if (m_InvaderID >= 13 && m_InvaderID <= 38)
     {
-        m_pTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage2);
+        m_pTexture = m_pTexture2;
     }
     if (m_InvaderID >= 39 && m_InvaderID <= 64)
     {
-        m_pTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage3);
+        m_pTexture = m_pTexture3;
     }
     return m_pTexture;
 }
 
-void SpaceInvader::LoadTexture()
+void SpaceInvader::InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer)
 {
-    if (!m_pImage1)
-    {
-        m_pImage1 = IMG_Load("../Data/SpaceInvaders1.png");
-    }
-    if (!m_pImage2)
-    {
-        m_pImage2 = IMG_Load("../Data/SpaceInvaders2.png");
-    }
-    if (!m_pImage3)
-    {
-        m_pImage3 = IMG_Load("../Data/SpaceInvaders3.png");
-    }
+    m_pImage = IMG_Load("../Data/SpaceInvaders1.png");
+    m_pTexture1 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    m_pImage = IMG_Load("../Data/SpaceInvaders2.png");
+    m_pTexture2 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    m_pImage = IMG_Load("../Data/SpaceInvaders3.png");
+    m_pTexture3 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
 }
 
-void SpaceInvader::FreeSurfaces()
+void SpaceInvader::DestroyTextures()
 {
-    SDL_FreeSurface(m_pImage1);
-    SDL_FreeSurface(m_pImage2);
-    SDL_FreeSurface(m_pImage3);
+    SDL_DestroyTexture(m_pTexture1);
+    SDL_DestroyTexture(m_pTexture2);
+    SDL_DestroyTexture(m_pTexture3);
 }

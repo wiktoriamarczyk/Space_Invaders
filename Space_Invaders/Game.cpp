@@ -8,7 +8,7 @@ Game::~Game()
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
     SDL_CloseAudio();
-    SpaceInvader::FreeSurfaces();
+    SpaceInvader::DestroyTextures();
     Shield::DestroyTexture();
 }
 
@@ -126,10 +126,10 @@ void Game::CreateObject()
 {
     m_AllGameObjects.clear();
 
-    // inicjalizacja Space Invaderow
     float PosX = 0.0f, PosY = 0.0f;
 
-    SpaceInvader::LoadTexture();
+    // inicjalizacja Space Invaderow
+    SpaceInvader::InitializeSpaceInvaderTexture(m_pRenderer);
     // inicjalizacja tarcz
     Shield::InitializeShieldTexture(m_pRenderer);
 
@@ -146,7 +146,7 @@ void Game::CreateObject()
         {
             PosX = ROW * INVADER_WIDTH + INVADER_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100);
             PosY = SCREEN_HEIGHT / 6 + COLUMN * INVADER_HEIGHT;
-            m_AllGameObjects.push_back(make_shared<SpaceInvader>(m_pRenderer, PosX, PosY));
+            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY));
         }
     }
 }

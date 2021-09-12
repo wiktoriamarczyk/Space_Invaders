@@ -23,7 +23,7 @@ enum : int
     SCREEN_HEIGHT = 600,
     INVADER_HEIGHT = 50,
     INVADER_WIDTH = 50,
-    INVADER_SPEED = 10,
+    INVADER_SPEED = 2,
 };
 
 bool SDL_IsKeyPressed(SDL_Scancode Code);
