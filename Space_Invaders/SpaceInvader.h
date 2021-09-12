@@ -1,10 +1,11 @@
 #pragma once
 #include "GameObject.h"
+#include "Gun.h"
 
 class SpaceInvader : public GameObject
 {
 public:
-    SpaceInvader(float PosX, float PosY);
+    SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     SDL_Texture* GetTexture();
@@ -13,6 +14,7 @@ public:
     static bool ExitGame;
 
 private:
+    shared_ptr<Gun> m_Gun;
     SDL_Texture* m_pTexture = nullptr;
     SDL_Rect m_MovementRect;
     int m_InvaderID = 0;
@@ -26,6 +28,5 @@ private:
     static SDL_Texture* m_pTexture1;
     static SDL_Texture* m_pTexture2;
     static SDL_Texture* m_pTexture3;
-
 };
 

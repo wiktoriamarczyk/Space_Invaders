@@ -16,4 +16,3 @@ protected:
     vec2 m_ObjectSize;
     bool m_ObjectIsAlive = true;
 };
-

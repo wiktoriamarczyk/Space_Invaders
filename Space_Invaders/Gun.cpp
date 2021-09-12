@@ -79,3 +79,13 @@ void Gun::Render(SDL_Renderer* pRenderer)
         }
     }
 }
+
+vector<shared_ptr<Shot>> Gun::GetShots()
+{
+    return m_Shots;
+}
+
+void Gun::SetShotStatus(bool ShotStatus)
+{
+    m_ShootYourShot = ShotStatus;
+}

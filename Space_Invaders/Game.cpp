@@ -97,11 +97,20 @@ void Game::Update(float DeltaTime)
         ExitGame();
     }
 
-    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    if (!m_AllGameObjects.empty())
     {
-        if (m_AllGameObjects[i]->GetObjectStatus())
+        for (int i = 0; i < m_AllGameObjects.size();)
         {
             m_AllGameObjects[i]->Update(DeltaTime);
+
+            if (m_AllGameObjects[i]->GetObjectStatus() == false)
+            {
+                m_AllGameObjects.erase(m_AllGameObjects.begin() + i);
+            }
+            else
+            {
+                ++i;
+            }
         }
     }
 }
@@ -112,9 +121,9 @@ void Game::Render()
     SDL_RenderClear(m_pRenderer);
 
     // render wszystkich obiektow
-    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    if (!m_AllGameObjects.empty())
     {
-        if (m_AllGameObjects[i]->GetObjectStatus())
+        for (int i = 0; i < m_AllGameObjects.size(); ++i)
         {
             m_AllGameObjects[i]->Render(m_pRenderer);
         }
@@ -140,7 +149,7 @@ void Game::CreateObject()
 
     for (int ROW = 0; ROW < 4; ++ROW)
     {
-        PosX = ROW * 4.2 * OBJECT_WIDTH + OBJECT_WIDTH;
+        PosX = ROW * 4.2f * OBJECT_WIDTH + OBJECT_WIDTH;
         PosY = SCREEN_HEIGHT - 3 * OBJECT_HEIGHT;
         m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY));
     }
@@ -149,9 +158,9 @@ void Game::CreateObject()
     {
         for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
         {
-            PosX = ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100);
-            PosY = SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT;
-            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY));
+            PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
+            PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
+            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
         }
     }
 

@@ -12,8 +12,10 @@ SDL_Texture* SpaceInvader::m_pTexture3 = nullptr;
 
 bool SpaceInvader::ExitGame = false;
 
-SpaceInvader::SpaceInvader(float PosX, float PosY)
+SpaceInvader::SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun)
 {
+    m_Gun = MyGun;
+
     m_InvaderID = m_NumOfInvaders;
     m_NumOfInvaders++;
 
@@ -67,6 +69,18 @@ void SpaceInvader::Update(float DeltaTime)
         if (ObjectTopLeftCorner.x <= 0)
         {
             m_ChangeDirectionX = false;
+        }
+    }
+
+    // strzelanie do invaderow
+    for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
+    {
+        if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+        {
+            if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
+            {
+                m_ObjectIsAlive = false;
+            }
         }
     }
 
