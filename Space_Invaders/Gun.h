@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Shot.h"
 
 class Gun : public GameObject
 {
@@ -12,5 +13,7 @@ public:
 
 private:
     SDL_Texture* m_pTexture = nullptr;
+    vector<shared_ptr<Shot>> m_Shots;
+    float m_ShootingTimer = 30.0f;
 };
 
