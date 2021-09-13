@@ -2,20 +2,19 @@
 
 SDL_Texture* Shield::m_pTexture = nullptr;
 
-Shield::Shield( float PosX, float PosY)
+Shield::Shield( float PosX, float PosY, shared_ptr<Gun> MyGun)
 {
+    m_Gun = MyGun;
+
     m_StartingPointPosition.x = PosX;
     m_StartingPointPosition.y = PosY;
-    m_ObjectSize.x = OBJECT_WIDTH;
+    m_ObjectSize.x = 1.2*OBJECT_WIDTH;
     m_ObjectSize.y = OBJECT_HEIGHT;
 
-    m_TextureDestructionLevel = {9, 33, 230, 190};
-    //m_TextureDestructionLevel = { 320, 33, 162, 190 };
-    //m_TextureDestructionLevel = { 644, 33, 79, 190 };
-    //m_TextureDestructionLevel = { 63, 258, 130, 150 };
-    //m_TextureDestructionLevel = { 291, 235, 228, 170};
-    //m_TextureDestructionLevel = { 657, 235, 73, 170 };
-    //m_TextureDestructionLevel = { 44, 504, 180, 190 };
+   // m_TextureDestructionLevel = {90, 43, 230, 190};
+   // m_TextureDestructionLevel = { 440, 43, 230, 180 };
+   // m_TextureDestructionLevel = { 90, 329, 230, 180 };
+   // m_TextureDestructionLevel = { 435, 329, 230, 170 };
 }
 
 void Shield::DestroyTexture()
@@ -32,8 +31,41 @@ void Shield::InitializeShieldTexture(SDL_Renderer* pRenderer)
 
 void Shield::Update(float DeltaTime)
 {
+    switch (m_DestructionLevel)
+    {
+    case 0:
+        m_TextureDestructionLevel = { 90, 43, 230, 190 };
+        break;
+    case 1:
+        m_TextureDestructionLevel = { 440, 43, 230, 180 };
+        break;
+    case 2:
+        m_TextureDestructionLevel = { 90, 329, 230, 180 };
+        break;
+    case 3:
+        m_TextureDestructionLevel = { 435, 329, 230, 170 };
+        break;
+    }
 
-  
+    vec2 ObjectTopLeftCorner = m_StartingPointPosition;
+    vec2 ObjectBottomRightCorner = m_StartingPointPosition + m_ObjectSize;
+
+    for (int i = 0; i < m_Gun->GetShots().size(); ++i)
+    {
+        if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+        {
+            if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
+            {
+                m_DestructionLevel++;
+                m_Gun->GetShots()[i]->SetObjectStatus(false);
+            }
+        }
+    }
+
+    if (m_DestructionLevel >= 4)
+    {
+        m_ObjectIsAlive = false;
+    }
 }
 
 void Shield::Render(SDL_Renderer* pRenderer)

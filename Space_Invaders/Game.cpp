@@ -151,7 +151,7 @@ void Game::CreateObject()
     {
         PosX = ROW * 4.2f * OBJECT_WIDTH + OBJECT_WIDTH;
         PosY = SCREEN_HEIGHT - 3 * OBJECT_HEIGHT;
-        m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY));
+        m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY, MyGun));
     }
 
     for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
