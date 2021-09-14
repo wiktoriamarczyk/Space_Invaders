@@ -54,7 +54,8 @@ bool Game::Initialize()
     CreateObject();
 
     // stworzenie czcionki ==TODO==
-    // m_Font = Font;
+    m_Font = make_shared<Font>();
+    m_Font->LoadFont("../Data/FontData.txt");
 
     return true;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Font.h"
 
 class Game
 {
@@ -18,5 +19,5 @@ private:
     SDL_Renderer* m_pRenderer = nullptr;
     SDL_Window* m_pWindow = nullptr;
     vector<shared_ptr<GameObject>> m_AllGameObjects;
-    //Font m_Font;
+    shared_ptr<Font> m_Font;
 };
