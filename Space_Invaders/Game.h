@@ -7,6 +7,7 @@ class Game
 public:
     Game()=default;
     ~Game();
+    static Game* GetSingleton();
     void Update(float DeltaTime);
     void Render();
     void CreateObject();
@@ -15,6 +16,7 @@ public:
     void ExitGame();
     
 private:
+    static Game* pSingleton;
     bool m_IsRunning = true;
     bool m_GameOver = false;
     SDL_Renderer* m_pRenderer = nullptr;

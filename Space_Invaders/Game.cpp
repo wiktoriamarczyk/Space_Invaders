@@ -3,8 +3,16 @@
 #include "Shield.h"
 #include "Gun.h"
 
+Game* Game::pSingleton = nullptr;
+
+Game* Game::GetSingleton()
+{
+    return pSingleton;
+}
+
 Game::~Game()
 {
+    pSingleton = nullptr;
     SDL_DestroyRenderer(m_pRenderer);
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
@@ -17,6 +25,8 @@ Game::~Game()
 
 bool Game::Initialize()
 {
+    pSingleton = this;
+
     srand(time(NULL));
 
     // zainicjalizowanie okna oraz dzwieku
