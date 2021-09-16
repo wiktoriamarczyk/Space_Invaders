@@ -14,11 +14,23 @@ Shot::Shot(vec2 Position)
 void Shot::Update(float DeltaTime)
 {
     float FrameDistance = SHOT_SPEED * DeltaTime;
+
     if (m_DealingDamage)
     {
         m_StartingPointPosition.y -= FrameDistance;
     }
+    else
+    {
+        m_StartingPointPosition.y += FrameDistance;
+    }
 
+    m_LivingTimer--;
+
+    if (m_LivingTimer <= 0)
+    {
+        m_ObjectIsAlive = false;
+        m_LivingTimer = 60.0f;
+    }
 }
 
 void Shot::Render(SDL_Renderer* pRenderer)

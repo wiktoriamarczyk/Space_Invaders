@@ -10,6 +10,7 @@ SDL_Surface* SpaceInvader::m_pImage = nullptr;
 SDL_Texture* SpaceInvader::m_pTexture1 = nullptr;
 SDL_Texture* SpaceInvader::m_pTexture2 = nullptr;
 SDL_Texture* SpaceInvader::m_pTexture3 = nullptr;
+SDL_Texture* SpaceInvader::m_pTexture4 = nullptr;
 
 bool SpaceInvader::ExitGame = false;
 
@@ -37,6 +38,9 @@ void SpaceInvader::Update(float DeltaTime)
     vec2 ObjectTopLeftCorner = m_StartingPointPosition;
     vec2 ObjectBottomRightCorner = m_StartingPointPosition + m_ObjectSize;
     vec2 tempPos = m_StartingPointPosition;
+
+    SDL_Rect srcrect1 = { 0, 0, 26, 26 };
+    SDL_Rect srcrect2 = { 26, 0, 26, 26 };
 
     if (!m_ChangeDirectionX)
     {
@@ -76,33 +80,65 @@ void SpaceInvader::Update(float DeltaTime)
     // strzelanie do invaderow
     for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
     {
-        if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+        if (m_Gun->GetShots()[i]->GetDealingDamageStatus() == true)
         {
-            if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
+            if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
             {
-                m_ObjectIsAlive = false;
-                m_Gun->GetShots()[i]->SetObjectStatus(false);
-                m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
+                if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
+                {
+                    m_IsDying = true;
+                    m_Gun->GetShots()[i]->SetObjectStatus(false);
+                    m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
+                }
             }
         }
     }
 
-    SDL_Rect srcrect1 = { 0, 0, 820, 820 };
-    SDL_Rect srcrect2 = { 820, 0, 820, 820 };
-
-    // DO POPRAWY - POWINNY ZMIENIAC TEKSTURE, KIEDY WYKONAJA RUCH
-    m_TextureTimer--;
-
-    if (m_TextureTimer == 50.0f)
+    if (m_IsDying)
     {
         m_MovementRect = srcrect1;
+        m_pTexture = m_pTexture4;
+
+        m_DyingTimer--;
+
+        if (m_DyingTimer <= 0)
+        {
+            m_ObjectIsAlive = false;
+        }
     }
-    if (m_TextureTimer <= 0)
+
+    // strzelaja tylko invadery na samej gorze
+    if (m_InvaderID <= 12)
     {
-        m_MovementRect = srcrect2;
-        m_TextureTimer = 100.0f;
+        m_ShootingTimer--;
+
+        if (m_ShootingTimer <= 0)
+        {
+            m_ShootingTimer = 50.0f;
+
+            if (m_InvaderID == RandNumber())
+            {
+                m_Gun->Shoot(m_StartingPointPosition.x, ObjectBottomRightCorner.y);
+            }
+        }
     }
-    
+
+    // DO POPRAWY - POWINNY ZMIENIAC TEKSTURE, KIEDY WYKONAJA RUCH
+    if (!m_IsDying)
+    {
+        m_TextureTimer--;
+
+        if (m_TextureTimer == 50.0f)
+        {
+            m_MovementRect = srcrect1;
+        }
+        if (m_TextureTimer <= 0)
+        {
+            m_MovementRect = srcrect2;
+            m_TextureTimer = 100.0f;
+        }
+    }
+
     // =============TEST==========
     if (SDL_IsKeyPressed(SDL_SCANCODE_W))
     {
@@ -155,6 +191,8 @@ void SpaceInvader::InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer)
     m_pTexture2 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     m_pImage = IMG_Load("../Data/SpaceInvaders3.png");
     m_pTexture3 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    m_pImage = IMG_Load("../Data/puf.png");
+    m_pTexture4 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     SDL_FreeSurface(m_pImage);
 }
 
@@ -163,4 +201,9 @@ void SpaceInvader::DestroyTextures()
     SDL_DestroyTexture(m_pTexture1);
     SDL_DestroyTexture(m_pTexture2);
     SDL_DestroyTexture(m_pTexture3);
+}
+
+int SpaceInvader::RandNumber()
+{
+    return rand() % 13;
 }

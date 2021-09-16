@@ -11,12 +11,17 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     vector<shared_ptr<Shot>> GetShots();
-    static int m_NumOfLives;
+    void Shoot(float PosX, float PosY);
+    static int NumOfLives();
 
 private:
     SDL_Texture* m_pTexture = nullptr;
+    SDL_Texture* m_pNormalTexture = nullptr;
+    SDL_Texture* m_pDyingTexture = nullptr;
     vector<shared_ptr<Shot>> m_Shots;
-    float m_ShootingTimer = 30.0f;
-    vector<vec2> m_Positions;
+    float m_ShootingTimer = 20.0f;
+    float m_TextureTimer = 25.0f;
+    bool m_IsDying = false;
+    static int m_NumOfLives;
 };
 

@@ -16,8 +16,12 @@ void Gun::InitializeGun(SDL_Renderer* pRenderer, float PosX, float PosY)
     m_ObjectSize.y = OBJECT_HEIGHT;
 
     SDL_Surface* m_pImage = IMG_Load("../Data/Gun.png");
-    m_pTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    m_pNormalTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    m_pImage = IMG_Load("../Data/puf.png");
+    m_pDyingTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     SDL_FreeSurface(m_pImage);
+
+    m_pTexture = m_pNormalTexture;
 }
 
 void Gun::Update(float DeltaTime)
@@ -49,6 +53,7 @@ void Gun::Update(float DeltaTime)
         }
     }
 
+    // update strzal i usuwanie strzal, ktorym zycie juz sie skonczylo
     if (!m_Shots.empty())
     {
         for (int i = 0; i < m_Shots.size();)
@@ -64,6 +69,40 @@ void Gun::Update(float DeltaTime)
                 ++i;
             }
         }
+    }
+
+    // strzelanie do broni przez inavderow
+    if (!m_Shots.empty())
+    {
+        for (int i = 0; i < m_Shots.size(); ++i)
+        {
+            if (m_Shots[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Shots[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+            {
+                if (m_Shots[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Shots[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
+                {
+                    m_NumOfLives--;
+                    m_IsDying = true;
+                    m_Shots[i]->SetObjectStatus(false);
+                }
+            }
+        }
+    }
+   
+    if (m_IsDying)
+    {
+        m_pTexture = m_pDyingTexture;
+        m_TextureTimer--;
+        if (m_TextureTimer <= 0)
+        {
+            m_pTexture = m_pNormalTexture;
+            m_IsDying = false;
+            m_TextureTimer = 25.0f;
+        }
+    }
+
+    if (m_NumOfLives <= 0)
+    {
+        m_ObjectIsAlive = false;
     }
 }
 
@@ -86,4 +125,16 @@ void Gun::Render(SDL_Renderer* pRenderer)
 vector<shared_ptr<Shot>> Gun::GetShots()
 {
     return m_Shots;
+}
+
+void Gun::Shoot(float PosX, float PosY)
+{
+    vec2 Tmp (PosX, PosY);
+    m_Shots.push_back(make_shared<Shot>(Tmp));
+    m_Shots.back()->SetDealingDamage(false);
+}
+
+int Gun::NumOfLives()
+{
+    return m_NumOfLives;
 }

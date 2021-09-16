@@ -4,6 +4,8 @@
 #include<string>
 #include<fstream>
 #include<memory>
+#include<stdlib.h>
+#include<time.h>
 #include<SDL.h>
 #include<SDL_Mixer.h>
 #include<SDL_image.h>

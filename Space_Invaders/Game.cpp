@@ -17,6 +17,8 @@ Game::~Game()
 
 bool Game::Initialize()
 {
+    srand(time(NULL));
+
     // zainicjalizowanie okna oraz dzwieku
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
@@ -106,7 +108,7 @@ void Game::Update(float DeltaTime)
         ExitGame();
     }
 
-    if (Gun::m_NumOfLives <= 0)
+    if (Gun::NumOfLives() <= 0)
     {
         m_GameOver = true;
     }
@@ -151,7 +153,7 @@ void Game::Render()
         SDL_Rect dstrect = {};
         SDL_Rect srcrect = {};
 
-        switch (Gun::m_NumOfLives)
+        switch (Gun::NumOfLives())
         {
         case 3:
             dstrect = { 600, 40, 100, 25 };
