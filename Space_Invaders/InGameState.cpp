@@ -9,7 +9,6 @@ InGameState::InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : Gam
     m_Font = MyFont;
     m_pRenderer = pRenderer;
     // przy kazdym tworzeniu InGameState wywoluj tworzenie obiektow gry
-    CreateObject();
     InitializeInGameStateTextures();
 }
 
@@ -37,11 +36,13 @@ void InGameState::Update(float DeltaTime)
 {
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
+        //==TODO==
         //m_NextStateID = eStateID::MAINMENU;
     }
 
     if (Gun::m_NumOfLives <= 0)
     {
+        //==TODO==
         Engine::GetSingleton()->ExitGame();
     }
 
