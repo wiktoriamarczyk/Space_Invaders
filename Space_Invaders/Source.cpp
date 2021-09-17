@@ -1,5 +1,5 @@
 #include "Common.h"
-#include "Game.h"
+#include "Engine.h"
 
 #ifdef main
 // erase SDL2 #define of 'main' keyword
@@ -8,14 +8,14 @@
 
 int main()
 {
-    Game MyGame;
+    Engine MyEngine;
 
-    if (MyGame.Initialize() == false)
+    if (MyEngine.Initialize() == false)
     {
         return 1;
     }
 
-    MyGame.Loop();
+    MyEngine.Loop();
 
     return 0;
 }
