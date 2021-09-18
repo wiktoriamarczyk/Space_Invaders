@@ -12,9 +12,10 @@ public:
     void OnEnter()override;
     void CreateObject();
 
+    void DestroyTextures();
+
 private:
     vector<shared_ptr<GameObject>> m_AllGameObjects;
     SDL_Texture* m_GunIconTexture = nullptr;
-
 };
 
