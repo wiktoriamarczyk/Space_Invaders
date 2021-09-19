@@ -20,6 +20,16 @@ void MainMenuState::InitializeMainMenuStateTextures()
     SDL_FreeSurface(m_pImage);
 }
 
+void MainMenuState::OnEnter()
+{
+    GameState::OnEnter();
+
+    if (m_PlayMusicAgain)
+    {
+        Engine::GetSingleton()->PlaySound("8-bit_music.wav");
+    }
+}
+
 void MainMenuState::Update(float DeltaTime) {}
 
 void MainMenuState::Render()
@@ -33,12 +43,16 @@ void MainMenuState::Render()
     m_Font->DrawText(m_pRenderer, 5, 130, 300, "SPACE INVADERS");
 
     if (m_Option == 0)
-        m_Font->DrawText(m_pRenderer, 3, 130, 400, "->NEW GAME");
-    else m_Font->DrawText(m_pRenderer, 3, 130, 400, "  NEW GAME");
-    if (m_Option == 1)
+        m_Font->DrawText(m_pRenderer, 3, 270, 400, "->NEW GAME");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 400, "  NEW GAME");
 
-        m_Font->DrawText(m_pRenderer, 3, 130, 440, "->EXIT");
-    else m_Font->DrawText(m_pRenderer, 3, 130, 440, "  EXIT");
+    if (m_Option == 1)
+        m_Font->DrawText(m_pRenderer, 3, 270, 440, "->HOW TO PLAY");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 440, "  HOW TO PLAY");
+
+    if (m_Option == 2)
+        m_Font->DrawText(m_pRenderer, 3, 270, 480, "->EXIT");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 480, "  EXIT");
 
     m_Font->DrawText(m_pRenderer, 1, 300, 580, "AUTHOR: WIKTORIA MARCZYK");
 
@@ -70,9 +84,16 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
     {
         if (m_Option == 0)
         {
+            m_PlayMusicAgain = true;
+            Mix_HaltChannel(-1);
             m_NextStateID = eStateID::INGAME;
         }
-        else if (m_Option == 1)
+        if (m_Option == 1)
+        {
+            m_PlayMusicAgain = false;
+            m_NextStateID = eStateID::HOWTOPLAY;
+        }
+        if (m_Option == 2)
         {
             Engine::GetSingleton()->ExitGame();
         }

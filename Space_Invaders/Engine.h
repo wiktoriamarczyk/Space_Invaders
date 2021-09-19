@@ -13,7 +13,7 @@ public:
     void Loop();
     void ChangeState(eStateID StateID);
     void ExitGame();
-    void PlaySound(const string& FileName);
+    void PlaySound(const string& FileName,float Volume = 1.0f);
     
 private:
     static Engine* pSingleton;
@@ -23,5 +23,4 @@ private:
     GameState* m_pCurrentState = nullptr;
     vector<unique_ptr<GameState>> m_AllStates;
     vector<shared_ptr<Sound>> m_LoadedSounds;
-
 };

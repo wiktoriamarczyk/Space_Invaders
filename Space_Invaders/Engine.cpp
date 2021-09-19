@@ -44,7 +44,7 @@ bool Engine::Initialize()
         return false;
     }
 
-    Mix_Volume(-1, 16);
+    //Mix_Volume(-1, 16);
 
     // utworzenie okna
     m_pWindow = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -124,7 +124,7 @@ void Engine::ExitGame()
     m_IsRunning = false;
 }
 
-void Engine::PlaySound(const string& FileName)
+void Engine::PlaySound(const string& FileName,float Volume )
 {
     for (int i = 0; i < m_LoadedSounds.size(); ++i)
     {
@@ -135,7 +135,7 @@ void Engine::PlaySound(const string& FileName)
         }
     }
     shared_ptr<Sound> temp_sound = make_shared<Sound>();
-    temp_sound->Load(FileName);
+    temp_sound->Load(FileName,Volume);
     m_LoadedSounds.push_back(temp_sound);
     m_LoadedSounds.back()->Play();
 }
