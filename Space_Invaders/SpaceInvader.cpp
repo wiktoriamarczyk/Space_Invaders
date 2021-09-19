@@ -4,7 +4,7 @@
 bool SpaceInvader::m_ChangeDirectionX = false;
 int SpaceInvader::m_NumOfInvaders = 0;
 int SpaceInvader::m_NumOfPoints = 0;
-//float SpaceInvader::m_Speed = INVADER_SPEED;
+float SpaceInvader::m_Speed = INVADER_SPEED;
 
 SDL_Surface* SpaceInvader::m_pImage = nullptr;
 
@@ -13,7 +13,6 @@ SDL_Texture* SpaceInvader::m_pTexture2 = nullptr;
 SDL_Texture* SpaceInvader::m_pTexture3 = nullptr;
 SDL_Texture* SpaceInvader::m_pTexture4 = nullptr;
 
-bool SpaceInvader::ExitGame = false;
 
 SpaceInvader::SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun)
 {
@@ -29,8 +28,6 @@ SpaceInvader::SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun)
 
     m_ObjectSize.x = OBJECT_WIDTH;
     m_ObjectSize.y = OBJECT_HEIGHT;
-    
-    m_Speed = INVADER_SPEED;
 }
 
 void SpaceInvader::Update(float DeltaTime)
@@ -78,6 +75,11 @@ void SpaceInvader::Update(float DeltaTime)
         }
     }
 
+    if (ObjectBottomRightCorner.y >= SCREEN_HEIGHT)
+    {
+        m_Gun->m_NumOfLives--;
+    }
+
     // strzelanie do invaderow
     for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
     {
@@ -96,6 +98,7 @@ void SpaceInvader::Update(float DeltaTime)
         }
     }
 
+    // zmiana tekstury na "puf" oraz przyspiaszenie invaderow 
     if (m_IsDying)
     {
         m_MovementRect = srcrect1;
@@ -106,6 +109,17 @@ void SpaceInvader::Update(float DeltaTime)
         if (m_DyingTimer <= 0)
         {
             m_ObjectIsAlive = false;
+            m_NumOfInvaders--;
+
+            if (m_NumOfInvaders <= 50 && m_NumOfInvaders >= 10)
+            {
+                m_Speed += 0.5f;
+            }
+            
+            else if (m_NumOfInvaders <= 10)
+            {
+                m_Speed += 8;
+            }
         }
     }
 
@@ -142,8 +156,6 @@ void SpaceInvader::Update(float DeltaTime)
             m_TextureTimer = 100.0f;
         }
     }
-
-    // =TODO= jesli Invader zostanie postrzelony -> m_Speed++
 }
 
 void SpaceInvader::Render(SDL_Renderer* pRenderer)

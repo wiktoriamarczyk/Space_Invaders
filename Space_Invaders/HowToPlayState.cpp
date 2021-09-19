@@ -27,7 +27,7 @@ void HowToPlayState::InitializeTextures()
     m_ThirdInvader = SDL_CreateTextureFromSurface(m_pRenderer, pImage);
     SDL_FreeSurface(pImage);
 
-    pImage = IMG_Load("../Data/SpaceInvaders4.png");
+    pImage = IMG_Load("../Data/Boss.png");
     m_Boss = SDL_CreateTextureFromSurface(m_pRenderer, pImage);
     SDL_FreeSurface(pImage);
 }
@@ -44,10 +44,14 @@ void HowToPlayState::DestroyTextures()
     m_Boss = nullptr;
 }
 
-void HowToPlayState::Update(float DeltaTime)
+void HowToPlayState::OnEnter()
 {
-
+    GameState::OnEnter();
+    // inicjalizacja zasobow
+    InitializeTextures();
 }
+
+void HowToPlayState::Update(float DeltaTime) {}
 
 void HowToPlayState::Render()
 {
@@ -93,11 +97,4 @@ void HowToPlayState::OnKeyDown(SDL_Scancode KeyCode)
         DestroyTextures();
         m_NextStateID = eStateID::MAINMENU;
     }
-}
-
-void HowToPlayState::OnEnter()
-{
-    GameState::OnEnter();
-    // inicjalizacja zasobow
-    InitializeTextures();
 }

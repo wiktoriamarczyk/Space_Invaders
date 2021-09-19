@@ -54,7 +54,7 @@ void Gun::Update(float DeltaTime)
         {
             m_Shots.push_back(make_shared<Shot>(m_StartingPointPosition));
             Engine::GetSingleton()->PlaySound("Shot.wav");
-            m_ShootingTimer = 30.0f;
+            m_ShootingTimer = 15.0f;
         }
     }
 
@@ -73,7 +73,6 @@ void Gun::Update(float DeltaTime)
         }
     }
     
-
     // strzelanie do broni przez inavderow
      for (int i = 0; i < m_Shots.size(); ++i)
      {
@@ -88,8 +87,7 @@ void Gun::Update(float DeltaTime)
              }
          }
      }
-    
-   
+
     if (m_IsDying)
     {
         m_pTexture = m_pDyingTexture;
@@ -120,7 +118,6 @@ void Gun::Render(SDL_Renderer* pRenderer)
    {
        m_Shots[i]->Render(pRenderer);
    }
-
 }
 
 vector<shared_ptr<Shot>> Gun::GetShots()
@@ -128,9 +125,9 @@ vector<shared_ptr<Shot>> Gun::GetShots()
     return m_Shots;
 }
 
-void Gun::Shoot(float PosX, float PosY)
+void Gun::Shoot(float PosX, float PosY, vec2 Size)
 {
     vec2 Tmp (PosX, PosY);
-    m_Shots.push_back(make_shared<Shot>(Tmp));
+    m_Shots.push_back(make_shared<Shot>(Tmp, Size));
     m_Shots.back()->SetDealingDamage(false);
 }

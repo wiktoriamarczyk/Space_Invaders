@@ -3,25 +3,19 @@
 
 SDL_Texture* Shield::m_pTexture = nullptr;
 
-Shield::Shield( float PosX, float PosY, shared_ptr<Gun> MyGun)
+Shield::Shield(float PosX, float PosY, shared_ptr<Gun> MyGun)
 {
     m_Gun = MyGun;
-
     m_StartingPointPosition.x = PosX;
     m_StartingPointPosition.y = PosY;
-    m_ObjectSize.x = 1.2*OBJECT_WIDTH;
+    m_ObjectSize.x = 1.2 * OBJECT_WIDTH;
     m_ObjectSize.y = OBJECT_HEIGHT;
-
-   // m_TextureDestructionLevel = {90, 43, 230, 190};
-   // m_TextureDestructionLevel = { 440, 43, 230, 180 };
-   // m_TextureDestructionLevel = { 90, 329, 230, 180 };
-   // m_TextureDestructionLevel = { 435, 329, 230, 170 };
 }
 
 void Shield::DestroyTexture()
 {
     SDL_DestroyTexture(m_pTexture);
-    m_pTexture= nullptr;
+    m_pTexture = nullptr;
 }
 
 void Shield::InitializeShieldTexture(SDL_Renderer* pRenderer)

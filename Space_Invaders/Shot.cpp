@@ -1,11 +1,11 @@
 #include "Shot.h"
 
-Shot::Shot(vec2 Position)
+Shot::Shot(vec2 Position, vec2 Size)
 {
     m_GunPosition = Position;
 
-    m_ObjectSize.x = SHOT_WIDTH;
-    m_ObjectSize.y = SHOT_HEIGHT;
+    m_ObjectSize.x = Size.x;
+    m_ObjectSize.y = Size.y;
 
     m_StartingPointPosition.x = m_GunPosition.x + 7.5 * m_ObjectSize.x;
     m_StartingPointPosition.y = m_GunPosition.y - m_ObjectSize.y;

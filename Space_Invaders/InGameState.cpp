@@ -3,6 +3,7 @@
 #include "SpaceInvader.h"
 #include "Gun.h"
 #include "Shield.h"
+#include "Boss.h"
 
 InGameState::InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : GameState(eStateID::INGAME)
 {
@@ -101,9 +102,8 @@ void InGameState::Render()
 
     SDL_RenderCopy(m_pRenderer, m_GunIconTexture, &srcrect, &dstrect);
 
-    m_Font->DrawText(m_pRenderer, 3, 10, 10, "SCORE:");
-    m_Font->DrawText(m_pRenderer, 3, 10, 40, ToString(SpaceInvader::m_NumOfPoints).c_str());
-    m_Font->DrawText(m_pRenderer, 3, 250, 10, "HI-SCORE:");
+    m_Font->DrawText(m_pRenderer, 3, 30, 10, "SCORE:");
+    m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(SpaceInvader::m_NumOfPoints).c_str());
     m_Font->DrawText(m_pRenderer, 3, 600, 10, "LIVES:");
 
     SDL_RenderPresent(m_pRenderer);
@@ -113,14 +113,19 @@ void InGameState::CreateObject()
 {
     SpaceInvader::m_NumOfPoints = 0;
     SpaceInvader::m_NumOfInvaders = 0;
+    SpaceInvader::m_Speed = INVADER_SPEED;
     Gun::m_NumOfLives = 3;
 
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();
     MyGun->InitializeGun(m_pRenderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT);
 
+    // inicjalizacja bossa
+    shared_ptr<Boss> MyBoss = make_shared<Boss>(m_pRenderer, MyGun);
+
     float PosX = 0.0f, PosY = 0.0f;
 
+    // inicjalizacja tarcz
     for (int ROW = 0; ROW < 4; ++ROW)
     {
         PosX = ROW * 4.2f * OBJECT_WIDTH + OBJECT_WIDTH;
@@ -128,17 +133,19 @@ void InGameState::CreateObject()
         m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY, MyGun));
     }
 
-    for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
-    {
-        for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
-        {
-            PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
-            PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
-            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
-        }
-    }
+    // inicjalizacja invaderow
+    //for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
+    //{
+    //    for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
+    //    {
+    //        PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
+    //        PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
+    //        m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
+    //    }
+    //}
 
     m_AllGameObjects.push_back(move(MyGun));
+    m_AllGameObjects.push_back(move(MyBoss));
 }
 
 // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
