@@ -25,7 +25,7 @@ void InGameState::DestroyTextures()
 
 void InGameState::InitializeInGameStateTextures()
 {
-    SDL_Surface* m_pImage = IMG_Load("../Data/Icon.png");
+    SDL_Surface* m_pImage = IMG_Load("../Data/LifeBanner.png");
     m_GunIconTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
     SDL_FreeSurface(m_pImage);
 
@@ -83,16 +83,16 @@ void InGameState::Render()
     switch (Gun::m_NumOfLives)
     {
     case 3:
-        dstrect = { 600, 40, 100, 25 };
-        srcrect = { 0, 0, 1500, 300 };
+        dstrect = { 600, 40, 115, 30 };
+        srcrect = { 0, 0, 100, 30 };
         break;
     case 2:
-        dstrect = { 600, 40, 75, 25 };
-        srcrect = { 0, 0, 960, 300 };
+        dstrect = { 600, 40, 75, 30 };
+        srcrect = { 0, 0, 68, 30 };
         break;
     case 1:
-        dstrect = { 600, 40, 50, 25 };
-        srcrect = { 0, 0, 480, 300 };
+        dstrect = { 600, 40, 35, 30 };
+        srcrect = { 0, 0, 32, 30 };
         break;
     case 0:
         dstrect = { 0, 0, 0, 0 };
@@ -149,7 +149,6 @@ void InGameState::CreateObject()
 void InGameState::OnEnter()
 {
     GameState::OnEnter();
-
     // inicjalizacja zasobow
     InitializeInGameStateTextures();
     CreateObject();

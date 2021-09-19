@@ -38,7 +38,7 @@ enum class eStateID
     MAINMENU = 1,
     INGAME = 2,
     VICTORY = 3,
-
+    HOWTOPLAY = 4,
 };
 
 bool SDL_IsKeyPressed(SDL_Scancode Code);

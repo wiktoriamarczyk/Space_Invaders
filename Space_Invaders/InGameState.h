@@ -11,7 +11,6 @@ public:
     void Render()override;
     void OnEnter()override;
     void CreateObject();
-
     void DestroyTextures();
 
 private:

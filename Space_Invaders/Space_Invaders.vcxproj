@@ -165,12 +165,19 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="InGameState.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SpaceInvader.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Space_Invaders.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Data\SpaceInvadersIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
