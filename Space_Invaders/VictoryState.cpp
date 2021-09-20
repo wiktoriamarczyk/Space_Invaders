@@ -43,8 +43,8 @@ void VictoryState::Render()
         m_Font->DrawText(m_pRenderer, 2, 260, 320, "OVER EVERY MISTAKE.");
         m_Font->DrawText(m_pRenderer, 2, 260, 340, "YOU JUST KEEP ON TRYING.");
         m_Font->DrawText(m_pRenderer, 2, 260, 360, "TILL YOU RUN OUT OF CAKE.");
-        m_Font->DrawText(m_pRenderer, 2, 260, 400, "^_^");
-        m_Font->DrawText(m_pRenderer, 1, 260, 550, "CLICK ESC TO RETURN TO MENU");
+        m_Font->DrawText(m_pRenderer, 2, 260, 380, "^_^");
+        m_Font->DrawText(m_pRenderer, 1, 290, 550, "CLICK ESC TO RETURN TO MENU");
 
         SDL_Rect TextRect = { 250, 290, 510, 130};
         SDL_RenderDrawRect(m_pRenderer, &TextRect);
@@ -60,7 +60,7 @@ void VictoryState::Render()
         m_Font->DrawText(m_pRenderer, 2, 260, 340, "EVEN THOUGH YOU BROKE MY HEART.");
         m_Font->DrawText(m_pRenderer, 2, 260, 360, "AND KILLED ME.");
         m_Font->DrawText(m_pRenderer, 1, 260, 400, "OH, BY THE WAY, THE CAKE IS GREAT ^_^");
-        m_Font->DrawText(m_pRenderer, 1, 260, 550, "CLICK ESC TO RETURN TO MENU");
+        m_Font->DrawText(m_pRenderer, 1, 290, 550, "CLICK ESC TO RETURN TO MENU");
 
         SDL_Rect TextRect = { 250, 290, 510, 130 };
         SDL_RenderDrawRect(m_pRenderer, &TextRect);

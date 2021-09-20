@@ -48,7 +48,7 @@ void Gun::Update(float DeltaTime)
     // szczelanie
     m_ShootingTimer--;
 
-    if (SDL_IsKeyPressed(SDL_SCANCODE_SPACE))
+    if (SDL_IsKeyPressed(SDL_SCANCODE_SPACE) && (!m_IsDying))
     {
         if (m_ShootingTimer <= 0)
         {

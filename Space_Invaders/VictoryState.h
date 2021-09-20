@@ -16,6 +16,5 @@ public:
 private:
     SDL_Texture* m_pTexture = nullptr;
     SDL_Renderer* m_pRenderer = nullptr;
-
 };
 

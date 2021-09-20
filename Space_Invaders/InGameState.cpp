@@ -150,16 +150,16 @@ void InGameState::CreateObject()
         m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY, MyGun));
     }
 
-    // inicjalizacja invaderow
-    //for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
-    //{
-    //    for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
-    //    {
-    //        PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
-    //        PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
-    //        m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
-    //    }
-    //}
+    //inicjalizacja invaderow
+    for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
+    {
+        for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
+        {
+            PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
+            PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
+            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
+        }
+    }
 
     m_AllGameObjects.push_back(move(MyGun));
     m_AllGameObjects.push_back(move(MyBoss));
@@ -172,6 +172,7 @@ void InGameState::CreateObject()
 
 void InGameState::OnEnter()
 {
+    m_GameOver = false;
     GameState::OnEnter();
     // inicjalizacja zasobow
     InitializeInGameStateTextures();

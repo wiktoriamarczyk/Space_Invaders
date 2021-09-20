@@ -111,14 +111,14 @@ void SpaceInvader::Update(float DeltaTime)
             m_ObjectIsAlive = false;
             m_NumOfInvaders--;
 
-            if (m_NumOfInvaders <= 50 && m_NumOfInvaders >= 10)
+            if (m_NumOfInvaders <= 50 && m_NumOfInvaders >= 3)
             {
                 m_Speed += 0.5f;
             }
             
-            else if (m_NumOfInvaders <= 10)
+            else if (m_NumOfInvaders <= 3)
             {
-                m_Speed += 8;
+                m_Speed += 30;
             }
         }
     }

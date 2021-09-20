@@ -5,12 +5,17 @@ MainMenuState::MainMenuState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) :
 {
     m_Font = MyFont;
     m_pRenderer = pRenderer;
-    InitializeMainMenuStateTextures();
 }
 
 MainMenuState::~MainMenuState()
 {
+    DestroyTextures();
+}
+
+void MainMenuState::DestroyTextures()
+{
     SDL_DestroyTexture(m_WelcomeInvaderTexture);
+    m_MiniBoss.reset();
 }
 
 void MainMenuState::InitializeMainMenuStateTextures()
@@ -24,13 +29,26 @@ void MainMenuState::OnEnter()
 {
     GameState::OnEnter();
 
+    InitializeMainMenuStateTextures();
+
+    if (!m_MiniBoss)
+    {
+        m_MiniBoss = make_shared<MiniBoss>(m_pRenderer);
+    }
+
     if (m_PlayMusicAgain)
     {
         Engine::GetSingleton()->PlaySound("8-bit_music.wav");
     }
 }
 
-void MainMenuState::Update(float DeltaTime) {}
+void MainMenuState::Update(float DeltaTime) 
+{
+    if (m_MiniBoss)
+    {
+        m_MiniBoss->Update(DeltaTime);
+    }
+}
 
 void MainMenuState::Render()
 {
@@ -56,6 +74,11 @@ void MainMenuState::Render()
 
     m_Font->DrawText(m_pRenderer, 1, 300, 580, "AUTHOR: WIKTORIA MARCZYK");
 
+    if (m_MiniBoss)
+    {
+        m_MiniBoss->Render(m_pRenderer);
+    }
+
     SDL_RenderPresent(m_pRenderer);
 }
 
@@ -68,13 +91,13 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
     }
 
     // sprawdzenie czy gracz naciska klawisz w dol, by przejsc do opcji ponizej 
-    if (KeyCode == SDL_SCANCODE_DOWN)
+    if (KeyCode == SDL_SCANCODE_DOWN && m_Option < 2)
     {
         m_Option++;
     }
 
     // sprawdzenie czy gracz naciska klawisz w gore, by przejsc do opcji powyzej
-    else if (KeyCode == SDL_SCANCODE_UP && m_Option >= 0)
+    else if (KeyCode == SDL_SCANCODE_UP && m_Option > 0)
     {
         m_Option--;
     }
@@ -86,6 +109,7 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
         {
             m_PlayMusicAgain = true;
             Mix_HaltChannel(-1);
+            DestroyTextures();
             m_NextStateID = eStateID::INGAME;
         }
         if (m_Option == 1)
