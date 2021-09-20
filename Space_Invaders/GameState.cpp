@@ -1,5 +1,7 @@
 #include "GameState.h"
 
+bool GameState::m_GameOver = false;
+
 GameState::GameState(eStateID StateID) : m_StateID(StateID) {}
 
 

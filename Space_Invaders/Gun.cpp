@@ -102,7 +102,13 @@ void Gun::Update(float DeltaTime)
 
     if (m_NumOfLives <= 0)
     {
-        m_ObjectIsAlive = false;
+        m_pTexture = m_pDyingTexture;
+
+        m_DyingTimer--;
+        if (m_DyingTimer <= 0)
+        {
+            m_ObjectIsAlive = false;
+        }
     }
 }
 

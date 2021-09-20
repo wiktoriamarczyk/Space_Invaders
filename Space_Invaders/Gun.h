@@ -21,7 +21,7 @@ private:
     vector<shared_ptr<Shot>> m_Shots;
     float m_ShootingTimer = 15.0f; //30.0f
     float m_TextureTimer = 25.0f;
+    float m_DyingTimer = 100.0f;
     bool m_IsDying = false;
-
 };
 

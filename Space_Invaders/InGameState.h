@@ -16,5 +16,6 @@ public:
 private:
     vector<shared_ptr<GameObject>> m_AllGameObjects;
     SDL_Texture* m_GunIconTexture = nullptr;
+    float m_DyingTimer = 100.0f;
 };
 

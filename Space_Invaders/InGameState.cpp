@@ -41,6 +41,7 @@ void InGameState::Update(float DeltaTime)
 {
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
+        Mix_HaltChannel(-1);
         DestroyTextures();
         m_AllGameObjects.clear();
         m_NextStateID = eStateID::MAINMENU;
@@ -48,8 +49,22 @@ void InGameState::Update(float DeltaTime)
 
     if (Gun::m_NumOfLives <= 0)
     {
-        //==TODO==
-        Engine::GetSingleton()->ExitGame();
+        m_DyingTimer--;
+        if (m_DyingTimer <= 0)
+        {
+            Boss::m_BossIsDead = true;
+            m_GameOver = true;
+            DestroyTextures();
+            m_AllGameObjects.clear();
+            m_NextStateID = eStateID::VICTORY;
+        }
+    }
+
+    if (Boss::m_BossIsDead)
+    {
+        DestroyTextures();
+        m_AllGameObjects.clear();
+        m_NextStateID = eStateID::VICTORY;
     }
 
     for (int i = 0; i < m_AllGameObjects.size();)
@@ -115,6 +130,8 @@ void InGameState::CreateObject()
     SpaceInvader::m_NumOfInvaders = 0;
     SpaceInvader::m_Speed = INVADER_SPEED;
     Gun::m_NumOfLives = 3;
+    Boss::m_LifeStatus = 30;
+    Boss::m_BossIsDead = false;
 
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();

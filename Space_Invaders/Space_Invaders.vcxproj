@@ -158,6 +158,7 @@
     <ClCompile Include="SpaceInvader.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="vec2.cpp" />
+    <ClCompile Include="VictoryState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="SpaceInvader.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="vec2.h" />
+    <ClInclude Include="VictoryState.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Space_Invaders.rc" />

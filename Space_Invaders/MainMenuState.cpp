@@ -74,7 +74,7 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
     }
 
     // sprawdzenie czy gracz naciska klawisz w gore, by przejsc do opcji powyzej
-    else if (KeyCode == SDL_SCANCODE_UP)
+    else if (KeyCode == SDL_SCANCODE_UP && m_Option >= 0)
     {
         m_Option--;
     }
