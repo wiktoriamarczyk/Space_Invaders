@@ -21,6 +21,22 @@ bool Sound::Load(const string& FileName, float Volume )
     return true;
 }
 
+void Sound::Play()const
+{
+    Mix_PlayChannel(-1, m_pSoundData, 0);
+}
+
+string Sound::GetName()const
+{
+    return m_FileName;
+}
+
+void Sound::FreeResources()
+{
+    Sound::~Sound();
+}
+
+/*
 bool Sound::LoadMusic(const string& FileName)
 {
     m_FileName = FileName;
@@ -33,17 +49,8 @@ bool Sound::LoadMusic(const string& FileName)
     return true;
 }
 
-void Sound::Play()const
-{
-    Mix_PlayChannel(-1, m_pSoundData, 0);
-}
-
 void Sound::PlayMusic() const
 {
     Mix_PlayMusic(m_pMusic, -1);
 }
-
-string Sound::GetName()const
-{
-    return m_FileName;
-}
+*/

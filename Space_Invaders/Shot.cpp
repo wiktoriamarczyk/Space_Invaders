@@ -4,11 +4,11 @@ Shot::Shot(vec2 Position, vec2 Size)
 {
     m_GunPosition = Position;
 
-    m_ObjectSize.x = Size.x;
-    m_ObjectSize.y = Size.y;
+    m_Size.x = Size.x;
+    m_Size.y = Size.y;
 
-    m_StartingPointPosition.x = m_GunPosition.x + 7.5 * m_ObjectSize.x;
-    m_StartingPointPosition.y = m_GunPosition.y - m_ObjectSize.y;
+    m_Position.x = m_GunPosition.x + 7.5 * m_Size.x;
+    m_Position.y = m_GunPosition.y - m_Size.y;
 }
 
 void Shot::Update(float DeltaTime)
@@ -17,25 +17,24 @@ void Shot::Update(float DeltaTime)
 
     if (m_DealingDamage)
     {
-        m_StartingPointPosition.y -= FrameDistance;
+        m_Position.y -= FrameDistance;
     }
     else
     {
-        m_StartingPointPosition.y += FrameDistance;
+        m_Position.y += FrameDistance;
     }
 
     m_LivingTimer--;
 
     if (m_LivingTimer <= 0)
     {
-        m_ObjectIsAlive = false;
-        m_LivingTimer = 60.0f;
+        m_IsAlive = false;
     }
 }
 
 void Shot::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect ShotRect = {m_StartingPointPosition.x, m_StartingPointPosition.y, m_ObjectSize.x, m_ObjectSize.y };
+    SDL_Rect ShotRect = {m_Position.x, m_Position.y, m_Size.x, m_Size.y };
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     SDL_RenderFillRect(pRenderer, &ShotRect);
 }

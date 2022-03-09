@@ -15,8 +15,8 @@ public:
     void OnEnter()override;
 private:
     shared_ptr<MiniBoss> m_MiniBoss;
-    int m_Option = 0;
-    SDL_Texture* m_WelcomeInvaderTexture = nullptr;
-    bool m_PlayMusicAgain = true;
+    int                  m_Option = 0;
+    SDL_Texture*         m_WelcomeInvaderTexture = nullptr;
+    bool                 m_PlayMusicAgain = true;
 };
 

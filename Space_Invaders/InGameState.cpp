@@ -13,28 +13,7 @@ InGameState::InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : Gam
 
 InGameState::~InGameState()
 {
-    DestroyTextures();
-}
-
-void InGameState::DestroyTextures()
-{
-    SDL_DestroyTexture(m_GunIconTexture);
-    m_GunIconTexture = nullptr;
-    SpaceInvader::DestroyTextures();
-    Shield::DestroyTexture();
-}
-
-void InGameState::InitializeInGameStateTextures()
-{
-    SDL_Surface* m_pImage = IMG_Load("../Data/LifeBanner.png");
-    m_GunIconTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
-    SDL_FreeSurface(m_pImage);
-
-    // inicjalizacja tarcz
-    Shield::InitializeShieldTexture(m_pRenderer);
-
-    // inicjalizacja Space Invaderow
-    SpaceInvader::InitializeSpaceInvaderTexture(m_pRenderer);
+    FreeResources();
 }
 
 void InGameState::Update(float DeltaTime)
@@ -42,8 +21,7 @@ void InGameState::Update(float DeltaTime)
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
         Mix_HaltChannel(-1);
-        DestroyTextures();
-        m_AllGameObjects.clear();
+        FreeResources();
         m_NextStateID = eStateID::MAINMENU;
     }
 
@@ -54,16 +32,14 @@ void InGameState::Update(float DeltaTime)
         {
             Boss::m_BossIsDead = true;
             m_GameOver = true;
-            DestroyTextures();
-            m_AllGameObjects.clear();
+            FreeResources();
             m_NextStateID = eStateID::VICTORY;
         }
     }
 
     if (Boss::m_BossIsDead)
     {
-        DestroyTextures();
-        m_AllGameObjects.clear();
+        FreeResources();
         m_NextStateID = eStateID::VICTORY;
     }
 
@@ -71,7 +47,7 @@ void InGameState::Update(float DeltaTime)
     {
         m_AllGameObjects[i]->Update(DeltaTime);
     
-        if (m_AllGameObjects[i]->GetObjectStatus() == false)
+        if (m_AllGameObjects[i]->GetStatus() == false)
         {
             m_AllGameObjects.erase(m_AllGameObjects.begin() + i);
         }
@@ -115,7 +91,7 @@ void InGameState::Render()
         break;
     }
 
-    SDL_RenderCopy(m_pRenderer, m_GunIconTexture, &srcrect, &dstrect);
+    DisplayTexture("Life_Banner.png", srcrect, dstrect);
 
     m_Font->DrawText(m_pRenderer, 3, 30, 10, "SCORE:");
     m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(SpaceInvader::m_NumOfPoints).c_str());
@@ -151,7 +127,7 @@ void InGameState::CreateObject()
     }
 
     //inicjalizacja invaderow
-    for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
+    for (int COLUMN = 0; COLUMN < 3; ++COLUMN)
     {
         for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
         {
@@ -175,6 +151,22 @@ void InGameState::OnEnter()
     m_GameOver = false;
     GameState::OnEnter();
     // inicjalizacja zasobow
-    InitializeInGameStateTextures();
     CreateObject();
+}
+
+void InGameState::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
+{
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
+}
+
+void InGameState::DisplayTexture(const string& FileName, SDL_Rect dstrect, SDL_Rect srcrect)
+{
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
+}
+
+void InGameState::FreeResources()
+{
+    Engine::GetSingleton()->DestroyTextures();
+    Engine::GetSingleton()->FreeSounds();
+    m_AllGameObjects.clear();
 }

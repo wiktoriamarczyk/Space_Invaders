@@ -6,6 +6,9 @@
 #include<memory>
 #include<stdlib.h>
 #include<time.h>
+#include<algorithm>
+#include<optional>
+#include<functional>
 #include<SDL.h>
 #include<SDL_Mixer.h>
 #include<SDL_image.h>
@@ -18,6 +21,10 @@ using std::make_shared;
 using std::move;
 using std::string;
 using std::fstream;
+using std::optional;
+using std::nullopt;
+using std::function;
+using std::none_of;
 
 enum : int
 {
@@ -27,7 +34,7 @@ enum : int
     OBJECT_WIDTH = 50,
     BOSS_WIDTH = 200,
     BOSS_HEIGHT = 100,
-    INVADER_SPEED = 2,
+    INVADER_SPEED = 50,
     GUN_SPEED = 500,
     BOSS_SPEED = 50,
     SHOT_SPEED = 500,
@@ -37,11 +44,11 @@ enum : int
 
 enum class eStateID
 {
-    UNKNOWN = 0,
-    MAINMENU = 1,
-    INGAME = 2,
-    VICTORY = 3,
-    HOWTOPLAY = 4,
+    UNKNOWN,
+    MAINMENU,
+    INGAME,
+    VICTORY, 
+    HOWTOPLAY,
 };
 
 bool SDL_IsKeyPressed(SDL_Scancode Code);

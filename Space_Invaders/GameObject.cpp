@@ -1,21 +1,32 @@
 #include "GameObject.h"
+#include "Engine.h"
 
-vec2 GameObject::GetObjectPosition()
+vec2i GameObject::GetPosition()const
 {
-    return m_StartingPointPosition;
+    return m_Position;
 }
 
-bool GameObject::GetObjectStatus()
+bool GameObject::GetStatus()const
 {
-    return m_ObjectIsAlive;
+    return m_IsAlive;
 }
 
-void GameObject::SetObjectPosition(vec2 ObjectPos)
+void GameObject::SetPosition(vec2i Position)
 {
-    m_StartingPointPosition = ObjectPos;
+    m_Position = Position;
 }
 
-void GameObject::SetObjectStatus(bool ObjectStatus)
+void GameObject::SetStatus(bool Status)
 {
-    m_ObjectIsAlive = ObjectStatus;
+    m_IsAlive = Status;
+}
+
+void GameObject::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
+{
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
+}
+
+void GameObject::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
+{
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
 }

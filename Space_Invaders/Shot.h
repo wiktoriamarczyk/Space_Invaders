@@ -11,7 +11,7 @@ public:
     void SetDealingDamage(bool DealingDamage);
 
 private:
-    vec2 m_GunPosition;
-    float m_LivingTimer = 60.0f;
-    bool m_DealingDamage = true;
+    vec2  m_GunPosition;
+    float m_LivingTimer = 100.0f;
+    bool  m_DealingDamage = true;
 };

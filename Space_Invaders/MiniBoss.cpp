@@ -4,11 +4,11 @@ MiniBoss::MiniBoss(SDL_Renderer* pRenderer)
 {
     m_pRenderer = pRenderer;
 
-    m_StartingPointPosition.x = -100;
-    m_StartingPointPosition.y = 30;
+    m_Position.x = -100;
+    m_Position.y = 30;
 
-    m_ObjectSize.x = 0.5f*BOSS_WIDTH;
-    m_ObjectSize.y = 0.5f*BOSS_HEIGHT;
+    m_Size.x = 0.5f*BOSS_WIDTH;
+    m_Size.y = 0.5f*BOSS_HEIGHT;
 
     InitializeMiniBossTexture();
 }
@@ -34,13 +34,13 @@ void MiniBoss::DestroyMiniBossTextures()
 void MiniBoss::Update(float DeltaTime)
 {
     float FrameDistance = BOSS_SPEED * DeltaTime;
-    vec2 ObjectTopLeftCorner = m_StartingPointPosition;
-    vec2 ObjectBottomRightCorner = m_StartingPointPosition + m_ObjectSize;
-    vec2 tempPos = m_StartingPointPosition;
+    vec2 ObjectTopLeftCorner = m_Position;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size;
+    vec2 tempPos = m_Position;
 
     if (!m_ChangeDirectionX)
     {
-        m_StartingPointPosition.x += FrameDistance;
+        m_Position.x += FrameDistance;
         if (ObjectBottomRightCorner.x >= SCREEN_WIDTH + 100)
         {
             m_ChangeDirectionX = true;
@@ -48,7 +48,7 @@ void MiniBoss::Update(float DeltaTime)
     }
     if (m_ChangeDirectionX)
     {
-        m_StartingPointPosition.x -= FrameDistance;
+        m_Position.x -= FrameDistance;
         if (ObjectTopLeftCorner.x <= -100)
         {
             m_ChangeDirectionX = false;
@@ -58,7 +58,7 @@ void MiniBoss::Update(float DeltaTime)
 
 void MiniBoss::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect dstrect = { int(m_StartingPointPosition.x), int(m_StartingPointPosition.y), m_ObjectSize.x, m_ObjectSize.y };
+    SDL_Rect dstrect = { int(m_Position.x), int(m_Position.y), m_Size.x, m_Size.y };
     //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     //SDL_RenderFillRect(pRenderer, &dstrect);
     SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);

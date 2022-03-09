@@ -6,7 +6,7 @@ class Gun : public GameObject
 {
 public:
     Gun()=default;
-    ~Gun();
+    ~Gun() {};
     void InitializeGun(SDL_Renderer* pRenderer, float PosX, float PosY);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
@@ -15,13 +15,10 @@ public:
     static int m_NumOfLives;
 
 private:
-    SDL_Texture* m_pTexture = nullptr;
-    SDL_Texture* m_pNormalTexture = nullptr;
-    SDL_Texture* m_pDyingTexture = nullptr;
     vector<shared_ptr<Shot>> m_Shots;
-    float m_ShootingTimer = 15.0f; //30.0f
-    float m_TextureTimer = 25.0f;
-    float m_DyingTimer = 100.0f;
-    bool m_IsDying = false;
+    float                    m_ShootingTimer = 30.0f; //30.0f
+    //float                    m_TextureTimer = 25.0f;
+    float                    m_Timer = 25.0f;
+    bool                     m_IsHurt = false;
 };
 

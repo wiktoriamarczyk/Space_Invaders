@@ -10,37 +10,12 @@ Boss::Boss(SDL_Renderer* pRenderer, shared_ptr<Gun> MyGun)
     m_pRenderer = pRenderer;
     m_Gun = MyGun;
 
-    m_StartingPointPosition.x = -200;
-    m_StartingPointPosition.y = 100;
+    m_Position.x = -200;
+    m_Position.y = 100;
 
-    m_ObjectSize.x = BOSS_WIDTH;
-    m_ObjectSize.y = BOSS_HEIGHT;
+    m_Size.x = BOSS_WIDTH;
+    m_Size.y = BOSS_HEIGHT;
 
-    InitializeBossTexture();
-}
-
-void Boss::InitializeBossTexture()
-{
-    SDL_Surface* m_pImage = IMG_Load("../Data/Boss.png");
-    m_pNormalTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
-    SDL_FreeSurface(m_pImage);
-
-    m_pImage = IMG_Load("../Data/puf.png");
-    m_pDyingTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
-    SDL_FreeSurface(m_pImage);
-    m_pImage = nullptr;
-
-    m_pTexture = m_pNormalTexture;
-}
-
-Boss::~Boss()
-{
-    SDL_DestroyTexture(m_pTexture);
-    m_pTexture = nullptr;
-    SDL_DestroyTexture(m_pNormalTexture);
-    m_pNormalTexture = nullptr;
-    SDL_DestroyTexture(m_pDyingTexture);
-    m_pDyingTexture = nullptr;
 }
 
 void Boss::Update(float DeltaTime)
@@ -53,9 +28,8 @@ void Boss::Update(float DeltaTime)
             m_PlayDeathSound = false;
         }
 
-        m_ObjectSize.x = BOSS_WIDTH;
-        m_ObjectSize.y = BOSS_WIDTH;
-        m_pTexture = m_pDyingTexture;
+        m_Size.x = BOSS_WIDTH;
+        m_Size.y = BOSS_WIDTH;
 
         m_DyingTimer--;
 
@@ -67,7 +41,7 @@ void Boss::Update(float DeltaTime)
 
     if (m_BossIsDead)
     {
-        m_ObjectIsAlive = false;
+        m_IsAlive = false;
     }
 
     if (SpaceInvader::m_NumOfInvaders <= 0)
@@ -79,13 +53,13 @@ void Boss::Update(float DeltaTime)
         }
 
         float FrameDistance = BOSS_SPEED * DeltaTime;
-        vec2 ObjectTopLeftCorner = m_StartingPointPosition;
-        vec2 ObjectBottomRightCorner = m_StartingPointPosition + m_ObjectSize;
-        vec2 tempPos = m_StartingPointPosition;
+        vec2 ObjectTopLeftCorner = m_Position;
+        vec2 ObjectBottomRightCorner = m_Position + m_Size;
+        vec2 tempPos = m_Position;
 
         if (ObjectTopLeftCorner.x <= SCREEN_WIDTH / 2 - 100)
         {
-            m_StartingPointPosition.x += FrameDistance;
+            m_Position.x += FrameDistance;
         }
 
         // strzelanie do bossa
@@ -93,12 +67,12 @@ void Boss::Update(float DeltaTime)
         {
             if (m_Gun->GetShots()[i]->GetDealingDamageStatus() == true)
             {
-                if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+                if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
                 {
-                    if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
+                    if (m_Gun->GetShots()[i]->GetPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetPosition().y >= ObjectTopLeftCorner.y)
                     {
                         Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
-                        m_Gun->GetShots()[i]->SetObjectStatus(false);
+                        m_Gun->GetShots()[i]->SetStatus(false);
                         m_LifeStatus--;
                         SpaceInvader::m_NumOfPoints = SpaceInvader::m_NumOfPoints + 100;
                     }
@@ -123,7 +97,7 @@ void Boss::Update(float DeltaTime)
                 }
                 else if (GetRandNumber() == 1)
                 {
-                    m_Gun->Shoot(m_StartingPointPosition.x + 50, ObjectBottomRightCorner.y - 30, BossShots);
+                    m_Gun->Shoot(m_Position.x + 50, ObjectBottomRightCorner.y - 30, BossShots);
                 }
                 else if (GetRandNumber() == 2)
                 {
@@ -138,13 +112,17 @@ void Boss::Render(SDL_Renderer* pRenderer)
 {
     if (SpaceInvader::m_NumOfInvaders <= 0)
     {
-        SDL_Rect dstrect = { int(m_StartingPointPosition.x), int(m_StartingPointPosition.y), m_ObjectSize.x, m_ObjectSize.y };
+        //SDL_Rect dstrect = { int(m_Position.x), int(m_Position.y), m_Size.x, m_Size.y };
         //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         //SDL_RenderFillRect(pRenderer, &dstrect);
-        SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);
+        //SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);
+        if (m_BossIsDead)
+        {
+            DisplayTexture("puf.png", m_Position, m_Size);
+        }
+        else DisplayTexture("Boss.png", m_Position, m_Size);
 
         SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
-
         SDL_Rect LifeRect = { 200, 10, 340, 50 };
         SDL_RenderDrawRect(m_pRenderer, &LifeRect);
 

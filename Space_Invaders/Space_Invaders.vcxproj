@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\Dependencies\SDL2_image-2.0.5\include;..\Dependencies\Include\SDL2_Mixer;..\Dependencies\Include\SDL2</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +162,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpaceInvader.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="vec2.cpp" />
     <ClCompile Include="VictoryState.cpp" />
   </ItemGroup>
@@ -181,6 +183,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SpaceInvader.h" />
     <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="vec2.h" />
     <ClInclude Include="VictoryState.h" />
   </ItemGroup>
