@@ -11,7 +11,7 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     vector<shared_ptr<Shot>> GetShots();
-    void Shoot(float PosX, float PosY, vec2 Size = {SHOT_WIDTH, SHOT_HEIGHT});
+    void Shoot(vec2 Pos, vec2i Size, int Speed);
     static int m_NumOfLives;
 
 private:

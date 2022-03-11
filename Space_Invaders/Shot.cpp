@@ -1,6 +1,6 @@
 #include "Shot.h"
 
-Shot::Shot(vec2 Position, vec2 Size)
+Shot::Shot(vec2 Position, vec2i Size, int Speed)
 {
     m_GunPosition = Position;
 
@@ -9,11 +9,13 @@ Shot::Shot(vec2 Position, vec2 Size)
 
     m_Position.x = m_GunPosition.x + 7.5 * m_Size.x;
     m_Position.y = m_GunPosition.y - m_Size.y;
+
+    m_Speed = Speed;
 }
 
 void Shot::Update(float DeltaTime)
 {
-    float FrameDistance = SHOT_SPEED * DeltaTime;
+    float FrameDistance = m_Speed * DeltaTime;
 
     if (m_DealingDamage)
     {

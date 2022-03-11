@@ -7,34 +7,11 @@ MainMenuState::MainMenuState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) :
     m_pRenderer = pRenderer;
 }
 
-MainMenuState::~MainMenuState()
-{
-    DestroyTextures();
-}
-
-void MainMenuState::DestroyTextures()
-{
-    SDL_DestroyTexture(m_WelcomeInvaderTexture);
-    m_MiniBoss.reset();
-}
-
-void MainMenuState::InitializeMainMenuStateTextures()
-{
-    SDL_Surface* m_pImage = IMG_Load("../Data/SpaceInvader.png");
-    m_WelcomeInvaderTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
-    SDL_FreeSurface(m_pImage);
-}
-
 void MainMenuState::OnEnter()
 {
     GameState::OnEnter();
 
-    InitializeMainMenuStateTextures();
-
-    if (!m_MiniBoss)
-    {
-        m_MiniBoss = make_shared<MiniBoss>(m_pRenderer);
-    }
+    m_Option = 0;
 
     if (m_PlayMusicAgain)
     {
@@ -42,12 +19,9 @@ void MainMenuState::OnEnter()
     }
 }
 
-void MainMenuState::Update(float DeltaTime) 
+void MainMenuState::Update(float DeltaTime)  
 {
-    if (m_MiniBoss)
-    {
-        m_MiniBoss->Update(DeltaTime);
-    }
+
 }
 
 void MainMenuState::Render()
@@ -55,8 +29,7 @@ void MainMenuState::Render()
     SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(m_pRenderer);
 
-    SDL_Rect dstrect = { 300, 100, 200, 200 };
-    SDL_RenderCopy(m_pRenderer, m_WelcomeInvaderTexture, NULL, &dstrect);
+    DisplayTexture("SpaceInvader.png", vec2i(300, 100), vec2i(200, 200));
 
     m_Font->DrawText(m_pRenderer, 5, 130, 300, "SPACE INVADERS");
 
@@ -74,10 +47,6 @@ void MainMenuState::Render()
 
     m_Font->DrawText(m_pRenderer, 1, 300, 580, "AUTHOR: WIKTORIA MARCZYK");
 
-    if (m_MiniBoss)
-    {
-        m_MiniBoss->Render(m_pRenderer);
-    }
 
     SDL_RenderPresent(m_pRenderer);
 }
@@ -102,14 +71,13 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
         m_Option--;
     }
 
-    // po nacisieciu enter dostajemy sie do okna gry lub wychodzimy z gry
+    // po nacisieciu enter dostajemy sie do danego okna gry lub wychodzimy z gry
     else if (KeyCode == SDL_SCANCODE_RETURN)
     {
         if (m_Option == 0)
         {
             m_PlayMusicAgain = true;
             Mix_HaltChannel(-1);
-            DestroyTextures();
             m_NextStateID = eStateID::INGAME;
         }
         if (m_Option == 1)

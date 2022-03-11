@@ -37,7 +37,7 @@ enum : int
     INVADER_SPEED = 50,
     GUN_SPEED = 500,
     BOSS_SPEED = 50,
-    SHOT_SPEED = 500,
+    SHOT_SPEED = 750,
     SHOT_WIDTH = 3,
     SHOT_HEIGHT = 9,
 };

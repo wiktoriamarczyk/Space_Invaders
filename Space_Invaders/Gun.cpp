@@ -18,13 +18,13 @@ void Gun::Update(float DeltaTime)
     vec2 ObjectTopLeftCorner = m_Position;
     vec2 ObjectBottomRightCorner = m_Position + m_Size;
 
-    if (SDL_IsKeyPressed(SDL_SCANCODE_A) && ObjectTopLeftCorner.x >= 0)
+    if ((SDL_IsKeyPressed(SDL_SCANCODE_A) || (SDL_IsKeyPressed(SDL_SCANCODE_LEFT)))&& ObjectTopLeftCorner.x >= 0)
     {
         m_Position.x -= FrameDistance;
     }
 
     vec2 PaddleBottomRightCorner = m_Position + m_Size / 2;
-    if (SDL_IsKeyPressed(SDL_SCANCODE_D) && ObjectBottomRightCorner.x <= SCREEN_WIDTH)
+    if ((SDL_IsKeyPressed(SDL_SCANCODE_D) || (SDL_IsKeyPressed(SDL_SCANCODE_RIGHT)))&& ObjectBottomRightCorner.x <= SCREEN_WIDTH)
     {
         m_Position.x += FrameDistance;
     }
@@ -36,7 +36,7 @@ void Gun::Update(float DeltaTime)
     {
         if (m_ShootingTimer <= 0)
         {
-            m_Shots.push_back(make_shared<Shot>(m_Position));
+            m_Shots.push_back(make_shared<Shot>(m_Position, vec2i(SHOT_WIDTH, SHOT_HEIGHT), 1500));
             Engine::GetSingleton()->PlaySound("Shot.wav");
             m_ShootingTimer = 30.0f;
         }
@@ -113,9 +113,8 @@ vector<shared_ptr<Shot>> Gun::GetShots()
     return m_Shots;
 }
 
-void Gun::Shoot(float PosX, float PosY, vec2 Size)
+void Gun::Shoot(vec2 Pos, vec2i Size, int Speed)
 {
-    vec2 Tmp (PosX, PosY);
-    m_Shots.push_back(make_shared<Shot>(Tmp, Size));
+    m_Shots.push_back(make_shared<Shot>(Pos, Size, Speed));
     m_Shots.back()->SetDealingDamage(false);
 }

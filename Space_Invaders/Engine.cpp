@@ -2,6 +2,8 @@
 #include "Font.h"
 #include "InGameState.h"
 #include "MainMenuState.h"
+#include "HowToPlayState.h"
+#include "VictoryState.h"
 
 Engine* Engine::pSingleton = nullptr;
 
@@ -49,13 +51,12 @@ bool Engine::Initialize()
     //Mix_Volume(-1, 16);
 
     // utworzenie okna
-    m_pWindow = SDL_CreateWindow("Space Invaders", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+    m_pWindow = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (m_pWindow == nullptr)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
 
     // utworzenie renderera
     m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
@@ -72,9 +73,10 @@ bool Engine::Initialize()
     // dodanie wszystkich stanow gry do wektora
     m_AllStates.push_back(make_unique<InGameState>(MyFont, m_pRenderer));
     m_AllStates.push_back(make_unique<MainMenuState>(MyFont, m_pRenderer));
+    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont, m_pRenderer));
 
     // pierwszym stanem jest Menu gry
-    ChangeState(eStateID::INGAME);
+    ChangeState(eStateID::MAINMENU);
 
     return true;
 }

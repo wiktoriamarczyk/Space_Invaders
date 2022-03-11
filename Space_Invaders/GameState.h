@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
-#include "GameObject.h"
 #include "Font.h"
+#include "vec2.h" 
 
 class Engine;
 
@@ -16,6 +16,8 @@ public:
     virtual void OnMouseButtonDown(int Button) {};
     eStateID GetStateID()const;
     eStateID GetNextStateID()const;
+    void DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size = nullopt);
+    void DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect);
 
 protected:
     SDL_Renderer*    m_pRenderer = nullptr;

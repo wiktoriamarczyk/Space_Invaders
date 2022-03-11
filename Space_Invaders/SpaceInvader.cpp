@@ -116,7 +116,7 @@ void SpaceInvader::Update(float DeltaTime)
 
             if (m_InvaderID == RandNumber())
             {
-                m_Gun->Shoot(m_Position.x, ObjectBottomRightCorner.y);
+                m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED);
             }
         }
     }

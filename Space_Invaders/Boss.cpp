@@ -28,9 +28,6 @@ void Boss::Update(float DeltaTime)
             m_PlayDeathSound = false;
         }
 
-        m_Size.x = BOSS_WIDTH;
-        m_Size.y = BOSS_WIDTH;
-
         m_DyingTimer--;
 
         if (m_DyingTimer <= 0)
@@ -83,7 +80,7 @@ void Boss::Update(float DeltaTime)
         // strzelanie przez bossa
         m_ShootingTimer--;
 
-        vec2 BossShots = { 2 * SHOT_WIDTH, 2 * SHOT_HEIGHT };
+        vec2i BossShots = { 2 * SHOT_WIDTH, 2 * SHOT_HEIGHT };
 
         if (!m_BossIsDead)
         {
@@ -93,21 +90,21 @@ void Boss::Update(float DeltaTime)
 
                 if (GetRandNumber() == 0)
                 {
-                    m_Gun->Shoot(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y, BossShots);
+                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED);
                 }
                 else if (GetRandNumber() == 1)
                 {
-                    m_Gun->Shoot(m_Position.x + 50, ObjectBottomRightCorner.y - 30, BossShots);
+                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED);
                 }
                 else if (GetRandNumber() == 2)
                 {
-                    m_Gun->Shoot(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y, BossShots);
+                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED);
                 }
             }
         }
     }
 }
-
+  
 void Boss::Render(SDL_Renderer* pRenderer)
 {
     if (SpaceInvader::m_NumOfInvaders <= 0)
