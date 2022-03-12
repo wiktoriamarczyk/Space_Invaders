@@ -1,6 +1,8 @@
 #pragma once
 #include<cmath>
 
+class vec2i;
+
 class vec2
 {
 public:
@@ -12,6 +14,8 @@ public:
 
     float GetLength()const;
     vec2 GetNormalized()const;
+
+    explicit operator vec2i()const;
 
     vec2 operator+(const vec2& other)const;
     vec2 operator-(const vec2& other)const;

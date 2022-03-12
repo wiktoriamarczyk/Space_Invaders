@@ -37,14 +37,16 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (m_ChangeDirectionY)
         {
-            m_Position.y += OBJECT_HEIGHT;
+            SetPosition( { m_Position.x , m_Position.y + OBJECT_HEIGHT } );
+            
             if (m_Position.y >= tempPos.y)
             {
                 tempPos = m_Position;
                 m_ChangeDirectionY = false;
             }
         }
-        m_Position.x += FrameDistance;
+        SetPosition({ m_Position.x + FrameDistance , m_Position.y  });
+
         if (ObjectBottomRightCorner.x >= SCREEN_WIDTH)
         {
             m_ChangeDirectionX = true;
@@ -54,14 +56,14 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (!m_ChangeDirectionY)
         {
-            m_Position.y += OBJECT_HEIGHT;
+            SetPosition({ m_Position.x , m_Position.y + OBJECT_HEIGHT });
             if (m_Position.y >= tempPos.y)
             {
                 tempPos = m_Position;
                 m_ChangeDirectionY = true;
             }
         }
-        m_Position.x -= FrameDistance;
+        SetPosition({ m_Position.x - FrameDistance , m_Position.y });
         if (ObjectTopLeftCorner.x <= 0)
         {
             m_ChangeDirectionX = false;
@@ -146,7 +148,7 @@ void SpaceInvader::Render(SDL_Renderer* pRenderer)
  
     if (m_IsDying)
     {
-        DisplayTexture("puf.png", m_Position, m_Size);
+        DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
     }
     else DisplayTexture(m_Name + ".png", m_MovementRect, dstrect);
 }

@@ -16,6 +16,7 @@ public:
     static int RandNumber();
 
 private:
+public:
     int             m_InvaderID = 0;
     string          m_Name;
     shared_ptr<Gun> m_Gun;

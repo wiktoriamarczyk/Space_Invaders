@@ -97,9 +97,9 @@ void Gun::Render(SDL_Renderer* pRenderer)
 {
     if (m_IsHurt)
     {
-        DisplayTexture("puf.png", m_Position, m_Size);
+        DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
     }
-    else  DisplayTexture("Gun.png", m_Position, m_Size);
+    else  DisplayTexture("Gun.png", (vec2i)m_Position, m_Size);
 
 
    for (int i = 0; i < m_Shots.size(); ++i)

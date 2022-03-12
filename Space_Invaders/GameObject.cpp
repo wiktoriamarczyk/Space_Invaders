@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "Engine.h"
 
-vec2i GameObject::GetPosition()const
+vec2 GameObject::GetPosition()const
 {
     return m_Position;
 }
@@ -11,9 +11,18 @@ bool GameObject::GetStatus()const
     return m_IsAlive;
 }
 
-void GameObject::SetPosition(vec2i Position)
+void GameObject::SetPosition(vec2 Position)
 {
     m_Position = Position;
+
+    //auto pSpaceInvader = dynamic_cast<SpaceInvader*>(this);
+    //if (pSpaceInvader)
+    //{
+    //    if (pSpaceInvader->m_InvaderID == 0)
+    //    {
+    //        printf("Invader x=%f , y=%f\n", m_Position.x, m_Position.y);
+    //    }
+    //}
 }
 
 void GameObject::SetStatus(bool Status)

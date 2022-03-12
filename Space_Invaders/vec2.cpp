@@ -84,6 +84,11 @@ vec2 vec2::operator/(float scalar)const
     return result;
 }
 
+vec2::operator vec2i()const
+{
+    return vec2i(int(x), int(y));
+}
+
 //============================================
 #include "vec2.h"
 

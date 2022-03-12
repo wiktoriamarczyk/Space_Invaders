@@ -90,6 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\Dependencies\SDL2_image-2.0.5\include;..\Dependencies\Include\SDL2_Mixer;..\Dependencies\Include\SDL2</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
