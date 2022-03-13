@@ -52,10 +52,13 @@ void Player::Update(float DeltaTime)
         {
             if (Shots[i]->GetPosition().y <= ObjectBottomRightCorner.y && Shots[i]->GetPosition().y >= ObjectTopLeftCorner.y)
             {
-                Engine::GetSingleton()->PlaySound("Bum.wav");
-                m_NumOfLives--;
-                m_IsHurt = true;
-                Shots[i]->SetStatus(false);
+                if (!m_IsHurt)
+                {
+                    Engine::GetSingleton()->PlaySound("Bum.wav");
+                    m_NumOfLives--;
+                    m_IsHurt = true;
+                    Shots[i]->SetStatus(false);
+                }
             }
         }
     }
@@ -66,12 +69,13 @@ void Player::Update(float DeltaTime)
         if (m_Timer <= 0)
         {
             m_IsHurt = false;
-            m_Timer = 25.0f;
+            m_Timer = 40.0f;
         }
     }
 
     if (m_NumOfLives <= 0)
     {
+        m_Timer = 100.0f;
         m_IsHurt = true;
         m_Timer--;
         if (m_Timer <= 0)

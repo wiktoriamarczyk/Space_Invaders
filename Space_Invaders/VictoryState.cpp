@@ -7,25 +7,6 @@ VictoryState::VictoryState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : G
     m_pRenderer = pRenderer;
 }
 
-VictoryState::~VictoryState()
-{
-    DestroyVictoryStateTextures();
-}
-
-void VictoryState::InitializeVicotryStateTextures()
-{
-    SDL_Surface* pImage = IMG_Load("../Data/Boss.png");
-    m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pImage);
-    SDL_FreeSurface(pImage);
-    pImage = nullptr;
-}
-
-void VictoryState::DestroyVictoryStateTextures()
-{
-    SDL_DestroyTexture(m_pTexture);
-    m_pTexture = nullptr;
-}
-
 void VictoryState::Update(float DeltaTime) {}
 
 void VictoryState::Render()
@@ -36,8 +17,7 @@ void VictoryState::Render()
     if (m_GameOver)
     {
         m_Font->DrawText(m_pRenderer, 7, 180, 100, "GAME OVER!");
-        SDL_Rect dstrect = { 30, 300, BOSS_WIDTH, BOSS_HEIGHT};
-        SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);
+        DisplayTexture("Boss.png", vec2i(30, 300), vec2i(BOSS_WIDTH, BOSS_HEIGHT));
 
         m_Font->DrawText(m_pRenderer, 2, 260, 300, "BUT THERE'S NO SENSE CRYING.");
         m_Font->DrawText(m_pRenderer, 2, 260, 320, "OVER EVERY MISTAKE.");
@@ -52,8 +32,7 @@ void VictoryState::Render()
     else
     {
         m_Font->DrawText(m_pRenderer, 7, 180, 100, "VICTORY!");
-        SDL_Rect dstrect = { 30, 300, BOSS_WIDTH, BOSS_HEIGHT };
-        SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);
+        DisplayTexture("Boss.png", vec2i(30, 300), vec2i(BOSS_WIDTH, BOSS_HEIGHT));
 
         m_Font->DrawText(m_pRenderer, 2, 260, 300, "I'M NOT EVEN ANGRY.");
         m_Font->DrawText(m_pRenderer, 2, 260, 320, "I'M BEING SO SINCERE RIGHT NOW.");
@@ -74,7 +53,6 @@ void VictoryState::OnEnter()
     Mix_HaltChannel(-1);
     GameState::OnEnter();
     Engine::GetSingleton()->PlaySound("EndingMusic.wav");
-    InitializeVicotryStateTextures();
 }
 
 void VictoryState::OnKeyDown(SDL_Scancode KeyCode)
@@ -82,7 +60,6 @@ void VictoryState::OnKeyDown(SDL_Scancode KeyCode)
     if (KeyCode == SDL_SCANCODE_ESCAPE)
     {
         Mix_HaltChannel(-1);
-        DestroyVictoryStateTextures();
         m_NextStateID = eStateID::MAINMENU;
     }
 }

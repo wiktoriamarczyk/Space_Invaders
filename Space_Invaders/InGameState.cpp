@@ -30,16 +30,17 @@ void InGameState::Update(float DeltaTime)
         m_DyingTimer--;
         if (m_DyingTimer <= 0)
         {
-            Boss::m_BossIsDead = true;
             m_GameOver = true;
             FreeResources();
             m_NextStateID = eStateID::VICTORY;
         }
     }
 
-    if (Boss::m_BossIsDead)
+    if (GetBossStatus())
     {
+        m_GameOver = false;
         FreeResources();
+        SetBossStatus(false);
         m_NextStateID = eStateID::VICTORY;
     }
 
@@ -94,7 +95,7 @@ void InGameState::Render()
     DisplayTexture("Life_Banner.png", srcrect, dstrect);
 
     m_Font->DrawText(m_pRenderer, 3, 30, 10, "SCORE:");
-    m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(SpaceInvader::m_NumOfPoints).c_str());
+    m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(GetNumOfPoints()).c_str());
     m_Font->DrawText(m_pRenderer, 3, 600, 10, "LIVES:");
 
     SDL_RenderPresent(m_pRenderer);
@@ -102,11 +103,9 @@ void InGameState::Render()
 
 void InGameState::CreateObject()
 {
-    SpaceInvader::m_NumOfPoints = 0;
-    SpaceInvader::m_NumOfInvaders = 0;
-    SpaceInvader::m_Speed = INVADER_SPEED;
-    Boss::m_LifeStatus = 30;
-    Boss::m_BossIsDead = false;
+    ///SpaceInvader::m_NumOfPoints = 0;
+    SetNumOfPoints(0);
+    SetSpaceInvadersNum(0);
 
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();
@@ -141,6 +140,41 @@ void InGameState::CreateObject()
     m_AllGameObjects.push_back(move(MyGun));
     m_AllGameObjects.push_back(move(MyBoss));
     m_AllGameObjects.push_back(m_Player);
+}
+
+int InGameState::GetRandomValue(int Range)
+{
+    return rand() % Range;
+}
+
+void InGameState::SetSpaceInvadersNum(int Value)
+{
+    m_NumOfSpaceInvaders = Value;
+}
+
+int InGameState::GetSpaceInvadersNum()const
+{
+    return m_NumOfSpaceInvaders;
+}
+
+void InGameState::SetBossStatus(bool BossStatus)
+{
+    m_BossIsDead = BossStatus;
+}
+
+int InGameState::GetBossStatus() const
+{
+    return m_BossIsDead;
+}
+
+void InGameState::SetNumOfPoints(int Value)
+{
+    m_NumOfPoints = Value;
+}
+
+int InGameState::GetNumOfPoints() const
+{
+    return m_NumOfPoints;
 }
 
 shared_ptr<Player> InGameState::GetPlayer()const

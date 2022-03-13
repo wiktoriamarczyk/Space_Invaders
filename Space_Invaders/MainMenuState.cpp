@@ -9,6 +9,8 @@ MainMenuState::MainMenuState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) :
 
 void MainMenuState::OnEnter()
 {
+    m_GameOver = false;
+
     GameState::OnEnter();
 
     m_Option = 0;

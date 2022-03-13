@@ -2,27 +2,29 @@
 #include "Engine.h"
 
 bool SpaceInvader::m_ChangeDirectionX = false;
-int SpaceInvader::m_NumOfInvaders = 0;
-int SpaceInvader::m_NumOfPoints = 0;
-float SpaceInvader::m_Speed = INVADER_SPEED;
-
 
 SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
 
-    m_InvaderID = m_NumOfInvaders;
-    m_NumOfInvaders++;
+    m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() + 1);
+    m_InvaderID = m_Game.GetSpaceInvadersNum();
 
     m_Name = GetName();
-
     m_Position = Position;
-
     m_Size = vec2i(OBJECT_WIDTH, OBJECT_HEIGHT);
+    m_Speed = INVADER_SPEED;
 }
 
 void SpaceInvader::Update(float DeltaTime)
 {
+    if (SDL_IsKeyPressed(SDL_SCANCODE_0))
+    {
+        m_IsAlive = false;
+        m_Game.SetSpaceInvadersNum(0);
+    }
+
+
     float FrameDistance = m_Speed * DeltaTime;
     vec2 ObjectTopLeftCorner = m_Position;
     vec2 ObjectBottomRightCorner = m_Position + m_Size;
@@ -31,6 +33,7 @@ void SpaceInvader::Update(float DeltaTime)
     vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
     vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
 
+    // przemieszczanie sie invaderow
     if (!m_ChangeDirectionX)
     {
         if (m_ChangeDirectionY)
@@ -50,6 +53,7 @@ void SpaceInvader::Update(float DeltaTime)
             m_ChangeDirectionX = true;
         }
     }
+
     if (m_ChangeDirectionX)
     {
         if (!m_ChangeDirectionY)
@@ -68,6 +72,7 @@ void SpaceInvader::Update(float DeltaTime)
         }
     }
 
+    // inwazja invaderow
     if (ObjectBottomRightCorner.y >= SCREEN_HEIGHT)
     {
         m_Game.GetPlayer()->SetLivesCount(m_Game.GetPlayer()->GetLivesCount() - 1);
@@ -85,7 +90,8 @@ void SpaceInvader::Update(float DeltaTime)
                     Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
                     m_IsDying = true;
                     m_Gun->GetShots()[i]->SetStatus(false);
-                    m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
+                    m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForInvader);
+                    ///m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
                 }
             }
         }
@@ -101,7 +107,7 @@ void SpaceInvader::Update(float DeltaTime)
         if (m_DyingTimer <= 0)
         {
             m_IsAlive = false;
-            m_NumOfInvaders--;
+            m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() - 1);
         }
     }
 
@@ -114,7 +120,7 @@ void SpaceInvader::Update(float DeltaTime)
         {
             m_ShootingTimer = 50.0f;
 
-            if (m_InvaderID == RandNumber())
+            if (m_InvaderID == m_Game.GetRandomValue(13))
             {
                 m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED, eTeamID::INVADER);
             }
@@ -169,9 +175,4 @@ string SpaceInvader::GetName()
         m_PointsForInvader = 10;
     }
     return m_Name;
-}
-
-int SpaceInvader::RandNumber()
-{
-    return rand() % 13;
 }

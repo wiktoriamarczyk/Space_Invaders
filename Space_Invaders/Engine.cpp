@@ -74,6 +74,7 @@ bool Engine::Initialize()
     m_AllStates.push_back(make_unique<InGameState>(MyFont, m_pRenderer));
     m_AllStates.push_back(make_unique<MainMenuState>(MyFont, m_pRenderer));
     m_AllStates.push_back(make_unique<HowToPlayState>(MyFont, m_pRenderer));
+    m_AllStates.push_back(make_unique<VictoryState>(MyFont, m_pRenderer));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);

@@ -2,25 +2,18 @@
 #include "SpaceInvader.h"
 #include "Engine.h"
 
-bool Boss::m_BossIsDead = false;
-int Boss::m_LifeStatus = 30;
 
 Boss::Boss(SDL_Renderer* pRenderer, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_pRenderer = pRenderer;
     m_Gun = MyGun;
-
-    m_Position.x = -200;
-    m_Position.y = 100;
-
-    m_Size.x = BOSS_WIDTH;
-    m_Size.y = BOSS_HEIGHT;
-
+    m_Position = vec2(-200, 100);
+    m_Size = vec2i(BOSS_WIDTH, BOSS_HEIGHT);
 }
 
 void Boss::Update(float DeltaTime)
 {
-    if (m_LifeStatus <= 0)
+    if (GetNumOfLives() <= 0)
     {
         if (m_PlayDeathSound)
         {
@@ -32,16 +25,16 @@ void Boss::Update(float DeltaTime)
 
         if (m_DyingTimer <= 0)
         {
-            m_BossIsDead = true;
+            m_Game.SetBossStatus(true);
         }
     }
 
-    if (m_BossIsDead)
+    if (m_Game.GetBossStatus())
     {
         m_IsAlive = false;
     }
 
-    if (SpaceInvader::m_NumOfInvaders <= 0)
+    if (m_Game.GetSpaceInvadersNum() <= 0)
     {
         if (m_PlayMusic)
         {
@@ -70,8 +63,9 @@ void Boss::Update(float DeltaTime)
                     {
                         Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
                         m_Gun->GetShots()[i]->SetStatus(false);
-                        m_LifeStatus--;
-                        SpaceInvader::m_NumOfPoints = SpaceInvader::m_NumOfPoints + 100;
+                        m_NumOfLives--;
+                        ///SpaceInvader::m_NumOfPoints = SpaceInvader::m_NumOfPoints + 100;
+                        m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForKill);
                     }
                 }
             }
@@ -82,21 +76,21 @@ void Boss::Update(float DeltaTime)
 
         vec2i BossShots = { 2 * SHOT_WIDTH, 2 * SHOT_HEIGHT };
 
-        if (!m_BossIsDead)
+        if (GetNumOfLives() > 0)
         {
             if (m_ShootingTimer <= 0)
             {
                 m_ShootingTimer = 40.0f;
 
-                if (GetRandNumber() == 0)
+                if (m_Game.GetRandomValue(3) == 0)
                 {
                     m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
-                else if (GetRandNumber() == 1)
+                else if (m_Game.GetRandomValue(3) == 1)
                 {
                     m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
-                else if (GetRandNumber() == 2)
+                else if (m_Game.GetRandomValue(3) == 2)
                 {
                     m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
@@ -107,15 +101,11 @@ void Boss::Update(float DeltaTime)
   
 void Boss::Render(SDL_Renderer* pRenderer)
 {
-    if (SpaceInvader::m_NumOfInvaders <= 0)
+    if (m_Game.GetSpaceInvadersNum() <= 0)
     {
-        //SDL_Rect dstrect = { int(m_Position.x), int(m_Position.y), m_Size.x, m_Size.y };
-        //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
-        //SDL_RenderFillRect(pRenderer, &dstrect);
-        //SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &dstrect);
-        if (m_BossIsDead)
+        if (GetNumOfLives() <= 0)
         {
-            DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
+            DisplayTexture("puf.png", (vec2i)m_Position, vec2i(BOSS_WIDTH, BOSS_WIDTH));
         }
         else DisplayTexture("Boss.png", (vec2i)m_Position, m_Size);
 
@@ -128,7 +118,7 @@ void Boss::Render(SDL_Renderer* pRenderer)
         int Rect_width = 5;
         int Rect_height = 45;
 
-        for (int i = 0; i < m_LifeStatus; ++i)
+        for (int i = 0; i < GetNumOfLives(); ++i)
         {
             SDL_Rect BlocksOfLife = { 202 + i * Rect_width + i * 1.25f * Rect_width, 12, 2 * Rect_width, Rect_height };
             SDL_RenderFillRect(m_pRenderer, &BlocksOfLife);
@@ -136,7 +126,12 @@ void Boss::Render(SDL_Renderer* pRenderer)
     }
 }
 
-int Boss::GetRandNumber()
+void Boss::SetNumOfLives(int Value)
 {
-    return rand() % 3;
+    m_NumOfLives = Value;
+}
+
+int Boss::GetNumOfLives() const
+{
+    return m_NumOfLives;
 }
