@@ -6,11 +6,29 @@ bool SpaceInvader::m_ChangeDirectionX = false;
 SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
-
     m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() + 1);
+
     m_InvaderID = m_Game.GetSpaceInvadersNum();
 
-    m_Name = GetName();
+    if (m_InvaderID <= 12)
+    {
+        m_Name = "SpaceInvaders1";
+        m_PointsForInvader = 30;
+        m_Color = Color(255, 106, 0);
+    }
+    if (m_InvaderID >= 13 && m_InvaderID <= 26)
+    {
+        m_Name = "SpaceInvaders2";
+        m_PointsForInvader = 20;
+        m_Color = Color(87, 0, 127);
+    }
+    if (m_InvaderID >= 26 && m_InvaderID <= 39)
+    {
+        m_Name = "SpaceInvaders3";
+        m_PointsForInvader = 10;
+        m_Color = Color(31, 73, 135);
+    }
+
     m_Position = Position;
     m_Size = vec2i(OBJECT_WIDTH, OBJECT_HEIGHT);
     m_Speed = INVADER_SPEED;
@@ -24,14 +42,13 @@ void SpaceInvader::Update(float DeltaTime)
         m_Game.SetSpaceInvadersNum(0);
     }
 
-
     float FrameDistance = m_Speed * DeltaTime;
     vec2 ObjectTopLeftCorner = m_Position;
     vec2 ObjectBottomRightCorner = m_Position + m_Size;
     vec2 tempPos = m_Position;
 
-    vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
-    vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
+    Vec2Rect srcrect1 = { { 0   , 0} , {0.5, 1} };
+    Vec2Rect srcrect2 = { { 0.5 , 0} , {0.5, 1} };
 
     // przemieszczanie sie invaderow
     if (!m_ChangeDirectionX)
@@ -88,27 +105,22 @@ void SpaceInvader::Update(float DeltaTime)
                 if (m_Gun->GetShots()[i]->GetPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetPosition().y >= ObjectTopLeftCorner.y)
                 {
                     Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
-                    m_IsDying = true;
+                    m_IsAlive = false;
                     m_Gun->GetShots()[i]->SetStatus(false);
                     m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForInvader);
-                    ///m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
                 }
             }
         }
     }
 
     // zmiana tekstury umierajacych invaderow
-    if (m_IsDying)
+
+    if (!m_IsAlive)
     {
-        m_MovementRect = srcrect1;
+        auto pParticle = m_Game.CreateParticle(m_Position);
+        pParticle->SetColor(m_Color);
 
-        m_DyingTimer--;
-
-        if (m_DyingTimer <= 0)
-        {
-            m_IsAlive = false;
-            m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() - 1);
-        }
+        m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() - 1);
     }
 
     // strzelaja tylko najwyzej umieszczone invadery
@@ -128,7 +140,7 @@ void SpaceInvader::Update(float DeltaTime)
     }
 
     // zmiana tekstury poruszania sie invaderow
-    if (!m_IsDying)
+    if (m_IsAlive)
     {
         m_TextureTimer--;
 
@@ -150,29 +162,17 @@ void SpaceInvader::Render(SDL_Renderer* pRenderer)
 {
     SDL_Rect dstrect = { int(m_Position.x), int(m_Position.y), int(m_Size.x), int(m_Size.y) };
  
-    if (m_IsDying)
+    /*if (m_IsDying)
     {
         DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
-    }
-    else DisplayTexture(m_Name + ".png", m_MovementRect, dstrect);
+    }*/
+    //DisplayTexture(m_Name + ".png", m_Position, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size } );
+
+
+    DisplayTexture(m_Name + ".png", m_Position, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size });
 }
 
 string SpaceInvader::GetName()
 {
-    if (m_InvaderID <= 12)
-    {
-        m_Name = "SpaceInvaders1";
-        m_PointsForInvader = 30;
-    }
-    if (m_InvaderID >= 13 && m_InvaderID <= 26)
-    {
-        m_Name = "SpaceInvaders2";
-        m_PointsForInvader = 20;
-    }
-    if (m_InvaderID >= 26 && m_InvaderID <= 39)
-    {
-        m_Name = "SpaceInvaders3";
-        m_PointsForInvader = 10;
-    }
     return m_Name;
 }

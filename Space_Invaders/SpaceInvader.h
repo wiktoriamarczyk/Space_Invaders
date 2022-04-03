@@ -19,11 +19,10 @@ private:
     int             m_PointsForInvader = 0;
     int             m_Speed = 0;
     shared_ptr<Gun> m_Gun;
-    SDL_Rect        m_MovementRect;
+    Vec2Rect        m_MovementRect;
     float           m_TextureTimer = 0.0f;
     float           m_ShootingTimer = 50.0f;
     float           m_DyingTimer = 25.0f;
-    bool            m_IsDying = false;
     bool            m_ChangeDirectionY = false;
     static bool     m_ChangeDirectionX;
 };

@@ -90,9 +90,10 @@ void Player::Render(SDL_Renderer* pRenderer)
     vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
     if (m_IsHurt)
     {
-        DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
+        //DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
     }
-    else DisplayTexture("Gun.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
+    else DisplayTexture("Gun.png", m_Position, DisplayParameters{ .DisplaySize = m_Size });
+
 }
 
 void Player::SetLivesCount(int NumOfLives)

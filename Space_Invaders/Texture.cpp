@@ -36,7 +36,7 @@ bool Texture::Load(const string& FileName)
     return true;
 }
 
-void Texture::Display(vec2i Position, optional<vec2i> Size)const
+void Texture::Display(vec2 Position, DisplayParameters Param)const
 {
     //int value = 0;
     //if( w.has_value() )
@@ -45,16 +45,27 @@ void Texture::Display(vec2i Position, optional<vec2i> Size)const
     //if (w)
     // value = *w;
 
-    vec2i tmp = Size.value_or(m_Size);
+    vec2 tmp = vec2(Param.DisplaySize.value_or(m_Size)) * Param.DrawScale;
+    SDL_Rect DstRect = {Position.x, Position.y, tmp.x, tmp.y };
 
-    SDL_Rect Rect = { Position.x, Position.y, tmp.x, tmp.y };
+    SDL_Rect SrcRect = {Param.SrcTopLeft.x * m_Size.x, Param.SrcTopLeft.y * m_Size.y, Param.SrcSize.x * m_Size.x, Param.SrcSize.y * m_Size.y };
+
+    if (Param.DrawColor.R != 1 || Param.DrawColor.G != 1 || Param.DrawColor.B != 1)
+    {
+        SDL_SetTextureColorMod(m_pTexture, Uint8(Param.DrawColor.R*255), Uint8(Param.DrawColor.G*255), Uint8(Param.DrawColor.B*255));
+    }
+
+    if (Param.DrawColor.A != 1)
+    {
+        SDL_SetTextureAlphaMod(m_pTexture, Uint8(Param.DrawColor.A * 255));
+    }
+
+    if (Param.DrawMode == eDrawMode::ADDITIVE)
+        SDL_SetTextureBlendMode(m_pTexture, SDL_BLENDMODE_ADD);
+    else
+        SDL_SetTextureBlendMode(m_pTexture, SDL_BLENDMODE_BLEND);
     
-    SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, &Rect);
-}
-
-void Texture::Display(SDL_Rect srcrect, SDL_Rect dstrect)
-{
-    SDL_RenderCopy(m_pRenderer, m_pTexture, &srcrect, &dstrect);
+    SDL_RenderCopy(m_pRenderer, m_pTexture, &SrcRect, &DstRect);
 }
 
 void Texture::FreeResources()

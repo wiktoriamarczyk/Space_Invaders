@@ -105,7 +105,7 @@ void Engine::Loop()
 
         SDL_Delay(1000 / 60);
 
-        m_pCurrentState->Update(1.0f / 60.0f);
+        m_pCurrentState->Update(1.0f / 240.0f);
         m_pCurrentState->Render();
 
         // domyslnie nastepny stan jest UNKNOWN, gdy nie chcemy przechodzic do nowego stanu, zatem jesli jest tam cos innego, tzn. ze bylo zazadanie zmiany stanu
@@ -180,20 +180,11 @@ shared_ptr<Texture> Engine::GetTexture(const string& FileName)const
     return temp_texture;
 }
 
-void Engine::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
-{
-    // jesli znalezlismy teksture, wyswietl ja
-    if (auto pTexture = GetTexture(FileName))
-    {
-        pTexture->Display(Position, Size);
-    }
-}
-
-void Engine::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
+void Engine::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param )
 {
     if (auto pTexture = GetTexture(FileName))
     {
-        pTexture->Display(srcrect, dstrect);
+        pTexture->Display(Position, Param);
     }
 }
 

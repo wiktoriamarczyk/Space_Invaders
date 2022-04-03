@@ -105,9 +105,9 @@ void Boss::Render(SDL_Renderer* pRenderer)
     {
         if (GetNumOfLives() <= 0)
         {
-            DisplayTexture("puf.png", (vec2i)m_Position, vec2i(BOSS_WIDTH, BOSS_WIDTH));
+            //DisplayTexture("puf.png", (vec2i)m_Position, vec2i(BOSS_WIDTH, BOSS_WIDTH));
         }
-        else DisplayTexture("Boss.png", (vec2i)m_Position, m_Size);
+        else DisplayTexture("Boss.png", m_Position, DisplayParameters{ .DisplaySize = m_Size});
 
         SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
         SDL_Rect LifeRect = { 200, 10, 340, 50 };

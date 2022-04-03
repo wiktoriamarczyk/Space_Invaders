@@ -13,11 +13,12 @@ public:
     bool GetStatus()const;
     void SetPosition(vec2 Position);
     void SetStatus(bool Status);
-    void DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size = nullopt);
-    void DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect);
+    void SetColor(Color color);
+    void DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param = {});
 
 protected:
-    vec2 m_Position;
+    vec2  m_Position;
     vec2i m_Size;
     bool  m_IsAlive = true;
+    Color m_Color;
 };

@@ -30,12 +30,12 @@ void GameObject::SetStatus(bool Status)
     m_IsAlive = Status;
 }
 
-void GameObject::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
+void GameObject::SetColor(Color color)
 {
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
+    m_Color = color;
 }
 
-void GameObject::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
+void GameObject::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param)
 {
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Param);
 }

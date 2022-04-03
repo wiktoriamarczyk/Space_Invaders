@@ -17,7 +17,7 @@ void VictoryState::Render()
     if (m_GameOver)
     {
         m_Font->DrawText(m_pRenderer, 7, 180, 100, "GAME OVER!");
-        DisplayTexture("Boss.png", vec2i(30, 300), vec2i(BOSS_WIDTH, BOSS_HEIGHT));
+        DisplayTexture("Boss.png", vec2i(30, 300), DisplayParameters{.DisplaySize = vec2i(BOSS_WIDTH, BOSS_HEIGHT) });
 
         m_Font->DrawText(m_pRenderer, 2, 260, 300, "BUT THERE'S NO SENSE CRYING.");
         m_Font->DrawText(m_pRenderer, 2, 260, 320, "OVER EVERY MISTAKE.");
@@ -32,7 +32,7 @@ void VictoryState::Render()
     else
     {
         m_Font->DrawText(m_pRenderer, 7, 180, 100, "VICTORY!");
-        DisplayTexture("Boss.png", vec2i(30, 300), vec2i(BOSS_WIDTH, BOSS_HEIGHT));
+        DisplayTexture("Boss.png", vec2i(30, 300), DisplayParameters{ .DisplaySize = vec2i(BOSS_WIDTH, BOSS_HEIGHT) });
 
         m_Font->DrawText(m_pRenderer, 2, 260, 300, "I'M NOT EVEN ANGRY.");
         m_Font->DrawText(m_pRenderer, 2, 260, 320, "I'M BEING SO SINCERE RIGHT NOW.");

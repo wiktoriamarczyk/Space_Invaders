@@ -31,7 +31,7 @@ void MainMenuState::Render()
     SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(m_pRenderer);
 
-    DisplayTexture("SpaceInvader.png", vec2i(300, 100), vec2i(200, 200));
+    DisplayTexture("SpaceInvader.png", vec2(300, 100), DisplayParameters{.DisplaySize = vec2i(200, 200)});
 
     m_Font->DrawText(m_pRenderer, 5, 130, 300, "SPACE INVADERS");
 

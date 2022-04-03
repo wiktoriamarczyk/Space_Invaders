@@ -9,6 +9,8 @@ Shield::Shield(float PosX, float PosY, shared_ptr<Gun> MyGun)
     m_Position.y = PosY;
     m_Size.x = 1.2 * OBJECT_WIDTH;
     m_Size.y = OBJECT_HEIGHT;
+
+    m_TextureDestructionLevel.Size = vec2(0.5f, 0.5f);
 }
 
 void Shield::Update(float DeltaTime)
@@ -16,16 +18,16 @@ void Shield::Update(float DeltaTime)
     switch (m_DestructionLevel)
     {
     case 0:
-        m_TextureDestructionLevel = { 90, 43, 230, 190 };
+        m_TextureDestructionLevel.TopLeft = vec2(0,0);
         break;
     case 1:
-        m_TextureDestructionLevel = { 440, 43, 230, 180 };
+        m_TextureDestructionLevel.TopLeft = vec2(0.5f, 0);
         break;
     case 2:
-        m_TextureDestructionLevel = { 90, 329, 230, 180 };
+        m_TextureDestructionLevel.TopLeft = vec2(0, 0.5f);
         break;
     case 3:
-        m_TextureDestructionLevel = { 435, 329, 230, 170 };
+        m_TextureDestructionLevel.TopLeft = vec2(0.5f, 0.5f);
         break;
     }
 
@@ -52,8 +54,7 @@ void Shield::Update(float DeltaTime)
 
 void Shield::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect dstrect = { m_Position.x, m_Position.y, m_Size.x, m_Size.y };
-    DisplayTexture("Shields.png", m_TextureDestructionLevel, dstrect);
+    DisplayTexture("Shields.png", m_Position, DisplayParameters{ .DisplaySize = m_Size, .SrcTopLeft = m_TextureDestructionLevel.TopLeft, .SrcSize = m_TextureDestructionLevel.Size });
 }
 
 void Shield::SetShotStatus(vec2 &BulletPosition)

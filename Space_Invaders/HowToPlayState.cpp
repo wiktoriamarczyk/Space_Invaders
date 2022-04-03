@@ -33,17 +33,11 @@ void HowToPlayState::Render()
     m_Font->DrawText(m_pRenderer, 2, 350, 470, "= 30 POINTS");
     m_Font->DrawText(m_pRenderer, 2, 350, 520, "=? MYSTERY");
 
-    SDL_Rect srcrect = { 0, 0, 26, 26 };
 
-    SDL_Rect dstrect = { 280, 350, OBJECT_WIDTH, OBJECT_HEIGHT};
-    DisplayTexture("SpaceInvaders1.png", srcrect, dstrect);
-
-    dstrect = { 280, 400, OBJECT_WIDTH, OBJECT_HEIGHT };
-    DisplayTexture("SpaceInvaders2.png", srcrect, dstrect);
-
-    dstrect = { 280, 450, OBJECT_WIDTH, OBJECT_HEIGHT };
-    DisplayTexture("SpaceInvaders3.png", srcrect, dstrect);
-
+    vec2i Size(OBJECT_WIDTH, OBJECT_HEIGHT);
+    DisplayTexture("SpaceInvaders1.png", vec2(280, 350), DisplayParameters{.DisplaySize = Size, .SrcSize = vec2(0.5f, 1.0f)});
+    DisplayTexture("SpaceInvaders2.png", vec2(280, 400), DisplayParameters{.DisplaySize = Size, .SrcSize = vec2(0.5f, 1.0f)});
+    DisplayTexture("SpaceInvaders3.png", vec2(280, 450), DisplayParameters{.DisplaySize = Size, .SrcSize = vec2(0.5f, 1.0f)});
     DisplayTexture("Boss.png", vec2i(280, 510));
 
     SDL_RenderPresent(m_pRenderer);

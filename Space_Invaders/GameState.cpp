@@ -21,12 +21,7 @@ void GameState::OnEnter()
     m_NextStateID = eStateID::UNKNOWN;
 }
 
-void GameState::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
+void GameState::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param )
 {
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
-}
-
-void GameState::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
-{
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
+    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Param);
 }

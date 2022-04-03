@@ -16,8 +16,7 @@ public:
     virtual void OnMouseButtonDown(int Button) {};
     eStateID GetStateID()const;
     eStateID GetNextStateID()const;
-    void DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size = nullopt);
-    void DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect);
+    void DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param = {});
 
 protected:
     SDL_Renderer*    m_pRenderer = nullptr;

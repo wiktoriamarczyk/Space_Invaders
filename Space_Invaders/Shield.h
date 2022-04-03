@@ -12,6 +12,6 @@ public:
 
 private:
     shared_ptr<Gun>     m_Gun;
-    SDL_Rect            m_TextureDestructionLevel;
+    Vec2Rect            m_TextureDestructionLevel;
     int                 m_DestructionLevel = 0;
 };

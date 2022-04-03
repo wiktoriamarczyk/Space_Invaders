@@ -69,30 +69,26 @@ void InGameState::Render()
      {
          m_AllGameObjects[i]->Render(m_pRenderer);
      }
-    
-    SDL_Rect dstrect = {};
-    SDL_Rect srcrect = {};
+
+    vec2 Size{};
 
     switch (m_Player->GetLivesCount())
     {
     case 3:
-        dstrect = { 600, 40, 115, 30 };
-        srcrect = { 0, 0, 100, 30 };
+        Size = vec2(1, 1);
         break;
     case 2:
-        dstrect = { 600, 40, 75, 30 };
-        srcrect = { 0, 0, 68, 30 };
+        Size = vec2(2.f/3.f, 1);
         break;
     case 1:
-        dstrect = { 600, 40, 35, 30 };
-        srcrect = { 0, 0, 32, 30 };
+        Size = vec2(1.0f/3.0f, 1);
         break;
     case 0:
-        dstrect = { 0, 0, 0, 0 };
+        Size = vec2(0, 0);
         break;
     }
 
-    DisplayTexture("Life_Banner.png", srcrect, dstrect);
+    DisplayTexture("Life_Banner.png", vec2(600, 40), DisplayParameters{.DrawScale = Size, .SrcSize = Size});
 
     m_Font->DrawText(m_pRenderer, 3, 30, 10, "SCORE:");
     m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(GetNumOfPoints()).c_str());
@@ -103,7 +99,6 @@ void InGameState::Render()
 
 void InGameState::CreateObject()
 {
-    ///SpaceInvader::m_NumOfPoints = 0;
     SetNumOfPoints(0);
     SetSpaceInvadersNum(0);
 
@@ -193,21 +188,4 @@ void InGameState::OnEnter()
     GameState::OnEnter();
     // inicjalizacja zasobow
     CreateObject();
-}
-
-void InGameState::DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size)
-{
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
-}
-
-void InGameState::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
-{
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
-}
-
-void InGameState::FreeResources()
-{
-    Engine::GetSingleton()->DestroyTextures();
-    Engine::GetSingleton()->FreeSounds();
-    m_AllGameObjects.clear();
 }
