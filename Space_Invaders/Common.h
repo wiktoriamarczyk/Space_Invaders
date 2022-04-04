@@ -59,6 +59,12 @@ enum class eTeamID
     INVADER,
 };
 
+enum class eInvaderDirection
+{
+    RIGHT,
+    LEFT
+};
+
 enum class eDrawMode
 {
     NORMAL,

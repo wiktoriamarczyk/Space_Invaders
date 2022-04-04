@@ -82,15 +82,15 @@ void Boss::Update(float DeltaTime)
             {
                 m_ShootingTimer = 40.0f;
 
-                if (m_Game.GetRandomValue(3) == 0)
+                if (GetRandInt(0, 2) == 0)
                 {
                     m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
-                else if (m_Game.GetRandomValue(3) == 1)
+                else if (GetRandInt(0, 2) == 1)
                 {
                     m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
-                else if (m_Game.GetRandomValue(3) == 2)
+                else if (GetRandInt(0, 2) == 2)
                 {
                     m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }

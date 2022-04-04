@@ -105,7 +105,7 @@ void Engine::Loop()
 
         SDL_Delay(1000 / 60);
 
-        m_pCurrentState->Update(1.0f / 240.0f);
+        m_pCurrentState->Update(1.0f / 60.0f);
         m_pCurrentState->Render();
 
         // domyslnie nastepny stan jest UNKNOWN, gdy nie chcemy przechodzic do nowego stanu, zatem jesli jest tam cos innego, tzn. ze bylo zazadanie zmiany stanu

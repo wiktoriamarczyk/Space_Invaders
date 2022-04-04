@@ -10,8 +10,7 @@ public:
     eTeamID GetTeamID()const;
 
 private:
-    vec2    m_GunPosition;
-    float   m_LivingTimer = 100.0f;
+    float   m_LivingTimer = 10.0f;
     int     m_Speed = 0;
     eTeamID m_TeamID = eTeamID::UNKNOWN;
 };

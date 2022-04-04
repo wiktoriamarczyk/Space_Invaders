@@ -124,7 +124,7 @@ void InGameState::CreateObject()
     //inicjalizacja invaderow
     for (int COLUMN = 0; COLUMN < 3; ++COLUMN)
     {
-        for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
+        for (int ROW = 0; ROW < 13; ++ROW)
         {
             PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
             PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
@@ -135,11 +135,6 @@ void InGameState::CreateObject()
     m_AllGameObjects.push_back(move(MyGun));
     m_AllGameObjects.push_back(move(MyBoss));
     m_AllGameObjects.push_back(m_Player);
-}
-
-int InGameState::GetRandomValue(int Range)
-{
-    return rand() % Range;
 }
 
 void InGameState::SetSpaceInvadersNum(int Value)

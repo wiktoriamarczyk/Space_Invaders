@@ -17,7 +17,6 @@ public:
     void FreeResources();
     shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
 
-    int GetRandomValue(int Range);
     void SetSpaceInvadersNum(int Value);
     int GetSpaceInvadersNum()const;
     void SetBossStatus(bool BossStatus);

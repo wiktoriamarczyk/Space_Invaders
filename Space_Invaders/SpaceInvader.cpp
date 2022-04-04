@@ -1,14 +1,13 @@
 ﻿#include "SpaceInvader.h"
 #include "Engine.h"
 
-bool SpaceInvader::m_ChangeDirectionX = false;
+eInvaderDirection SpaceInvader::s_DirectionX = eInvaderDirection::RIGHT;
 
 SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
-    m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() + 1);
-
     m_InvaderID = m_Game.GetSpaceInvadersNum();
+    m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() + 1);
 
     if (m_InvaderID <= 12)
     {
@@ -43,49 +42,44 @@ void SpaceInvader::Update(float DeltaTime)
     }
 
     float FrameDistance = m_Speed * DeltaTime;
-    vec2 ObjectTopLeftCorner = m_Position;
-    vec2 ObjectBottomRightCorner = m_Position + m_Size;
-    vec2 tempPos = m_Position;
+
+    vec2 ObjectCenter = m_Position;
+    vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
 
     Vec2Rect srcrect1 = { { 0   , 0} , {0.5, 1} };
     Vec2Rect srcrect2 = { { 0.5 , 0} , {0.5, 1} };
 
     // przemieszczanie sie invaderow
-    if (!m_ChangeDirectionX)
+    if (s_DirectionX == eInvaderDirection::RIGHT)
     {
         if (m_ChangeDirectionY)
         {
             SetPosition( { m_Position.x , m_Position.y + OBJECT_HEIGHT } );
-            
-            if (m_Position.y >= tempPos.y)
-            {
-                tempPos = m_Position;
-                m_ChangeDirectionY = false;
-            }
+            m_ChangeDirectionY = false;
         }
+
         SetPosition({ m_Position.x + FrameDistance , m_Position.y  });
 
         if (ObjectBottomRightCorner.x >= SCREEN_WIDTH)
         {
-            m_ChangeDirectionX = true;
+            s_DirectionX = eInvaderDirection::LEFT;
         }
     }
 
-    if (m_ChangeDirectionX)
+    if (s_DirectionX == eInvaderDirection::LEFT)
     {
         if (!m_ChangeDirectionY)
         {
             SetPosition({ m_Position.x , m_Position.y + OBJECT_HEIGHT });
-            if (m_Position.y >= tempPos.y)
-            {
-                tempPos = m_Position;
-                m_ChangeDirectionY = true;
-            }
+            m_ChangeDirectionY = true;
         }
+
         SetPosition({ m_Position.x - FrameDistance , m_Position.y });
+
         if (ObjectTopLeftCorner.x <= 0)
         {
-            m_ChangeDirectionX = false;
+            s_DirectionX = eInvaderDirection::RIGHT;
         }
     }
 
@@ -114,7 +108,6 @@ void SpaceInvader::Update(float DeltaTime)
     }
 
     // zmiana tekstury umierajacych invaderow
-
     if (!m_IsAlive)
     {
         auto pParticle = m_Game.CreateParticle(m_Position);
@@ -126,13 +119,13 @@ void SpaceInvader::Update(float DeltaTime)
     // strzelaja tylko najwyzej umieszczone invadery
     if (m_InvaderID <= 12)
     {
-        m_ShootingTimer--;
+        m_ShootingTimer -= DeltaTime;
 
         if (m_ShootingTimer <= 0)
         {
-            m_ShootingTimer = 50.0f;
+            m_ShootingTimer = GetRandFloat(1.f, 2.f);
 
-            if (m_InvaderID == m_Game.GetRandomValue(13))
+            if (m_InvaderID == GetRandInt(0, 12))
             {
                 m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED, eTeamID::INVADER);
             }
@@ -142,34 +135,26 @@ void SpaceInvader::Update(float DeltaTime)
     // zmiana tekstury poruszania sie invaderow
     if (m_IsAlive)
     {
-        m_TextureTimer--;
+        m_TextureTimer -= DeltaTime;
 
-        if (m_TextureTimer == 50.0f)
+        if (m_TextureTimer <= 0.5f)
         {
-            Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
+           // Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
             m_MovementRect = srcrect1;
         }
         if (m_TextureTimer <= 0)
         {
-            Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
+          //  Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
             m_MovementRect = srcrect2;
-            m_TextureTimer = 100.0f;
+            m_TextureTimer = 1.0f;
         }
     }
 }
 
 void SpaceInvader::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect dstrect = { int(m_Position.x), int(m_Position.y), int(m_Size.x), int(m_Size.y) };
- 
-    /*if (m_IsDying)
-    {
-        DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
-    }*/
-    //DisplayTexture(m_Name + ".png", m_Position, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size } );
-
-
-    DisplayTexture(m_Name + ".png", m_Position, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size });
+    vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
+    DisplayTexture(m_Name + ".png", ObjectTopLeftCorner, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size });
 }
 
 string SpaceInvader::GetName()
