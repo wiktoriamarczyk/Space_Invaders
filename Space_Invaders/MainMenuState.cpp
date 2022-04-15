@@ -36,16 +36,20 @@ void MainMenuState::Render()
     m_Font->DrawText(m_pRenderer, 5, 130, 300, "SPACE INVADERS");
 
     if (m_Option == 0)
-        m_Font->DrawText(m_pRenderer, 3, 270, 400, "->NEW GAME");
-    else m_Font->DrawText(m_pRenderer, 3, 270, 400, "  NEW GAME");
+        m_Font->DrawText(m_pRenderer, 3, 270, 380, "->NEW GAME");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 380, "  NEW GAME");
 
     if (m_Option == 1)
-        m_Font->DrawText(m_pRenderer, 3, 270, 440, "->HOW TO PLAY");
-    else m_Font->DrawText(m_pRenderer, 3, 270, 440, "  HOW TO PLAY");
+        m_Font->DrawText(m_pRenderer, 3, 270, 420, "->HOW TO PLAY");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 420, "  HOW TO PLAY");
 
     if (m_Option == 2)
-        m_Font->DrawText(m_pRenderer, 3, 270, 480, "->EXIT");
-    else m_Font->DrawText(m_pRenderer, 3, 270, 480, "  EXIT");
+        m_Font->DrawText(m_pRenderer, 3, 270, 460, "->HIGHSCORE");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 460, "  HIGHSCORE");
+
+    if (m_Option == 3)
+        m_Font->DrawText(m_pRenderer, 3, 270, 500, "->EXIT");
+    else m_Font->DrawText(m_pRenderer, 3, 270, 500, "  EXIT");
 
     m_Font->DrawText(m_pRenderer, 1, 300, 580, "AUTHOR: WIKTORIA MARCZYK");
 
@@ -62,7 +66,7 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
     }
 
     // sprawdzenie czy gracz naciska klawisz w dol, by przejsc do opcji ponizej 
-    if (KeyCode == SDL_SCANCODE_DOWN && m_Option < 2)
+    if (KeyCode == SDL_SCANCODE_DOWN && m_Option < 3)
     {
         m_Option++;
     }
@@ -88,6 +92,11 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
             m_NextStateID = eStateID::HOWTOPLAY;
         }
         if (m_Option == 2)
+        {
+            m_PlayMusicAgain = false;
+            m_NextStateID = eStateID::HIGHSCORE;
+        }
+        if (m_Option == 3)
         {
             Engine::GetSingleton()->ExitGame();
         }

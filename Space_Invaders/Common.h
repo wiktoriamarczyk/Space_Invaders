@@ -50,6 +50,7 @@ enum class eStateID
     INGAME,
     VICTORY, 
     HOWTOPLAY,
+    HIGHSCORE,
 };
 
 enum class eTeamID
