@@ -3,9 +3,8 @@
 #include "Engine.h"
 
 
-Boss::Boss(SDL_Renderer* pRenderer, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
+Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
-    m_pRenderer = pRenderer;
     m_Gun = MyGun;
     m_Position = vec2(-200, 100);
     m_Size = vec2i(BOSS_WIDTH, BOSS_HEIGHT);
@@ -109,11 +108,11 @@ void Boss::Render(SDL_Renderer* pRenderer)
         }
         else DisplayTexture("Boss.png", m_Position, DisplayParameters{ .DisplaySize = m_Size});
 
-        SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         SDL_Rect LifeRect = { 200, 10, 340, 50 };
-        SDL_RenderDrawRect(m_pRenderer, &LifeRect);
+        SDL_RenderDrawRect(pRenderer, &LifeRect);
 
-        SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
 
         int Rect_width = 5;
         int Rect_height = 45;
@@ -121,7 +120,7 @@ void Boss::Render(SDL_Renderer* pRenderer)
         for (int i = 0; i < GetNumOfLives(); ++i)
         {
             SDL_Rect BlocksOfLife = { 202 + i * Rect_width + i * 1.25f * Rect_width, 12, 2 * Rect_width, Rect_height };
-            SDL_RenderFillRect(m_pRenderer, &BlocksOfLife);
+            SDL_RenderFillRect(pRenderer, &BlocksOfLife);
         }
     }
 }

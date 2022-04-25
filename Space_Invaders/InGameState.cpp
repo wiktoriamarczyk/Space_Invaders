@@ -5,10 +5,9 @@
 #include "Shield.h"
 #include "Boss.h"
 
-InGameState::InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : GameState(eStateID::INGAME)
+InGameState::InGameState(shared_ptr<Font> MyFont) : GameState(eStateID::INGAME)
 {
     m_Font = MyFont;
-    m_pRenderer = pRenderer;
 }
 
 InGameState::~InGameState()
@@ -59,15 +58,15 @@ void InGameState::Update(float DeltaTime)
     }
 }
 
-void InGameState::Render()
+void InGameState::Render(SDL_Renderer* pRenderer)
 {
-    SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
-    SDL_RenderClear(m_pRenderer);
+    SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(pRenderer);
 
     // render wszystkich obiektow
      for (int i = 0; i < m_AllGameObjects.size(); ++i)
      {
-         m_AllGameObjects[i]->Render(m_pRenderer);
+         m_AllGameObjects[i]->Render(pRenderer);
      }
 
     vec2 Size{};
@@ -90,11 +89,11 @@ void InGameState::Render()
 
     DisplayTexture("Life_Banner.png", vec2(600, 40), DisplayParameters{.DrawScale = Size, .SrcSize = Size});
 
-    m_Font->DrawText(m_pRenderer, 3, 30, 10, "SCORE:");
-    m_Font->DrawText(m_pRenderer, 3, 30, 40, ToString(GetNumOfPoints()).c_str());
-    m_Font->DrawText(m_pRenderer, 3, 600, 10, "LIVES:");
+    m_Font->DrawText(pRenderer, 3, 30, 10, "SCORE:");
+    m_Font->DrawText(pRenderer, 3, 30, 40, ToString(GetNumOfPoints()).c_str());
+    m_Font->DrawText(pRenderer, 3, 600, 10, "LIVES:");
 
-    SDL_RenderPresent(m_pRenderer);
+    SDL_RenderPresent(pRenderer);
 }
 
 void InGameState::CreateObject()
@@ -109,7 +108,7 @@ void InGameState::CreateObject()
     m_Player = make_shared<Player>(MyGun, vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT));
 
     // inicjalizacja bossa
-    shared_ptr<Boss> MyBoss = make_shared<Boss>(m_pRenderer, MyGun, *this);
+    shared_ptr<Boss> MyBoss = make_shared<Boss>(MyGun, *this);
 
     float PosX = 0.0f, PosY = 0.0f;
 
@@ -194,9 +193,9 @@ void InGameState::FreeResources()
 
 shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
 {
-    shared_ptr<ParticleEmiter> PEmiter = make_shared<ParticleEmiter>();
-    PEmiter->SetPosition(Position);
-    m_AllGameObjects.push_back(PEmiter);
+    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>();
+    pEmiter->SetPosition(Position);
+    m_AllGameObjects.push_back(pEmiter);
 
-    return PEmiter;
+    return pEmiter;
 }

@@ -4,9 +4,9 @@
 class MainMenuState : public GameState
 {
 public:
-    MainMenuState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer);
+    MainMenuState(shared_ptr<Font> MyFont);
     void Update(float DeltaTime)override;
-    void Render()override;
+    void Render(SDL_Renderer* pRenderer)override;
     void OnKeyDown(SDL_Scancode KeyCode)override;
     void OnEnter()override;
 private:

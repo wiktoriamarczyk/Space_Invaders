@@ -2,7 +2,7 @@
 
 ParticleEmiter::ParticleEmiter()
 {
-    const int ParticleCount = 2;
+    const int ParticleCount = 5;
 
     float AngleDistance = 3.14f * 2 / ParticleCount;
 
@@ -18,7 +18,8 @@ ParticleEmiter::ParticleEmiter()
 
         float ParticleSpeed = GetRandFloat(90.0f, 100.0f);
 
-        tmp.m_MovementVector = Vec2Dir * ParticleSpeed;
+        // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
+        tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
         tmp.m_LifeTime = GetRandFloat(20.0f, 35.0f);
 
         m_Particles.push_back(tmp);
@@ -29,7 +30,7 @@ void ParticleEmiter::Update(float DeltaTime)
 {
     for (int i = 0; i < m_Particles.size(); ++i)
     {
-        m_Particles[i].m_ParticlePosition += m_Particles[i].m_MovementVector * DeltaTime;
+        m_Particles[i].m_ParticlePosition += m_Particles[i].m_DirectionVector * DeltaTime;
 
         m_Particles[i].m_LifeTime--;
 

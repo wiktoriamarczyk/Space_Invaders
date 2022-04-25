@@ -4,7 +4,7 @@
 struct ParticleData
 {
     vec2 m_ParticlePosition;
-    vec2 m_MovementVector;
+    vec2 m_DirectionVector;
     float m_LifeTime;
 };
 

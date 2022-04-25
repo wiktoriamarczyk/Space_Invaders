@@ -71,10 +71,10 @@ bool Engine::Initialize()
     MyFont->LoadFont("../Data/FontData.txt");
 
     // dodanie wszystkich stanow gry do wektora
-    m_AllStates.push_back(make_unique<InGameState>(MyFont, m_pRenderer));
-    m_AllStates.push_back(make_unique<MainMenuState>(MyFont, m_pRenderer));
-    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont, m_pRenderer));
-    m_AllStates.push_back(make_unique<VictoryState>(MyFont, m_pRenderer));
+    m_AllStates.push_back(make_unique<InGameState>(MyFont));
+    m_AllStates.push_back(make_unique<MainMenuState>(MyFont));
+    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont));
+    m_AllStates.push_back(make_unique<VictoryState>(MyFont));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);
@@ -106,7 +106,7 @@ void Engine::Loop()
         SDL_Delay(1000 / 60);
 
         m_pCurrentState->Update(1.0f / 60.0f);
-        m_pCurrentState->Render();
+        m_pCurrentState->Render(m_pRenderer);
 
         // domyslnie nastepny stan jest UNKNOWN, gdy nie chcemy przechodzic do nowego stanu, zatem jesli jest tam cos innego, tzn. ze bylo zazadanie zmiany stanu
         if (m_pCurrentState->GetNextStateID() != eStateID::UNKNOWN)

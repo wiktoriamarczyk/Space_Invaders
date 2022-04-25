@@ -3,18 +3,20 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "ParticleEmiter.h"
+#include "PowerUp.h"
 
 class InGameState : public GameState
 {
 public:
-    InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer);
+    InGameState(shared_ptr<Font> MyFont);
     ~InGameState();
     void Update(float DeltaTime)override;
-    void Render()override;
+    void Render(SDL_Renderer* pRenderer)override;
     void OnEnter()override;
     void CreateObject();
     shared_ptr<Player> GetPlayer()const;
     void FreeResources();
+
     shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
 
     void SetSpaceInvadersNum(int Value);
