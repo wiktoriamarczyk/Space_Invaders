@@ -1,27 +1,53 @@
 #include "ParticleEmiter.h"
 
+#include "Engine.h"
+
 ParticleEmiter::ParticleEmiter()
 {
-    const int ParticleCount = 10;
+    // liczba partikli jak¹ stworzymy
+    const int ParticleCount = 128;
 
+    // k¹t pomiêdzy poszczególnymi partiklami -> pe³ne ko³o / liczba partikli
     float AngleDistance = 3.14f * 2 / ParticleCount;
 
+    // tworzymy poszczególne partikle
     for (int i = 0; i < ParticleCount; ++i)
     {
         ParticleData tmp;
-        
-        //tmp.m_ParticlePosition.x = GetRandFloat(-100.0f, 100.0f);
-        //tmp.m_ParticlePosition.y = GetRandFloat(-100.0f, 100.0f);
 
-        float Angle = AngleDistance * i;// +GetRandFloat(-5.0f, 5.0f);
+        // k¹t pod jakim leci ten partikiel
+        float Angle = AngleDistance * i;
+        // uwtwórz wektor jednostkowy kierunku z k¹ta u¿ywaj¹c:
+        //
+        //         /|
+        //        / |
+        //    Z  /  |
+        //      /   | X
+        //     /    |
+        //    / a)  |
+        //    -------
+        //      Y
+        //
+        // a - k¹t
+        // Z = 1 -> wektor ma d³ugoœæ 1
+        // sin(a) = X/Z ->  X = sin(a)
+        // cos(a) = Y/Z ->  Y = cos(a)
+
         vec2 Vec2Dir(sin(Angle), cos(Angle));
 
-        float ParticleSpeed = GetRandFloat(90.0f, 100.0f);
+        // losujemy prêdkoœæ pomiêdzy 80 a 130 pixeli na sekundê
+        float ParticleSpeed = GetRandFloat(80.0f, 130.0f);
 
         // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
         tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
-        tmp.m_LifeTime = GetRandFloat(15.0f, 25.0f);
-
+        // losujemy czas ¿ycia w sekundach
+        tmp.m_LifeTime = GetRandFloat(1.0f, 1.5f);
+        // losujemy czas "opóŸnienia" - czas na pocz¹tku w którym partikle nic nie robi i siê nie renderuje
+        tmp.m_StartDelayTime = GetRandFloat(0.0f, 0.15f);
+        // losujemy skalê
+        tmp.m_Scale = GetRandFloat(0.75f, 1.75f);
+           
+        // wrzucamy dane partikla do wektora
         m_Particles.push_back(tmp);
     }
 }
@@ -30,9 +56,16 @@ void ParticleEmiter::Update(float DeltaTime)
 {
     for (int i = 0; i < m_Particles.size(); ++i)
     {
+        // póki mamy jakiœ czas "opóŸnienia" to go zmiejszammy i nie robimy nic innego
+        if (m_Particles[i].m_StartDelayTime > 0)
+        {
+            m_Particles[i].m_StartDelayTime -= DeltaTime;
+            continue;
+        }
+
         m_Particles[i].m_ParticlePosition += m_Particles[i].m_DirectionVector * DeltaTime;
 
-        m_Particles[i].m_LifeTime--;
+        m_Particles[i].m_LifeTime-=DeltaTime;
 
         if (m_Particles[i].m_LifeTime <= 0)
         {
@@ -49,16 +82,19 @@ void ParticleEmiter::Update(float DeltaTime)
 
 void ParticleEmiter::Render(SDL_Renderer* Renderer)
 {
-    vec2 Scale = vec2(4, 4);
+    vec2 Scale = vec2(2, 2);
     vec2i Size = vec2i(32, 32);
 
     for (int i = 0; i < m_Particles.size(); ++i)
     {
-        //SDL_Rect srcrect{0, 0, 345/2, 345/2};
-        vec2 Pos = m_Particles[i].m_ParticlePosition + m_Position - ((Scale*Size)/2);
-        //SDL_Rect dstrect{Pos.x, Pos.y, 345/8, 345/8};
-        //DisplayTexture("Particle1.jpg", srcrect, dstrect);
+        // póki mamy jakiœ czas "opóŸnienia" to siê nie rysujemy
+        if (m_Particles[i].m_StartDelayTime > 0)
+            continue;
 
-        DisplayTexture("Particle3.jpg", Pos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color } );
+        const auto FinalScale = Scale * m_Particles[i].m_Scale;
+
+        vec2 Pos = m_Particles[i].m_ParticlePosition + m_Position - ((FinalScale*Size)/2);
+
+        DisplayTexture("Particle3.jpg", Pos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = FinalScale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color } );
     }
 }
