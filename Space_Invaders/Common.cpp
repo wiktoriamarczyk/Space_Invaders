@@ -17,7 +17,12 @@ int GetRandInt(int Min, int Max)
 
 float GetRandFloat(float Min, float Max)
 {
-    return GetRandInt((int)Min, (int)Max) + GetNormalizedFloat();
+    float FloatDiff = Max - Min;
+    if (FloatDiff <= 1)
+        return Min + (FloatDiff)*GetNormalizedFloat();
+
+    const int IntDiff = int(FloatDiff);
+    return Min + GetRandInt(0, IntDiff-1) + (1+FloatDiff-IntDiff)* GetNormalizedFloat();
 }
 
 float GetNormalizedFloat()
