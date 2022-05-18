@@ -73,7 +73,7 @@ void Player::Update(float DeltaTime)
         if (m_Timer <= 0)
         {
             m_IsHurt = false;
-            m_Timer = 40.0f;
+            m_Timer = 100.0f;
         }
     }
 
@@ -92,11 +92,16 @@ void Player::Update(float DeltaTime)
 void Player::Render(SDL_Renderer* pRenderer)
 {
     vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
+
     if (m_IsHurt)
     {
-        //DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
+        DisplayTexture("Gun_Damaged.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
     }
-    else DisplayTexture("Gun.png", m_Position, DisplayParameters{ .DisplaySize = m_Size });
+    else
+    {
+        DisplayTexture("Gun.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
+        m_TextureTimer = 0.0f;
+    }
 
 }
 

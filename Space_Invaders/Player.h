@@ -18,7 +18,8 @@ private:
     float                    m_ShootingTimer = 30.0f;
     shared_ptr<Gun>          m_Gun;
     int                      m_NumOfLives = 3;
-    float                    m_Timer = 40.0f;
+    float                    m_Timer = 100.0f;
+    float                    m_TextureTimer = 50.0f;
     int                      m_NumOfPoints = 0;
 };
 
