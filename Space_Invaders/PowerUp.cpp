@@ -1,9 +1,8 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(ePowerUpType Type)
+PowerUp::PowerUp(string Name)
 {
-    m_Speed = 50;
-    m_Type = Type;
+    m_Name = Name;
 }
 
 void PowerUp::Update(float DeltaTime)
@@ -23,11 +22,6 @@ void PowerUp::Update(float DeltaTime)
 void PowerUp::Render(SDL_Renderer* pRenderer)
 {
     DisplayTexture(m_Name + ".png", m_Position, {.DrawMode = eDrawMode::ADDITIVE , .DrawScale = m_Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color});
-}
-
-void PowerUp::SetName(string Name)
-{
-    m_Name = Name;
 }
 
 void PowerUp::SetScale(vec2 Scale)

@@ -66,6 +66,9 @@ bool Engine::Initialize()
         return false;
     }
 
+    ///SDL_Rect ViewPort = { 200, 0, WINDOW_WIDTH - 200, WINDOW_HEIGHT };
+    ///SDL_RenderSetViewport(m_pRenderer, &ViewPort);
+
     // stworzenie czcionki
     shared_ptr<Font> MyFont = make_shared<Font>();
     MyFont->LoadFont("../Data/FontData.txt");

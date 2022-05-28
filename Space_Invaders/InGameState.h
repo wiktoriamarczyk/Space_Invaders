@@ -1,7 +1,6 @@
 #pragma once
 #include "GameState.h"
 #include "GameObject.h"
-#include "Player.h"
 #include "ParticleEmiter.h"
 #include "PowerUp.h"
 
@@ -14,11 +13,13 @@ public:
     void Render(SDL_Renderer* pRenderer)override;
     void OnEnter()override;
     void CreateObject();
-    shared_ptr<Player> GetPlayer()const;
     void FreeResources();
 
+    template<typename T>
+    vector<shared_ptr<T>> GetObjects();
+
     shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
-    shared_ptr<PowerUp> CreatePowerUp(vec2 Position, ePowerUpType Type);
+    shared_ptr<PowerUp> CreatePowerUp(string Name, vec2 Position, ePowerUpType Type);
 
     void SetSpaceInvadersNum(int Value);
     int GetSpaceInvadersNum()const;
@@ -26,11 +27,13 @@ public:
     int GetBossStatus()const;
     void SetNumOfPoints(int Value);
     int GetNumOfPoints()const;
+    void SetPlayerLivesCount(int Value);
+    int GetPlayerLivesCount()const;
 
 
 private:
     vector<shared_ptr<GameObject>> m_AllGameObjects;
-    shared_ptr<Player>             m_Player;
+    int                            m_PlayerLives = 3;
     SDL_Texture*                   m_GunIconTexture = nullptr;
     float                          m_DyingTimer = 50.0f;
     int                            m_NumOfSpaceInvaders = 0;
@@ -38,3 +41,20 @@ private:
     int                            m_NumOfPoints = 0;
 };
 
+template<typename T>
+vector<shared_ptr<T>> InGameState::GetObjects()
+{
+    vector<shared_ptr<T>> specific_objects;
+
+    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    {
+        shared_ptr<T> object = dynamic_pointer_cast<T>(m_AllGameObjects[i]);
+
+        if (object)
+        {
+            specific_objects.push_back(object);
+        }
+    }
+
+    return specific_objects;
+}

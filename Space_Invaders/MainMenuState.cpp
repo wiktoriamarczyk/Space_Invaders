@@ -30,27 +30,27 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(pRenderer);
 
-    DisplayTexture("SpaceInvader.png", vec2(300, 100), DisplayParameters{.DisplaySize = vec2i(200, 200)});
+    DisplayTexture("SpaceInvader.png", vec2(300, 140), DisplayParameters{.DisplaySize = vec2i(200, 200)});
 
-    m_Font->DrawText(pRenderer, 5, 130, 300, "SPACE INVADERS");
+    m_Font->DrawText(pRenderer, 5, 130, SCREEN_HEIGHT / 2 - 50, "SPACE INVADERS");
 
     if (m_Option == 0)
-        m_Font->DrawText(pRenderer, 3, 270, 380, "->NEW GAME");
-    else m_Font->DrawText(pRenderer, 3, 270, 380, "  NEW GAME");
+        m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 40, "->NEW GAME");
+    else m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 40, "  NEW GAME");
 
     if (m_Option == 1)
-        m_Font->DrawText(pRenderer, 3, 270, 420, "->HOW TO PLAY");
-    else m_Font->DrawText(pRenderer, 3, 270, 420, "  HOW TO PLAY");
+        m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 80, "->HOW TO PLAY");
+    else m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 80, "  HOW TO PLAY");
 
     if (m_Option == 2)
-        m_Font->DrawText(pRenderer, 3, 270, 460, "->HIGHSCORE");
-    else m_Font->DrawText(pRenderer, 3, 270, 460, "  HIGHSCORE");
+        m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 120, "->HIGHSCORE");
+    else m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 120, "  HIGHSCORE");
 
     if (m_Option == 3)
-        m_Font->DrawText(pRenderer, 3, 270, 500, "->EXIT");
-    else m_Font->DrawText(pRenderer, 3, 270, 500, "  EXIT");
+        m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 160, "->EXIT");
+    else m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 160, "  EXIT");
 
-    m_Font->DrawText(pRenderer, 1, 300, 580, "AUTHOR: WIKTORIA MARCZYK");
+    m_Font->DrawText(pRenderer, 1, SCREEN_WIDTH/2 - SCREEN_WIDTH/10, SCREEN_HEIGHT - 140, "AUTHOR: WIKTORIA MARCZYK");
 
 
     SDL_RenderPresent(pRenderer);

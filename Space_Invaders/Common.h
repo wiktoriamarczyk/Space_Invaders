@@ -26,11 +26,14 @@ using std::optional;
 using std::nullopt;
 using std::function;
 using std::none_of;
+using std::dynamic_pointer_cast;
 
 enum : int
 {
     SCREEN_WIDTH = 800,
-    SCREEN_HEIGHT = 600,
+    SCREEN_HEIGHT = 800,
+   //WINDOW_WIDTH = 1520,
+   //WINDOW_HEIGHT = 900,
     OBJECT_HEIGHT = 50,
     OBJECT_WIDTH = 50,
     SHOT_SPEED = 500,

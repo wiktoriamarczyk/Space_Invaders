@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "Engine.h"
+#include "PowerUp.h"
 
-Player::Player(shared_ptr<Gun> MyGun, vec2 Position)
+Player::Player(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
     m_Position = Position;
@@ -34,7 +35,7 @@ void Player::Update(float DeltaTime)
         {
             m_Gun->Shoot(m_Position, vec2i(SHOT_WIDTH, SHOT_HEIGHT), 1500, eTeamID::PLAYER);
             Engine::GetSingleton()->PlaySound("Shot.wav");
-            m_ShootingTimer = 30.0f;
+             m_ShootingTimer = 30.0f;
         }
     }
 
@@ -55,7 +56,7 @@ void Player::Update(float DeltaTime)
                 if (!m_IsHurt)
                 {
                     Engine::GetSingleton()->PlaySound("Bum.wav");
-                    m_NumOfLives--;
+                    m_Game.SetPlayerLivesCount(m_Game.GetPlayerLivesCount() - 1);
                     m_IsHurt = true;
                     Shots[i]->SetStatus(false);
                 }
@@ -64,9 +65,20 @@ void Player::Update(float DeltaTime)
     }
 
     // lapanie PowerUpow przez gracza
+    vector<shared_ptr<PowerUp>> allPowerUps = m_Game.GetObjects<PowerUp>();
+    
+    for (int i = 0; i < allPowerUps.size(); ++i)
+    {
+        if (allPowerUps[i]->GetPosition().x >= ObjectTopLeftCorner.x && allPowerUps[i]->GetPosition().x <= ObjectBottomRightCorner.x)
+        {
+            if (allPowerUps[i]->GetPosition().y <= ObjectBottomRightCorner.y && allPowerUps[i]->GetPosition().y >= ObjectTopLeftCorner.y)
+            {
+                
+            }
+        }
+    }
 
-
-
+    // zranienie gracza
     if (m_IsHurt)
     {
         m_Timer--;
@@ -77,7 +89,8 @@ void Player::Update(float DeltaTime)
         }
     }
 
-    if (m_NumOfLives <= 0)
+    // smierc gracza
+    if (m_Game.GetPlayerLivesCount() <= 0)
     {
         m_Timer = 100.0f;
         m_IsHurt = true;
@@ -103,14 +116,4 @@ void Player::Render(SDL_Renderer* pRenderer)
         m_TextureTimer = 0.0f;
     }
 
-}
-
-void Player::SetLivesCount(int NumOfLives)
-{
-    m_NumOfLives = NumOfLives;
-}
-
-int Player::GetLivesCount()
-{
-    return m_NumOfLives;
 }

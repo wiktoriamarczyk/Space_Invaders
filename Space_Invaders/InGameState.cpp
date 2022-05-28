@@ -4,6 +4,7 @@
 #include "Gun.h"
 #include "Shield.h"
 #include "Boss.h"
+#include "Player.h"
 
 InGameState::InGameState(shared_ptr<Font> MyFont) : GameState(eStateID::INGAME)
 {
@@ -24,7 +25,7 @@ void InGameState::Update(float DeltaTime)
         m_NextStateID = eStateID::MAINMENU;
     }
 
-    if (m_Player->GetLivesCount() <= 0)
+    if (GetPlayerLivesCount() <= 0)
     {
         m_DyingTimer--;
         if (m_DyingTimer <= 0)
@@ -71,7 +72,7 @@ void InGameState::Render(SDL_Renderer* pRenderer)
 
     vec2 Size{};
 
-    switch (m_Player->GetLivesCount())
+    switch (GetPlayerLivesCount())
     {
     case 3:
         Size = vec2(1, 1);
@@ -96,6 +97,20 @@ void InGameState::Render(SDL_Renderer* pRenderer)
     SDL_RenderPresent(pRenderer);
 }
 
+void InGameState::OnEnter()
+{
+    m_GameOver = false;
+    GameState::OnEnter();
+    // inicjalizacja zasobow
+    SetPlayerLivesCount(3);
+    CreateObject();
+}
+
+// SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
+// ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
+// z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
+// 800 pikseli szerokosci ekranu
+
 void InGameState::CreateObject()
 {
     SetNumOfPoints(0);
@@ -105,7 +120,7 @@ void InGameState::CreateObject()
     shared_ptr<Gun> MyGun = make_shared<Gun>();
 
     // inicjalizacja gracza
-    m_Player = make_shared<Player>(MyGun, vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT));
+    shared_ptr<Player> MyPlayer = make_shared<Player>(vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT), MyGun, *this);
 
     // inicjalizacja bossa
     shared_ptr<Boss> MyBoss = make_shared<Boss>(MyGun, *this);
@@ -121,7 +136,7 @@ void InGameState::CreateObject()
     }
 
     //inicjalizacja invaderow
-    for (int COLUMN = 0; COLUMN < 3; ++COLUMN)
+    for (int COLUMN = 0; COLUMN < 4; ++COLUMN)
     {
         for (int ROW = 0; ROW < 13; ++ROW)
         {
@@ -133,7 +148,43 @@ void InGameState::CreateObject()
 
     m_AllGameObjects.push_back(move(MyGun));
     m_AllGameObjects.push_back(move(MyBoss));
-    m_AllGameObjects.push_back(m_Player);
+    m_AllGameObjects.push_back(move(MyPlayer));
+}
+
+void InGameState::FreeResources()
+{
+    Engine::GetSingleton()->DestroyTextures();
+    Engine::GetSingleton()->FreeSounds();
+    m_AllGameObjects.clear();
+}
+
+shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
+{
+    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>();
+    pEmiter->SetPosition(Position);
+    m_AllGameObjects.push_back(pEmiter);
+
+    return pEmiter;
+}
+
+shared_ptr<PowerUp> InGameState::CreatePowerUp(string Name, vec2 Position, ePowerUpType Type)
+{
+    shared_ptr<PowerUp> pPowerUp;
+
+    switch (Type)
+    {
+    case ePowerUpType::HEALTH:
+        //pPowerUp = make_shared<Health>(Name);
+        break;
+
+    case ePowerUpType::GUN_IMPROVMENT:
+        break;
+
+    }
+
+    pPowerUp->SetPosition(Position);
+    m_AllGameObjects.push_back(pPowerUp);
+    return pPowerUp;
 }
 
 void InGameState::SetSpaceInvadersNum(int Value)
@@ -166,45 +217,12 @@ int InGameState::GetNumOfPoints() const
     return m_NumOfPoints;
 }
 
-shared_ptr<Player> InGameState::GetPlayer()const
+void InGameState::SetPlayerLivesCount(int Value)
 {
-    return m_Player;
+    m_PlayerLives = Value;
 }
 
-// SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
-// ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
-// z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
-// 800 pikseli szerokosci ekranu
-
-void InGameState::OnEnter()
+int InGameState::GetPlayerLivesCount() const
 {
-    m_GameOver = false;
-    GameState::OnEnter();
-    // inicjalizacja zasobow
-    CreateObject();
-}
-
-void InGameState::FreeResources()
-{
-    Engine::GetSingleton()->DestroyTextures();
-    Engine::GetSingleton()->FreeSounds();
-    m_AllGameObjects.clear();
-}
-
-shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
-{
-    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>();
-    pEmiter->SetPosition(Position);
-    m_AllGameObjects.push_back(pEmiter);
-
-    return pEmiter;
-}
-
-shared_ptr<PowerUp> InGameState::CreatePowerUp(vec2 Position, ePowerUpType Type)
-{
-    shared_ptr<PowerUp> pPowerUp = make_shared<PowerUp>(Type);
-    pPowerUp->SetPosition(Position);
-    m_AllGameObjects.push_back(pPowerUp);
-
-    return pPowerUp;
+    return m_PlayerLives;
 }

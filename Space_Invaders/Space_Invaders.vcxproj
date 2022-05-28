@@ -159,6 +159,7 @@
     <ClCompile Include="ParticleEmiter.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PUp_Health.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="ParticleEmiter.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PUp_Health.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="Sound.h" />
