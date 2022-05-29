@@ -19,9 +19,9 @@ public:
     void DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param = {});
 
 protected:
-    eStateID         m_NextStateID = eStateID::UNKNOWN;
-    shared_ptr<Font> m_Font;
-    static bool      m_GameOver;
+    eStateID           m_NextStateID = eStateID::UNKNOWN;
+    shared_ptr<Font>   m_Font;
+    static bool m_GameOver;
 
 private:
     const eStateID   m_StateID = eStateID::UNKNOWN;

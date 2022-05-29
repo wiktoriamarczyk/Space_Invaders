@@ -18,7 +18,7 @@ public:
     template<typename T>
     vector<shared_ptr<T>> GetObjects();
 
-    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
+    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, int ParticleScale, float MaxLifeTime);
     shared_ptr<PowerUp> CreatePowerUp(string Name, vec2 Position, ePowerUpType Type);
 
     void SetSpaceInvadersNum(int Value);

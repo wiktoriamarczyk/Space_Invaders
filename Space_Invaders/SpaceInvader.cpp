@@ -24,7 +24,7 @@ SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Ga
     if (m_InvaderID >= 26 && m_InvaderID <= 38)
     {
         m_Name = "SpaceInvaders3";
-        m_PointsForInvader = 10;
+        m_PointsForInvader = 15;
         m_Color = Color(31, 73, 135);
     }
     if (m_InvaderID >= 39)
@@ -119,11 +119,11 @@ void SpaceInvader::Update(float DeltaTime)
     if (!m_IsAlive)
     {
         // tworzenie particle'a
-        auto pParticle = m_Game.CreateParticle(m_Position);
+        auto pParticle = m_Game.CreateParticle(m_Position, 128, 1.75f, 0.5f);
         pParticle->SetColor(m_Color);
 
         // losowanie powerup'a
-        int PowerUpType = GetRandInt(1, 3);
+        int PowerUpType = GetRandInt(1, 10);
 
         if (PowerUpType == 1)
         {

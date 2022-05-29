@@ -20,10 +20,7 @@ void MainMenuState::OnEnter()
     }
 }
 
-void MainMenuState::Update(float DeltaTime)  
-{
-
-}
+void MainMenuState::Update(float DeltaTime) {}
 
 void MainMenuState::Render(SDL_Renderer* pRenderer)
 {
@@ -39,7 +36,7 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
         m_ColorTimer = 10.f;
     }
 
-    m_Font->DrawText(pRenderer, 5, 130, SCREEN_HEIGHT / 2 - 50, "SPACE INVADERS", m_TxtColor);
+    m_Font->DrawText(pRenderer, 5, 130, SCREEN_HEIGHT / 2 - 40, "SPACE INVADERS", m_TxtColor);
 
     if (m_Option == 0)
         m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 40, "->NEW GAME");

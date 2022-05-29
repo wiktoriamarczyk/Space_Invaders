@@ -160,9 +160,9 @@ void InGameState::FreeResources()
     m_AllGameObjects.clear();
 }
 
-shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
+shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position, int ParticleCount, int ParticleScale, float MaxLifeTime)
 {
-    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>();
+    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>(ParticleCount, ParticleScale, MaxLifeTime);
     pEmiter->SetPosition(Position);
     m_AllGameObjects.push_back(pEmiter);
 

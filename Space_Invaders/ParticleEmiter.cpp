@@ -2,10 +2,10 @@
 
 #include "Engine.h"
 
-ParticleEmiter::ParticleEmiter()
-{
-    // liczba partikli jak¹ stworzymy
-    const int ParticleCount = 128;
+ParticleEmiter::ParticleEmiter(int ParticleCount, int Scale, float MaxLifeTime)
+{    
+    // ParticleCount - liczba partikli jak¹ stworzymy
+
 
     // k¹t pomiêdzy poszczególnymi partiklami -> pe³ne ko³o / liczba partikli
     float AngleDistance = 3.14f * 2 / ParticleCount;
@@ -41,11 +41,11 @@ ParticleEmiter::ParticleEmiter()
         // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
         tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
         // losujemy czas ¿ycia w sekundach
-        tmp.m_LifeTime = GetRandFloat(1.0f, 1.5f);
+        tmp.m_LifeTime = GetRandFloat(MaxLifeTime / 2.f, MaxLifeTime);
         // losujemy czas "opóŸnienia" - czas na pocz¹tku w którym partikle nic nie robi i siê nie renderuje
         tmp.m_StartDelayTime = GetRandFloat(0.0f, 0.15f);
         // losujemy skalê
-        tmp.m_Scale = GetRandFloat(0.75f, 1.75f);
+        tmp.m_Scale = GetRandFloat(Scale/2.f, Scale);
            
         // wrzucamy dane partikla do wektora
         m_Particles.push_back(tmp);

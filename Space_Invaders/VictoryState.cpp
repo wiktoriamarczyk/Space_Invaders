@@ -15,33 +15,21 @@ void VictoryState::Render(SDL_Renderer* pRenderer)
 
     if (m_GameOver)
     {
-        m_Font->DrawText(pRenderer, 7, 180, 100, "GAME OVER!");
-        DisplayTexture("Boss.png", vec2i(30, 300), DisplayParameters{.DisplaySize = vec2i(200, 100) });
-
-        m_Font->DrawText(pRenderer, 2, 260, 300, "BUT THERE'S NO SENSE CRYING.");
-        m_Font->DrawText(pRenderer, 2, 260, 320, "OVER EVERY MISTAKE.");
-        m_Font->DrawText(pRenderer, 2, 260, 340, "YOU JUST KEEP ON TRYING.");
-        m_Font->DrawText(pRenderer, 2, 260, 360, "TILL YOU RUN OUT OF CAKE.");
-        m_Font->DrawText(pRenderer, 2, 260, 380, "^_^");
-        m_Font->DrawText(pRenderer, 1, 290, 550, "CLICK ESC TO RETURN TO MENU");
-
-        SDL_Rect TextRect = { 250, 290, 510, 130};
-        SDL_RenderDrawRect(pRenderer, &TextRect);
+        m_Font->DrawText(pRenderer, 7, 140, 200, "GAME OVER!", Color{255.f, 1.f, 1.f});
     }
     else
     {
-        m_Font->DrawText(pRenderer, 7, 180, 100, "VICTORY!");
-        DisplayTexture("Boss.png", vec2i(30, 300), DisplayParameters{ .DisplaySize = vec2i(200, 100) });
+        m_Font->DrawText(pRenderer, 7, 170, 200, "VICTORY!");
+        m_Font->DrawText(pRenderer, 3, 170, 350, "YOUR SCORE: " );
 
-        m_Font->DrawText(pRenderer, 2, 260, 300, "I'M NOT EVEN ANGRY.");
-        m_Font->DrawText(pRenderer, 2, 260, 320, "I'M BEING SO SINCERE RIGHT NOW.");
-        m_Font->DrawText(pRenderer, 2, 260, 340, "EVEN THOUGH YOU BROKE MY HEART.");
-        m_Font->DrawText(pRenderer, 2, 260, 360, "AND KILLED ME.");
-        m_Font->DrawText(pRenderer, 1, 260, 400, "OH, BY THE WAY, THE CAKE IS GREAT ^_^");
-        m_Font->DrawText(pRenderer, 1, 290, 550, "CLICK ESC TO RETURN TO MENU");
-
-        SDL_Rect TextRect = { 250, 290, 510, 130 };
+        DisplayTexture("Boss.png", vec2i(60, 525), DisplayParameters{ .DisplaySize = vec2i(200, 100) });
+        m_Font->DrawText(pRenderer, 2, 300, 500, "SORRY FOR THE INVASION.");
+        m_Font->DrawText(pRenderer, 2, 300, 530, "IT WON'T HAPPEN AGAIN,");
+        m_Font->DrawText(pRenderer, 2, 300, 560, "I PROMISE! :(");
+        SDL_Rect TextRect = { 290, 490, 380, 100 };
         SDL_RenderDrawRect(pRenderer, &TextRect);
+
+        m_Font->DrawText(pRenderer, 1, 290, 700, "CLICK ESC TO RETURN TO MENU");
     }
 
     SDL_RenderPresent(pRenderer);

@@ -9,14 +9,29 @@ Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
     m_Position = vec2(-200, 100);
     m_Size = vec2i(200, 100);
     m_Speed = 50;
+    m_Color = Color(255, 1, 1);
 }
 
 void Boss::Update(float DeltaTime)
 {
+    if (SDL_IsKeyPressed(SDL_SCANCODE_1))
+    {
+        SetNumOfLives(0);
+    }
+
+    float FrameDistance = m_Speed * DeltaTime;
+    vec2 ObjectTopLeftCorner = m_Position;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size;
+    vec2 tempPos = m_Position;
+
+
     if (GetNumOfLives() <= 0)
     {
         if (m_PlayDeathSound)
         {
+            auto pParticle = m_Game.CreateParticle(m_Position + m_Size/2, 128, 2.75f, 4.f);
+            pParticle->SetColor(m_Color);
+
             Engine::GetSingleton()->PlaySound("Boss_death.wav");
             m_PlayDeathSound = false;
         }
@@ -42,11 +57,6 @@ void Boss::Update(float DeltaTime)
             m_PlayMusic = false;
         }
 
-        float FrameDistance = m_Speed * DeltaTime;
-        vec2 ObjectTopLeftCorner = m_Position;
-        vec2 ObjectBottomRightCorner = m_Position + m_Size;
-        vec2 tempPos = m_Position;
-
         if (ObjectTopLeftCorner.x <= SCREEN_WIDTH / 2 - 100)
         {
             m_Position.x += FrameDistance;
@@ -64,7 +74,6 @@ void Boss::Update(float DeltaTime)
                         Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
                         m_Gun->GetShots()[i]->SetStatus(false);
                         m_NumOfLives--;
-                        ///SpaceInvader::m_NumOfPoints = SpaceInvader::m_NumOfPoints + 100;
                         m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForKill);
                     }
                 }
