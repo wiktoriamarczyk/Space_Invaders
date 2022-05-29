@@ -1,8 +1,11 @@
 #include "PowerUp.h"
+#include "InGameState.h"
+#include "Player.h"
 
-PowerUp::PowerUp(string Name)
+PowerUp::PowerUp(string Name, InGameState& Game) : m_Game(Game)
 {
     m_Name = Name;
+    m_Speed = 100;
 }
 
 void PowerUp::Update(float DeltaTime)
@@ -17,11 +20,29 @@ void PowerUp::Update(float DeltaTime)
     {
         m_IsAlive = false;
     }
+
+    // jesli nastapi kolizja z graczem, uaktywnij konkretnego PowerUpa
+
+    vector<shared_ptr<Player>> MyPlayer = m_Game.GetObjects<Player>();
+    vec2 ObjectTopLeftCornerPlayer = MyPlayer[0]->GetPosition() - MyPlayer[0]->GetSize() / 2;
+    vec2 ObjectBottomRightCornerPlayer = MyPlayer[0]->GetPosition() + MyPlayer[0]->GetSize() / 2;
+
+    if (GetPosition().x >= ObjectTopLeftCornerPlayer.x && GetPosition().x <= ObjectBottomRightCornerPlayer.x)
+    {
+        if (GetPosition().y <= ObjectBottomRightCornerPlayer.y && GetPosition().y >= ObjectTopLeftCornerPlayer.y)
+        {
+            Activate(MyPlayer[0]);
+        }
+    }
 }
 
 void PowerUp::Render(SDL_Renderer* pRenderer)
 {
-    DisplayTexture(m_Name + ".png", m_Position, {.DrawMode = eDrawMode::ADDITIVE , .DrawScale = m_Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color});
+    if (m_DisplayTexture)
+    {
+        DisplayTexture(m_Name + ".png", m_Position, { .DrawMode = eDrawMode::NORMAL , .DrawScale = m_Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color });
+    }
+
 }
 
 void PowerUp::SetScale(vec2 Scale)

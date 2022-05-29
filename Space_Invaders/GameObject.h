@@ -13,6 +13,7 @@ public:
     void DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param = {});
 
     vec2 GetPosition()const;
+    vec2i GetSize()const;
     bool GetStatus()const;
     void SetPosition(vec2 Position);
     void SetStatus(bool Status);

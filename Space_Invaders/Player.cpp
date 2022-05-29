@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "Engine.h"
-#include "PowerUp.h"
 
 Player::Player(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
@@ -19,7 +18,7 @@ void Player::Update(float DeltaTime)
     {
         m_Position.x -= FrameDistance;
     }
-
+    
     vec2 PaddleBottomRightCorner = m_Position + m_Size / 2;
     if ((SDL_IsKeyPressed(SDL_SCANCODE_D) || (SDL_IsKeyPressed(SDL_SCANCODE_RIGHT))) && ObjectBottomRightCorner.x <= SCREEN_WIDTH)
     {
@@ -27,15 +26,26 @@ void Player::Update(float DeltaTime)
     }
 
     // strzelanie przez gracza
-    m_ShootingTimer--;
+    m_ShootingTimer -= DeltaTime;
+    m_SpecialShootingTimer -= DeltaTime;
 
     if (SDL_IsKeyPressed(SDL_SCANCODE_SPACE) && (!m_IsHurt))
     {
         if (m_ShootingTimer <= 0)
         {
-            m_Gun->Shoot(m_Position, vec2i(SHOT_WIDTH, SHOT_HEIGHT), 1500, eTeamID::PLAYER);
+            m_Gun->Shoot(m_Position, eTeamID::PLAYER);
             Engine::GetSingleton()->PlaySound("Shot.wav");
-             m_ShootingTimer = 30.0f;
+
+            if (m_SpecialShootingTimer >= 0)
+            {
+                m_Gun->InitializeShotParams(vec2i(2 * SHOT_WIDTH, 2 * SHOT_HEIGHT), Color{255.f, 1.f, 1.f}, 2500);
+                m_ShootingTimer = 0.25f;
+            }
+            else 
+            {
+                m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, 1500);
+                m_ShootingTimer = 0.4f;
+            }
         }
     }
 
@@ -64,35 +74,21 @@ void Player::Update(float DeltaTime)
         }
     }
 
-    // lapanie PowerUpow przez gracza
-    vector<shared_ptr<PowerUp>> allPowerUps = m_Game.GetObjects<PowerUp>();
-    
-    for (int i = 0; i < allPowerUps.size(); ++i)
-    {
-        if (allPowerUps[i]->GetPosition().x >= ObjectTopLeftCorner.x && allPowerUps[i]->GetPosition().x <= ObjectBottomRightCorner.x)
-        {
-            if (allPowerUps[i]->GetPosition().y <= ObjectBottomRightCorner.y && allPowerUps[i]->GetPosition().y >= ObjectTopLeftCorner.y)
-            {
-                
-            }
-        }
-    }
-
     // zranienie gracza
     if (m_IsHurt)
     {
-        m_Timer--;
+        m_Timer -= DeltaTime;
         if (m_Timer <= 0)
         {
             m_IsHurt = false;
-            m_Timer = 100.0f;
+            m_Timer = 1.0f;
         }
     }
 
     // smierc gracza
     if (m_Game.GetPlayerLivesCount() <= 0)
     {
-        m_Timer = 100.0f;
+        m_Timer = 1.0f;
         m_IsHurt = true;
         m_Timer--;
         if (m_Timer <= 0)
@@ -116,4 +112,9 @@ void Player::Render(SDL_Renderer* pRenderer)
         m_TextureTimer = 0.0f;
     }
 
+}
+
+void Player::SetSpecialShootingTimer(float Timer)
+{
+    m_SpecialShootingTimer = Timer;
 }

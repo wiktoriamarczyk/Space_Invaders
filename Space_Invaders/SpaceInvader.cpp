@@ -150,7 +150,8 @@ void SpaceInvader::Update(float DeltaTime)
 
             if (m_InvaderID == GetRandInt(0, 12))
             {
-                m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED, eTeamID::INVADER);
+                m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), eTeamID::INVADER);
+                m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{255.f, 255.f, 255.f}, SHOT_SPEED);
             }
         }
     }

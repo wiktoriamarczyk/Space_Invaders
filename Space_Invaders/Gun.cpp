@@ -37,7 +37,12 @@ vector<shared_ptr<Shot>>& Gun::GetShots()
     return m_Shots;
 }
 
-void Gun::Shoot(vec2 Pos, vec2i Size, int Speed, eTeamID Team)
+void Gun::Shoot(vec2 Pos, eTeamID Team)
 {
-    m_Shots.push_back(make_shared<Shot>(Pos, Size, Speed, Team));
+    m_Shots.push_back(make_shared<Shot>(Pos, Team));
+}
+
+void Gun::InitializeShotParams(vec2i Size, Color MyColor, int Speed)
+{
+    m_Shots.back()->InitializeParams(Size, MyColor, Speed);
 }

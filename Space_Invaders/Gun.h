@@ -9,7 +9,8 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     vector<shared_ptr<Shot>>& GetShots();
-    void Shoot(vec2 Pos, vec2i Size, int Speed, eTeamID Team);
+    void Shoot(vec2 Pos, eTeamID Team);
+    void InitializeShotParams(vec2i Size, Color MyColor, int Speed);
 
 private:
     vector<shared_ptr<Shot>> m_Shots;

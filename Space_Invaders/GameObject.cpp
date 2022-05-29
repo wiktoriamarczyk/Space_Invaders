@@ -6,6 +6,11 @@ vec2 GameObject::GetPosition()const
     return m_Position;
 }
 
+vec2i GameObject::GetSize() const
+{
+    return m_Size;
+}
+
 bool GameObject::GetStatus()const
 {
     return m_IsAlive;

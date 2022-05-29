@@ -84,15 +84,18 @@ void Boss::Update(float DeltaTime)
 
                 if (GetRandInt(0, 2) == 0)
                 {
-                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), eTeamID::INVADER);
+                    m_Gun->InitializeShotParams(BossShots, Color{255.f, 255.f, 255.f}, SHOT_SPEED);
                 }
                 else if (GetRandInt(0, 2) == 1)
                 {
-                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED, eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), eTeamID::INVADER);
+                    m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
                 }
                 else if (GetRandInt(0, 2) == 2)
                 {
-                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), eTeamID::INVADER);
+                    m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
                 }
             }
         }

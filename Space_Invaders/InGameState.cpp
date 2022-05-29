@@ -5,6 +5,8 @@
 #include "Shield.h"
 #include "Boss.h"
 #include "Player.h"
+#include "PUp_Health.h"
+#include "PUp_GunSpeed.h"
 
 InGameState::InGameState(shared_ptr<Font> MyFont) : GameState(eStateID::INGAME)
 {
@@ -174,18 +176,25 @@ shared_ptr<PowerUp> InGameState::CreatePowerUp(string Name, vec2 Position, ePowe
     switch (Type)
     {
     case ePowerUpType::HEALTH:
-        //pPowerUp = make_shared<Health>(Name);
+        pPowerUp = make_shared<PUp_Health>(Name, *this);
         break;
 
     case ePowerUpType::GUN_IMPROVMENT:
+        pPowerUp = make_shared<PUp_GunSpeed>(Name, *this);
         break;
 
     }
 
-    pPowerUp->SetPosition(Position);
-    m_AllGameObjects.push_back(pPowerUp);
-    return pPowerUp;
+    if (pPowerUp)
+    {
+        pPowerUp->SetPosition(Position);
+        m_AllGameObjects.push_back(pPowerUp);
+        return pPowerUp;
+    }
+
+    return nullptr;
 }
+
 
 void InGameState::SetSpaceInvadersNum(int Value)
 {
