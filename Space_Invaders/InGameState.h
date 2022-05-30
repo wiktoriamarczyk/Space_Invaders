@@ -21,6 +21,7 @@ public:
     shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, int ParticleScale, float MaxLifeTime);
     shared_ptr<PowerUp> CreatePowerUp(string Name, vec2 Position, ePowerUpType Type);
 
+    void SetPointsInfoTimer(float Value);
     void SetSpaceInvadersNum(int Value);
     int GetSpaceInvadersNum()const;
     void SetBossStatus(bool BossStatus);
@@ -35,10 +36,12 @@ private:
     vector<shared_ptr<GameObject>> m_AllGameObjects;
     int                            m_PlayerLives = 3;
     SDL_Texture*                   m_GunIconTexture = nullptr;
-    float                          m_DyingTimer = 50.0f;
+    float                          m_DyingTimer = 2.0f;
     int                            m_NumOfSpaceInvaders = 0;
     bool                           m_BossIsDead = false;
     int                            m_NumOfPoints = 0;
+
+    float                          m_PointsInfoTimer = 0.f;
 };
 
 template<typename T>

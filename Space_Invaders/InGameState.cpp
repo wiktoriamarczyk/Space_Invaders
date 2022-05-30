@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "PUp_Health.h"
 #include "PUp_GunSpeed.h"
+#include "PUp_Shield.h"
 
 InGameState::InGameState(shared_ptr<Font> MyFont) : GameState(eStateID::INGAME)
 {
@@ -20,6 +21,8 @@ InGameState::~InGameState()
 
 void InGameState::Update(float DeltaTime)
 {
+    m_PointsInfoTimer -= DeltaTime;
+
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
         Mix_HaltChannel(-1);
@@ -29,7 +32,7 @@ void InGameState::Update(float DeltaTime)
 
     if (GetPlayerLivesCount() <= 0)
     {
-        m_DyingTimer--;
+        m_DyingTimer -= DeltaTime;
         if (m_DyingTimer <= 0)
         {
             m_GameOver = true;
@@ -96,6 +99,11 @@ void InGameState::Render(SDL_Renderer* pRenderer)
     m_Font->DrawText(pRenderer, 3, 30, 40, ToString(GetNumOfPoints()).c_str());
     m_Font->DrawText(pRenderer, 3, 600, 10, "LIVES:");
 
+    if (m_PointsInfoTimer > 0)
+    {
+        m_Font->DrawText(pRenderer, 2, 200, 10, "+ 200! ULTRA KILL", Color{ 249.f, 215.f, 28.f });
+    }
+
     SDL_RenderPresent(pRenderer);
 }
 
@@ -105,6 +113,8 @@ void InGameState::OnEnter()
     GameState::OnEnter();
     // inicjalizacja zasobow
     SetPlayerLivesCount(3);
+    m_DyingTimer = 2.0f;
+    m_PointsInfoTimer = 0.f;
     CreateObject();
 }
 
@@ -182,7 +192,9 @@ shared_ptr<PowerUp> InGameState::CreatePowerUp(string Name, vec2 Position, ePowe
     case ePowerUpType::GUN_IMPROVMENT:
         pPowerUp = make_shared<PUp_GunSpeed>(Name, *this);
         break;
-
+    case ePowerUpType::SHIELD:
+        pPowerUp = make_shared<PUp_Shield>(Name, *this);
+        break;
     }
 
     if (pPowerUp)
@@ -195,6 +207,11 @@ shared_ptr<PowerUp> InGameState::CreatePowerUp(string Name, vec2 Position, ePowe
     return nullptr;
 }
 
+
+void InGameState::SetPointsInfoTimer(float Value)
+{
+    m_PointsInfoTimer = Value;
+}
 
 void InGameState::SetSpaceInvadersNum(int Value)
 {

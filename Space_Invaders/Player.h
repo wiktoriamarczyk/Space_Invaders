@@ -10,6 +10,7 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     void SetSpecialShootingTimer(float Timer);
+    void SetShieldTimer(float ShieldTimer);
 
 private:
     InGameState&             m_Game;
@@ -20,5 +21,6 @@ private:
     float                    m_TextureTimer = 0.5f;
     int                      m_NumOfPoints = 0;
     float                    m_SpecialShootingTimer = 0.f;
+    float                    m_ShieldTimer = 0.f;
 };
 

@@ -19,7 +19,7 @@ private:
     int             m_NumOfLives = 30;
     bool            m_PlayMusic = true;
     bool            m_PlayDeathSound = true;
-    float           m_DyingTimer = 100.0f;
+    float           m_DyingTimer = 3.0f;
     float           m_ShootingTimer = 40.0f;
     int             m_PointsForKill = 100;
 };

@@ -11,5 +11,7 @@ public:
     void OnKeyDown(SDL_Scancode KeyCode)override;
 
 private:
+    float      m_TextureTimer = 0.f;
+    Vec2Rect m_MovementRect;
 };
 

@@ -8,6 +8,7 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     eTeamID GetTeamID()const;
+    void SetTeamID(eTeamID TeamID);
     void InitializeParams(vec2i Size, Color MyColor, int Speed);
 
 private:

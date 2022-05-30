@@ -6,7 +6,7 @@
 Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
-    m_Position = vec2(-200, 100);
+    m_Position = vec2(-300, 200);
     m_Size = vec2i(200, 100);
     m_Speed = 50;
     m_Color = Color(255, 1, 1);
@@ -20,23 +20,24 @@ void Boss::Update(float DeltaTime)
     }
 
     float FrameDistance = m_Speed * DeltaTime;
-    vec2 ObjectTopLeftCorner = m_Position;
-    vec2 ObjectBottomRightCorner = m_Position + m_Size;
+    vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size / 2;
     vec2 tempPos = m_Position;
+
 
 
     if (GetNumOfLives() <= 0)
     {
         if (m_PlayDeathSound)
         {
-            auto pParticle = m_Game.CreateParticle(m_Position + m_Size/2, 128, 2.75f, 4.f);
+            auto pParticle = m_Game.CreateParticle(m_Position, 256, 2.75f, 4.f);
             pParticle->SetColor(m_Color);
 
             Engine::GetSingleton()->PlaySound("Boss_death.wav");
             m_PlayDeathSound = false;
         }
 
-        m_DyingTimer--;
+        m_DyingTimer -= DeltaTime;
 
         if (m_DyingTimer <= 0)
         {
@@ -91,19 +92,19 @@ void Boss::Update(float DeltaTime)
             {
                 m_ShootingTimer = 40.0f;
 
-                if (GetRandInt(0, 2) == 0)
+                if (GetRandInt(0, 3) == 0)
                 {
-                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), eTeamID::INVADER);
                     m_Gun->InitializeShotParams(BossShots, Color{255.f, 255.f, 255.f}, SHOT_SPEED);
                 }
-                else if (GetRandInt(0, 2) == 1)
+                else if (GetRandInt(0, 3) == 1)
                 {
-                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(m_Position.x + 52, ObjectBottomRightCorner.y), eTeamID::INVADER);
                     m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
                 }
-                else if (GetRandInt(0, 2) == 2)
+                else if (GetRandInt(0, 3) == 2)
                 {
-                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), eTeamID::INVADER);
+                    m_Gun->Shoot(vec2(m_Position.x - 52, ObjectBottomRightCorner.y), eTeamID::INVADER);
                     m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
                 }
             }
@@ -113,13 +114,14 @@ void Boss::Update(float DeltaTime)
   
 void Boss::Render(SDL_Renderer* pRenderer)
 {
+    vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
+
     if (m_Game.GetSpaceInvadersNum() <= 0)
     {
-        if (GetNumOfLives() <= 0)
+        if (GetNumOfLives() > 0)
         {
-            //DisplayTexture("puf.png", (vec2i)m_Position, vec2i(BOSS_WIDTH, BOSS_WIDTH));
+            DisplayTexture("Boss.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
         }
-        else DisplayTexture("Boss.png", m_Position, DisplayParameters{ .DisplaySize = m_Size});
 
         SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         SDL_Rect LifeRect = { 200, 10, 340, 50 };

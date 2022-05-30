@@ -56,6 +56,7 @@ enum class eTeamID
     UNKNOWN,
     PLAYER,
     INVADER,
+    SUICIDE,
 };
 
 enum class eInvaderDirection

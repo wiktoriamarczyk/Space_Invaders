@@ -11,7 +11,7 @@ void Shot::Update(float DeltaTime)
 {
     float FrameDistance = m_Speed * DeltaTime;
 
-    if (m_TeamID == eTeamID::PLAYER)
+    if (m_TeamID == eTeamID::PLAYER || m_TeamID == eTeamID::SUICIDE)
     {
         m_Position.y -= FrameDistance;
     }
@@ -36,6 +36,11 @@ void Shot::Render(SDL_Renderer* pRenderer)
 eTeamID Shot::GetTeamID()const
 {
     return m_TeamID;
+}
+
+void Shot::SetTeamID(eTeamID TeamID)
+{
+    m_TeamID = TeamID;
 }
 
 void Shot::InitializeParams(vec2i Size, Color MyColor, int Speed)

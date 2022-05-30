@@ -100,7 +100,7 @@ void SpaceInvader::Update(float DeltaTime)
     // strzelanie do invaderow
     for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
     {
-        if (m_Gun->GetShots()[i]->GetTeamID() == eTeamID::PLAYER)
+        if (m_Gun->GetShots()[i]->GetTeamID() != eTeamID::INVADER)
         {
             if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
             {
@@ -109,7 +109,13 @@ void SpaceInvader::Update(float DeltaTime)
                     Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
                     m_IsAlive = false;
                     m_Gun->GetShots()[i]->SetStatus(false);
-                    m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForInvader);
+
+                    if (m_Gun->GetShots()[i]->GetTeamID() == eTeamID::SUICIDE)
+                    {
+                        m_Game.SetPointsInfoTimer(2.f);
+                        m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + 200);
+                    }
+                    else m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForInvader);
                 }
             }
         }
@@ -128,11 +134,15 @@ void SpaceInvader::Update(float DeltaTime)
         if (PowerUpType == 1)
         {
             auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Gun", m_Position, ePowerUpType::GUN_IMPROVMENT);
-            pPowerUp->SetScale(vec2{ 0.5, 0.5 });
         }
         else if (PowerUpType == 2)
         {
             auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Health", m_Position, ePowerUpType::HEALTH);
+        }
+        else if (PowerUpType == 3)
+        {
+            auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Shield", m_Position, ePowerUpType::SHIELD);
+            pPowerUp->SetScale(vec2{1.5f, 1.5f});
         }
 
         // zmniejszenie liczby invaderow o jednego
@@ -146,7 +156,7 @@ void SpaceInvader::Update(float DeltaTime)
 
         if (m_ShootingTimer <= 0)
         {
-            m_ShootingTimer = GetRandFloat(0.5f, 0.75f);
+            m_ShootingTimer = GetRandFloat(0.25f, 0.5f);
 
             if (m_InvaderID == GetRandInt(0, 12))
             {
