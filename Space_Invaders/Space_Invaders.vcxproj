@@ -108,6 +108,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\Dependencies\Include\SDL2;..\Dependencies\Include\SDL2_Mixer;..\Dependencies\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,10 +160,12 @@
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="ParticleEmiter.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="PUp_GunSpeed.cpp" />
     <ClCompile Include="PUp_Health.cpp" />
     <ClCompile Include="PUp_Shield.cpp" />
+    <ClCompile Include="SetupState.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -184,10 +188,12 @@
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="ParticleEmiter.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="PUp_GunSpeed.h" />
     <ClInclude Include="PUp_Health.h" />
     <ClInclude Include="PUp_Shield.h" />
+    <ClInclude Include="SetupState.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="Sound.h" />

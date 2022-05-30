@@ -21,7 +21,7 @@ void Font::DrawText(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, 
 
     for (int i = 0; Text[i] != 0; ++i)
     {
-        const CharacterData* pData = FindCharacter(Text[i]);
+        const CharacterData* pData = FindCharacter(toupper(Text[i]));
         if (pData == nullptr)
             continue;
         DrawLines(pRenderer, PixelSize, PosX + i * CharacterSpacing, PosY, pData->m_ImageData, MyColor);

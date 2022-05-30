@@ -8,10 +8,12 @@ Sound::~Sound()
     m_pMusic = nullptr;
 }
 
-bool Sound::Load(const string& FileName, float Volume )
+bool Sound::Load(const path& FileName, float Volume )
 {
-    m_FileName = FileName;
-    m_pSoundData = Mix_LoadWAV(("../Data/" + FileName).c_str());
+    m_FileName = FileName.string();
+
+    m_pSoundData = Mix_LoadWAV((DataPath/FileName).string().c_str());
+
     Mix_VolumeChunk( m_pSoundData, int(Volume * MIX_MAX_VOLUME) );
     if (m_pSoundData == nullptr)
     {

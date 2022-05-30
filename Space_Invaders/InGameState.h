@@ -3,15 +3,17 @@
 #include "GameObject.h"
 #include "ParticleEmiter.h"
 #include "PowerUp.h"
+#include "PlayerData.h"
 
 class InGameState : public GameState
 {
 public:
-    InGameState(shared_ptr<Font> MyFont);
+    InGameState(shared_ptr<Font> MyFont, shared_ptr<PlayerData> MyPlayerData);
     ~InGameState();
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     void OnEnter()override;
+    void OnKeyDown(SDL_Scancode KeyCode)override;
     void CreateObject();
     void FreeResources();
 
@@ -39,7 +41,7 @@ private:
     float                          m_DyingTimer = 2.0f;
     int                            m_NumOfSpaceInvaders = 0;
     bool                           m_BossIsDead = false;
-    int                            m_NumOfPoints = 0;
+    shared_ptr<PlayerData>         m_PlayerData;
 
     float                          m_PointsInfoTimer = 0.f;
 };

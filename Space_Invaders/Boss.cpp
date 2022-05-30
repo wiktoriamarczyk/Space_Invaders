@@ -6,7 +6,7 @@
 Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
-    m_Position = vec2(-300, 200);
+    m_Position = vec2(-200, 200);
     m_Size = vec2i(200, 100);
     m_Speed = 50;
     m_Color = Color(255, 1, 1);
@@ -66,16 +66,19 @@ void Boss::Update(float DeltaTime)
         // strzelanie do bossa
         for (int i = 0; i < m_Gun->GetShots().size(); ++i)
         {
-            if (m_Gun->GetShots()[i]->GetTeamID() == eTeamID::PLAYER)
+            if (m_Gun->GetShots()[i]->GetTeamID() != eTeamID::INVADER)
             {
                 if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
                 {
                     if (m_Gun->GetShots()[i]->GetPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetPosition().y >= ObjectTopLeftCorner.y)
                     {
-                        Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
-                        m_Gun->GetShots()[i]->SetStatus(false);
-                        m_NumOfLives--;
-                        m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForKill);
+                        if (GetNumOfLives() > 0)
+                        {
+                            Engine::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
+                            m_Gun->GetShots()[i]->SetStatus(false);
+                            m_NumOfLives--;
+                            m_Game.SetNumOfPoints(m_Game.GetNumOfPoints() + m_PointsForKill);
+                        }
                     }
                 }
             }

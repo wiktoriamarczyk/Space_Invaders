@@ -22,16 +22,18 @@ void PowerUp::Update(float DeltaTime)
     }
 
     // jesli nastapi kolizja z graczem, uaktywnij konkretnego PowerUpa
-
     vector<shared_ptr<Player>> MyPlayer = m_Game.GetObjects<Player>();
-    vec2 ObjectTopLeftCornerPlayer = MyPlayer[0]->GetPosition() - MyPlayer[0]->GetSize() / 2;
-    vec2 ObjectBottomRightCornerPlayer = MyPlayer[0]->GetPosition() + MyPlayer[0]->GetSize() / 2;
-
-    if (GetPosition().x >= ObjectTopLeftCornerPlayer.x && GetPosition().x <= ObjectBottomRightCornerPlayer.x)
+    if (!MyPlayer.empty())
     {
-        if (GetPosition().y <= ObjectBottomRightCornerPlayer.y && GetPosition().y >= ObjectTopLeftCornerPlayer.y)
+        vec2 ObjectTopLeftCornerPlayer = MyPlayer[0]->GetPosition() - MyPlayer[0]->GetSize() / 2;
+        vec2 ObjectBottomRightCornerPlayer = MyPlayer[0]->GetPosition() + MyPlayer[0]->GetSize() / 2;
+
+        if (ObjectBottomRightCorner.x >= ObjectTopLeftCornerPlayer.x && ObjectTopLeftCorner.x <= ObjectBottomRightCornerPlayer.x)
         {
-            Activate(MyPlayer[0]);
+            if (ObjectTopLeftCorner.y <= ObjectBottomRightCornerPlayer.y && ObjectBottomRightCorner.y >= ObjectTopLeftCornerPlayer.y)
+            {
+                Activate(MyPlayer[0]);
+            }
         }
     }
 }

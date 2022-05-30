@@ -49,7 +49,6 @@ void HowToPlayState::Render(SDL_Renderer* pRenderer)
 
 void HowToPlayState::OnKeyDown(SDL_Scancode KeyCode)
 {
-    // jesli gracz wciska esc, wywolaj zamkniecie programu
     if (KeyCode == SDL_SCANCODE_ESCAPE)
     {
         m_NextStateID = eStateID::MAINMENU;

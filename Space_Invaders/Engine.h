@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "Sound.h"
 #include "Texture.h"
+#include "PlayerData.h"
 
 class Engine
 {
@@ -13,12 +14,12 @@ public:
     void Loop();
     void ChangeState(eStateID StateID);
     void ExitGame();
-    void PlaySound(const string& FileName, float Volume = 1.0f);
+    void PlaySound(const path& FileName, float Volume = 1.0f);
     void FreeSounds();
-    shared_ptr<Texture> GetTexture(const string& FileName)const;
-    void DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param = {});
+    shared_ptr<Texture> GetTexture(const path& FileName)const;
+    void DisplayTexture(const path& FileName, vec2 Position, DisplayParameters Param = {});
     void DestroyTextures();
-    vec2i GetTextureSize(const string& FileName)const;
+    vec2i GetTextureSize(const path& FileName)const;
     vec2i GetMousePos()const;
 
 private:

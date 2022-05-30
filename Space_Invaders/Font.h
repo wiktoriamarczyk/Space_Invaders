@@ -24,3 +24,4 @@ vector<CharacterData> FillFontVector(const string& FileName);
 void DrawLine(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const string& Pixels);
 void DrawLines(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const vector<string>& Lines, Color MyColor);
 string ToString(int value);
+

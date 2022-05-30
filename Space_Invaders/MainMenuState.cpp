@@ -6,6 +6,11 @@ MainMenuState::MainMenuState(shared_ptr<Font> MyFont) : GameState(eStateID::MAIN
     m_Font = MyFont;
 }
 
+MainMenuState::~MainMenuState()
+{
+    FreeResources();
+}
+
 void MainMenuState::OnEnter()
 {
     m_GameOver = false;
@@ -18,6 +23,12 @@ void MainMenuState::OnEnter()
     {
         Engine::GetSingleton()->PlaySound("8-bit_music.wav");
     }
+}
+
+void MainMenuState::FreeResources()
+{
+    Engine::GetSingleton()->DestroyTextures();
+    Engine::GetSingleton()->FreeSounds();
 }
 
 void MainMenuState::Update(float DeltaTime) {}
@@ -61,6 +72,8 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
 
 void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
 {
+    m_PlayMusicAgain = false;
+
     // jesli gracz wciska esc, wywolaj zamkniecie programu
     if (KeyCode == SDL_SCANCODE_ESCAPE)
     {
@@ -84,18 +97,14 @@ void MainMenuState::OnKeyDown(SDL_Scancode KeyCode)
     {
         if (m_Option == 0)
         {
-            m_PlayMusicAgain = true;
-            Mix_HaltChannel(-1);
-            m_NextStateID = eStateID::INGAME;
+            m_NextStateID = eStateID::SETUP;
         }
         if (m_Option == 1)
         {
-            m_PlayMusicAgain = false;
             m_NextStateID = eStateID::HOWTOPLAY;
         }
         if (m_Option == 2)
         {
-            m_PlayMusicAgain = false;
             m_NextStateID = eStateID::HIGHSCORE;
         }
         if (m_Option == 3)

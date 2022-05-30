@@ -9,9 +9,10 @@
 #include "PUp_GunSpeed.h"
 #include "PUp_Shield.h"
 
-InGameState::InGameState(shared_ptr<Font> MyFont) : GameState(eStateID::INGAME)
+InGameState::InGameState(shared_ptr<Font> MyFont, shared_ptr<PlayerData> MyPlayerData) : GameState(eStateID::INGAME)
 {
     m_Font = MyFont;
+    m_PlayerData = MyPlayerData;
 }
 
 InGameState::~InGameState()
@@ -22,13 +23,6 @@ InGameState::~InGameState()
 void InGameState::Update(float DeltaTime)
 {
     m_PointsInfoTimer -= DeltaTime;
-
-    if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
-    {
-        Mix_HaltChannel(-1);
-        FreeResources();
-        m_NextStateID = eStateID::MAINMENU;
-    }
 
     if (GetPlayerLivesCount() <= 0)
     {
@@ -116,6 +110,17 @@ void InGameState::OnEnter()
     m_DyingTimer = 2.0f;
     m_PointsInfoTimer = 0.f;
     CreateObject();
+}
+
+void InGameState::OnKeyDown(SDL_Scancode KeyCode)
+{
+    if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
+    {
+        Mix_HaltChannel(-1);
+        FreeResources();
+        Engine::GetSingleton()->PlaySound("8-bit_music.wav");
+        m_NextStateID = eStateID::MAINMENU;
+    }
 }
 
 // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
@@ -235,12 +240,12 @@ int InGameState::GetBossStatus() const
 
 void InGameState::SetNumOfPoints(int Value)
 {
-    m_NumOfPoints = Value;
+    m_PlayerData->SetScore(Value);
 }
 
 int InGameState::GetNumOfPoints() const
 {
-    return m_NumOfPoints;
+    return m_PlayerData->GetScore();
 }
 
 void InGameState::SetPlayerLivesCount(int Value)

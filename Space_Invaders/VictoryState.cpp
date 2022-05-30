@@ -1,9 +1,15 @@
 #include "VictoryState.h"
 #include "Engine.h"
 
-VictoryState::VictoryState(shared_ptr<Font> MyFont) : GameState(eStateID::VICTORY)
+VictoryState::VictoryState(shared_ptr<Font> MyFont, shared_ptr<PlayerData> MyPlayerData) : GameState(eStateID::VICTORY)
 {
     m_Font = MyFont;
+    m_PlayerData = MyPlayerData;
+}
+
+VictoryState::~VictoryState()
+{
+    FreeResources();
 }
 
 void VictoryState::Update(float DeltaTime) 
@@ -29,7 +35,7 @@ void VictoryState::Render(SDL_Renderer* pRenderer)
     if (m_GameOver)
     {
         m_Font->DrawText(pRenderer, 7, 140, 200, "GAME OVER!", Color{255.f, 1.f, 1.f});
-        m_Font->DrawText(pRenderer, 3, 170, 300, "YOUR SCORE: ");
+        m_Font->DrawText(pRenderer, 2, 200, 330,  (m_PlayerData->GetName() + "'S SCORE: " + ToString(m_PlayerData->GetScore())).c_str());
 
         DisplayTexture("Boss.png", vec2i(60, 525), DisplayParameters{ .DisplaySize = vec2i(200, 100) });
         DisplayTexture("SpaceInvaders1.png", vec2i(300, 525), { .DisplaySize = vec2i(100,100) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size });
@@ -48,7 +54,7 @@ void VictoryState::Render(SDL_Renderer* pRenderer)
     else
     {
         m_Font->DrawText(pRenderer, 7, 170, 200, "VICTORY!");
-        m_Font->DrawText(pRenderer, 3, 190, 300, "YOUR SCORE: " );
+        m_Font->DrawText(pRenderer, 2, 190, 330, (m_PlayerData->GetName() + "'S SCORE: " + ToString(m_PlayerData->GetScore())).c_str());
 
         DisplayTexture("Boss.png", vec2i(60, 525), DisplayParameters{ .DisplaySize = vec2i(200, 100) });
         DisplayTexture("Aureole.png", vec2i(85, 500), DisplayParameters{ .DisplaySize = vec2i(150, 50) });
@@ -78,6 +84,14 @@ void VictoryState::OnKeyDown(SDL_Scancode KeyCode)
     if (KeyCode == SDL_SCANCODE_ESCAPE)
     {
         Mix_HaltChannel(-1);
+        FreeResources();
+        Engine::GetSingleton()->PlaySound("8-bit_music.wav");
         m_NextStateID = eStateID::MAINMENU;
     }
+}
+
+void VictoryState::FreeResources()
+{
+    Engine::GetSingleton()->DestroyTextures();
+    Engine::GetSingleton()->FreeSounds();
 }

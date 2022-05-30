@@ -14,10 +14,10 @@ Texture::~Texture()
     m_pImage = nullptr;
 }
 
-bool Texture::Load(const string& FileName)
+bool Texture::Load(const path& FileName)
 {
-    m_FileName = FileName;
-    m_pImage = IMG_Load(("../Data/" + FileName).c_str());
+    m_FileName = FileName.string();
+    m_pImage = IMG_Load((DataPath / FileName).string().c_str());
 
     if (!m_pImage)
     {

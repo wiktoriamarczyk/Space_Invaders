@@ -7,7 +7,7 @@ class Texture
 public:
     Texture(SDL_Renderer* pRenderer);
     ~Texture();
-    bool Load(const string& FileName);
+    bool Load(const path& FileName);
     void Display(vec2 Position, DisplayParameters Param = {})const;
     void FreeResources();
     vec2i GetSize();

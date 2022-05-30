@@ -10,9 +10,11 @@
 #include<optional>
 #include<functional>
 #include"vec2.h"
+#include<regex>
 #include<SDL.h>
 #include<SDL_Mixer.h>
 #include<SDL_image.h>
+#include<filesystem>
 
 using std::vector;
 using std::unique_ptr;
@@ -27,6 +29,11 @@ using std::nullopt;
 using std::function;
 using std::none_of;
 using std::dynamic_pointer_cast;
+using std::regex;
+using std::regex_match;
+using std::filesystem::path;
+
+const path DataPath = "../Data";
 
 enum : int
 {
@@ -49,6 +56,7 @@ enum class eStateID
     VICTORY, 
     HOWTOPLAY,
     HIGHSCORE,
+    SETUP,
 };
 
 enum class eTeamID

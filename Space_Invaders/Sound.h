@@ -6,7 +6,7 @@ class Sound
 public:
     Sound() = default;
     ~Sound();
-    bool Load(const string & FileName,float Volume = 1.0f );
+    bool Load(const path & FileName,float Volume = 1.0f );
     void Play()const;
     string GetName()const;
     void FreeResources();

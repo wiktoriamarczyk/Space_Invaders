@@ -103,17 +103,10 @@ void Player::Update(float DeltaTime)
     // smierc gracza
     if (m_Game.GetPlayerLivesCount() <= 0)
     {
+        m_IsHurt = true;
         auto pParticle = m_Game.CreateParticle(m_Position, 12, 1.75f, 0.5f);
         pParticle->SetColor(m_Color);
-
-        m_Timer = 2.0f;
-        m_IsHurt = true;
-        m_Timer -= DeltaTime;
-
-        if (m_Timer <= 0)
-        {
-            m_IsAlive = false;
-        }
+        m_IsAlive = false;
     }
 }
 
@@ -125,14 +118,13 @@ void Player::Render(SDL_Renderer* pRenderer)
     {
         DisplayTexture("Gun_Damaged.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
     }
+    else if (m_Game.GetPlayerLivesCount() > 0 && m_ShieldTimer > 0)
+    {
+        DisplayTexture("Gun_Shield.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
+    }
     else if (!m_IsHurt && m_Game.GetPlayerLivesCount() > 0 && m_ShieldTimer <= 0)
     {
         DisplayTexture("Gun.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
-        m_TextureTimer = 0.0f;
-    }
-    else if (!m_IsHurt && m_Game.GetPlayerLivesCount() > 0 && m_ShieldTimer > 0)
-    {
-        DisplayTexture("GunShield.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
     }
 }
 

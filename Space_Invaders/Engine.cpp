@@ -4,6 +4,8 @@
 #include "MainMenuState.h"
 #include "HowToPlayState.h"
 #include "VictoryState.h"
+#include "SetupState.h"
+#include "PlayerData.h"
 
 Engine* Engine::pSingleton = nullptr;
 
@@ -73,11 +75,14 @@ bool Engine::Initialize()
     shared_ptr<Font> MyFont = make_shared<Font>();
     MyFont->LoadFont("../Data/FontData.txt");
 
+    shared_ptr<PlayerData> MyPlayer = make_shared<PlayerData>();
+
     // dodanie wszystkich stanow gry do wektora
-    m_AllStates.push_back(make_unique<InGameState>(MyFont));
+    m_AllStates.push_back(make_unique<InGameState>(MyFont, MyPlayer));
     m_AllStates.push_back(make_unique<MainMenuState>(MyFont));
     m_AllStates.push_back(make_unique<HowToPlayState>(MyFont));
-    m_AllStates.push_back(make_unique<VictoryState>(MyFont));
+    m_AllStates.push_back(make_unique<VictoryState>(MyFont, MyPlayer));
+    m_AllStates.push_back(make_unique<SetupState>(MyFont, MyPlayer));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);
@@ -138,18 +143,18 @@ void Engine::ExitGame()
     m_IsRunning = false;
 }
 
-void Engine::PlaySound(const string& FileName, float Volume)
+void Engine::PlaySound(const path& File, float Volume)
 {
     for (int i = 0; i < m_LoadedSounds.size(); ++i)
     {
-        if (m_LoadedSounds[i]->GetName() == FileName)
+        if (m_LoadedSounds[i]->GetName() == File)
         {
             m_LoadedSounds[i]->Play();
             return;
         }
     }
     shared_ptr<Sound> temp_sound = make_shared<Sound>();
-    temp_sound->Load(FileName, Volume);
+    temp_sound->Load(File, Volume);
     m_LoadedSounds.push_back(temp_sound);
     m_LoadedSounds.back()->Play();
 }
@@ -162,7 +167,7 @@ void Engine::FreeSounds()
     }
 }
 
-shared_ptr<Texture> Engine::GetTexture(const string& FileName)const
+shared_ptr<Texture> Engine::GetTexture(const path& FileName)const
 {
     for (int i = 0; i < m_LoadedTextures.size(); ++i)
     {
@@ -183,7 +188,7 @@ shared_ptr<Texture> Engine::GetTexture(const string& FileName)const
     return temp_texture;
 }
 
-void Engine::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param )
+void Engine::DisplayTexture(const path& FileName, vec2 Position, DisplayParameters Param )
 {
     if (auto pTexture = GetTexture(FileName))
     {
@@ -199,7 +204,7 @@ void Engine::DestroyTextures()
     }
 }
 
-vec2i Engine::GetTextureSize(const string& FileName)const
+vec2i Engine::GetTextureSize(const path& FileName)const
 {
     if (auto pTexture = GetTexture(FileName))
     {
