@@ -87,6 +87,8 @@ bool Engine::Initialize()
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);
 
+    LoadResources();
+
     return true;
 }
 
@@ -169,6 +171,8 @@ void Engine::FreeSounds()
 
 shared_ptr<Texture> Engine::GetTexture(const path& FileName)const
 {
+    scoped_lock<mutex> ScopedUnlock(m_EngineMutex);
+
     for (int i = 0; i < m_LoadedTextures.size(); ++i)
     {
         if (m_LoadedTextures[i]->GetName() == FileName)
@@ -177,15 +181,7 @@ shared_ptr<Texture> Engine::GetTexture(const path& FileName)const
         }
     }
 
-    shared_ptr<Texture> temp_texture = make_shared<Texture>(m_pRenderer);
-
-    if (!temp_texture->Load(FileName))
-    {
-        return nullptr;
-    }
-
-    m_LoadedTextures.push_back(temp_texture);
-    return temp_texture;
+    return nullptr;
 }
 
 void Engine::DisplayTexture(const path& FileName, vec2 Position, DisplayParameters Param )
@@ -198,6 +194,8 @@ void Engine::DisplayTexture(const path& FileName, vec2 Position, DisplayParamete
 
 void Engine::DestroyTextures()
 {
+    scoped_lock<mutex> ScopedUnlock(m_EngineMutex);
+
     for (int i = 0; i < m_LoadedTextures.size(); ++i)
     {
         m_LoadedTextures[i]->FreeResources();
@@ -218,4 +216,94 @@ vec2i Engine::GetMousePos() const
     int x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
     return vec2i(x, y);
+}
+
+void Engine::TextureLoadThread()
+{
+    while (true)
+    {
+        // blokujemy mutex, by miec wylaczny dostep do wektora z teksturami do zaladowania
+        m_EngineMutex.lock();
+
+        // jesli nie ma wiecej tekstur do zaladowania, to odblokuj mutex i zakoncz watek
+        if (m_TexturesToLoad.empty())
+        {
+            m_EngineMutex.unlock();
+            return;
+        }
+        // jesli sa tekstury do zaladowania, to skopiuj ostatnia do lokalnej zmiennej, wyrzuc ja z wektora
+        auto text_path = m_TexturesToLoad.back();
+        m_TexturesToLoad.erase(m_TexturesToLoad.end() - 1);
+
+        // i odblokuj mutex dla innych watkow, by rowniez sprawdzaly czy sa tekstury do zaladowania
+        m_EngineMutex.unlock();
+
+        // stworz teksture
+        shared_ptr<Texture> tmp_text = make_shared<Texture>(m_pRenderer);
+        // i zaladuj dane
+        if (!tmp_text->Load(text_path))
+        {
+            continue;
+        }
+        // jak zaladowalismy teksture, to zablokuj mutex, zeby moc wrzucic teksture do listy zaladowanych tekstur
+        // aby dwa watki nie chcialy NARAZ w tym samym momencie wpisac tekstury do wektora (wtedy aplikacja by sie scrushowala)
+        else
+        {
+            m_EngineMutex.lock();
+            m_LoadedTextures.push_back(tmp_text);
+            m_EngineMutex.unlock();
+        }
+    }
+}
+
+void Engine::LoadResources()
+{
+    m_TexturesToLoad.push_back("SpaceInvader.png");
+    m_TexturesToLoad.push_back("SpaceInvaders1.png");
+    m_TexturesToLoad.push_back("SpaceInvaders2.png");
+    m_TexturesToLoad.push_back("SpaceInvaders3.png");
+    m_TexturesToLoad.push_back("SpaceInvaders4.png");
+    m_TexturesToLoad.push_back("Boss.png");
+    m_TexturesToLoad.push_back("Aureole.png");
+    m_TexturesToLoad.push_back("Gun.png");
+    m_TexturesToLoad.push_back("Gun_Damaged.png");
+    m_TexturesToLoad.push_back("Gun_Shield.png");
+    m_TexturesToLoad.push_back("Life_Banner.png");
+    m_TexturesToLoad.push_back("Particle3.jpg");
+    m_TexturesToLoad.push_back("PowerUp_Gun.png");
+    m_TexturesToLoad.push_back("PowerUp_Health.png");
+    m_TexturesToLoad.push_back("PowerUp_Shield.png");
+    m_TexturesToLoad.push_back("Shields.png");
+    m_TexturesToLoad.push_back("PowerUp_QuestionMark.png");
+
+    // tworzenie watkow
+    for (int i = 0; i < 4; ++i)
+    {
+        m_LoadingThreads.push_back(thread([this]() { TextureLoadThread(); }));
+    }
+
+    // poczekaj, az watki skoncza prace
+    for (int i = 0; i < m_LoadingThreads.size(); ++i)
+    {
+        m_LoadingThreads[i].join();
+    }
+
+    // funkcje korzystajce z SDL_Renderer nie moga byc zawolane w watku, wiec musimy dokonczyc ladowanie tekstur tutaj (w watku glownym)
+    for (int i = 0; i < m_LoadedTextures.size(); ++i)
+    {
+        m_LoadedTextures[i]->PrepareTexture();
+    }
+
+}
+
+mutex* Engine::GetEngineMutex()
+{
+    auto pEngine = GetSingleton();
+
+    if (!pEngine)
+    {
+        return nullptr;
+    }
+
+    return &pEngine->m_EngineMutex;
 }

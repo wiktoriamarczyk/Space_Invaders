@@ -22,7 +22,12 @@ public:
     vec2i GetTextureSize(const path& FileName)const;
     vec2i GetMousePos()const;
 
+    static mutex* GetEngineMutex();
+
 private:
+    void TextureLoadThread();
+    void LoadResources();
+
     using TexturesVec = vector<shared_ptr<Texture>>;
 
     bool                          m_IsRunning = true;
@@ -34,5 +39,9 @@ private:
     GameState*                    m_pCurrentState = nullptr;
     vector<unique_ptr<GameState>> m_AllStates;
     vector<shared_ptr<Sound>>     m_LoadedSounds;
-    mutable TexturesVec           m_LoadedTextures;
+    TexturesVec                   m_LoadedTextures;
+
+    mutable mutex                 m_EngineMutex;
+    vector<path>                  m_TexturesToLoad;
+    vector<thread>                m_LoadingThreads;
 };

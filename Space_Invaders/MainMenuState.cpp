@@ -27,7 +27,6 @@ void MainMenuState::OnEnter()
 
 void MainMenuState::FreeResources()
 {
-    Engine::GetSingleton()->DestroyTextures();
     Engine::GetSingleton()->FreeSounds();
 }
 

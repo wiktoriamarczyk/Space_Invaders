@@ -92,6 +92,5 @@ void VictoryState::OnKeyDown(SDL_Scancode KeyCode)
 
 void VictoryState::FreeResources()
 {
-    Engine::GetSingleton()->DestroyTextures();
     Engine::GetSingleton()->FreeSounds();
 }

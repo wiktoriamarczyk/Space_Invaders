@@ -170,7 +170,6 @@ void InGameState::CreateObject()
 
 void InGameState::FreeResources()
 {
-    Engine::GetSingleton()->DestroyTextures();
     Engine::GetSingleton()->FreeSounds();
     m_AllGameObjects.clear();
 }

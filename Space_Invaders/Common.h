@@ -15,6 +15,9 @@
 #include<SDL_Mixer.h>
 #include<SDL_image.h>
 #include<filesystem>
+#include<mutex>
+#include<thread>
+#include<chrono>
 
 using std::vector;
 using std::unique_ptr;
@@ -32,6 +35,9 @@ using std::dynamic_pointer_cast;
 using std::regex;
 using std::regex_match;
 using std::filesystem::path;
+using std::mutex;
+using std::thread;
+using std::scoped_lock;
 
 const path DataPath = "../Data";
 

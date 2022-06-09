@@ -12,6 +12,7 @@ public:
     void FreeResources();
     vec2i GetSize();
     string GetName();
+    void PrepareTexture();
 
 private:
     SDL_Renderer* m_pRenderer = nullptr;

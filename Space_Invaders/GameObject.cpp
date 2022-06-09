@@ -52,5 +52,5 @@ int GameObject::GetSpeed()
 
 void GameObject::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param)
 {
-    Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Param);
+    Engine::GetSingleton()->DisplayTexture((FileName).c_str(), Position, Param);
 }
