@@ -18,6 +18,7 @@
 #include<mutex>
 #include<thread>
 #include<chrono>
+#include <sstream>
 
 using std::vector;
 using std::unique_ptr;
@@ -38,6 +39,9 @@ using std::filesystem::path;
 using std::mutex;
 using std::thread;
 using std::scoped_lock;
+using std::ofstream;
+using std::getline;
+using std::pair;
 
 const path DataPath = "../Data";
 

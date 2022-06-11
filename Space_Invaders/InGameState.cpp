@@ -31,6 +31,7 @@ void InGameState::Update(float DeltaTime)
         {
             m_GameOver = true;
             FreeResources();
+            m_PlayerData->SendDataToHighscore();
             m_NextStateID = eStateID::VICTORY;
         }
     }
@@ -40,6 +41,7 @@ void InGameState::Update(float DeltaTime)
         m_GameOver = false;
         FreeResources();
         SetBossStatus(false);
+        m_PlayerData->SendDataToHighscore();
         m_NextStateID = eStateID::VICTORY;
     }
 
@@ -107,8 +109,11 @@ void InGameState::OnEnter()
     GameState::OnEnter();
     // inicjalizacja zasobow
     SetPlayerLivesCount(3);
+    SetNumOfPoints(0);
+    SetSpaceInvadersNum(0);
     m_DyingTimer = 2.0f;
     m_PointsInfoTimer = 0.f;
+    // tworzenie obiektow
     CreateObject();
 }
 
@@ -119,6 +124,7 @@ void InGameState::OnKeyDown(SDL_Scancode KeyCode)
         Mix_HaltChannel(-1);
         FreeResources();
         Engine::GetSingleton()->PlaySound("8-bit_music.wav");
+        m_PlayerData->SendDataToHighscore();
         m_NextStateID = eStateID::MAINMENU;
     }
 }
@@ -130,9 +136,6 @@ void InGameState::OnKeyDown(SDL_Scancode KeyCode)
 
 void InGameState::CreateObject()
 {
-    SetNumOfPoints(0);
-    SetSpaceInvadersNum(0);
-
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();
 

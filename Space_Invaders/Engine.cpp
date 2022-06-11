@@ -6,6 +6,7 @@
 #include "VictoryState.h"
 #include "SetupState.h"
 #include "PlayerData.h"
+#include "HighscoreState.h"
 
 Engine* Engine::pSingleton = nullptr;
 
@@ -75,7 +76,10 @@ bool Engine::Initialize()
     shared_ptr<Font> MyFont = make_shared<Font>();
     MyFont->LoadFont("../Data/FontData.txt");
 
-    shared_ptr<PlayerData> MyPlayer = make_shared<PlayerData>();
+
+    unique_ptr<HighscoreState> highscore = make_unique<HighscoreState>(MyFont);
+    // stworzenie gracza
+    shared_ptr<PlayerData> MyPlayer = make_shared<PlayerData>(*highscore);
 
     // dodanie wszystkich stanow gry do wektora
     m_AllStates.push_back(make_unique<InGameState>(MyFont, MyPlayer));
@@ -83,6 +87,7 @@ bool Engine::Initialize()
     m_AllStates.push_back(make_unique<HowToPlayState>(MyFont));
     m_AllStates.push_back(make_unique<VictoryState>(MyFont, MyPlayer));
     m_AllStates.push_back(make_unique<SetupState>(MyFont, MyPlayer));
+    m_AllStates.push_back(move(highscore));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);

@@ -21,7 +21,7 @@ public:
 protected:
     eStateID           m_NextStateID = eStateID::UNKNOWN;
     shared_ptr<Font>   m_Font;
-    static bool m_GameOver;
+    static bool        m_GameOver;
 
 private:
     const eStateID   m_StateID = eStateID::UNKNOWN;
