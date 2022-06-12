@@ -163,6 +163,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PUp_Angry.cpp" />
     <ClCompile Include="PUp_GunSpeed.cpp" />
     <ClCompile Include="PUp_Health.cpp" />
     <ClCompile Include="PUp_Shield.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PUp_Angry.h" />
     <ClInclude Include="PUp_GunSpeed.h" />
     <ClInclude Include="PUp_Health.h" />
     <ClInclude Include="PUp_Shield.h" />

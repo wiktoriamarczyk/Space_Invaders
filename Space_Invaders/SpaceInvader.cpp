@@ -56,7 +56,13 @@ void SpaceInvader::Update(float DeltaTime)
     Vec2Rect srcrect1 = { { 0   , 0} , {0.5, 1} };
     Vec2Rect srcrect2 = { { 0.5 , 0} , {0.5, 1} };
 
-    m_Speed = 10 + 250 / (m_Game.GetSpaceInvadersNum() + 1);
+    m_AngryTimer -= DeltaTime;
+     
+    if (m_AngryTimer > 0)
+    {
+        m_Speed = 50;
+    }
+    else m_Speed = 10 + 250 / (m_Game.GetSpaceInvadersNum() + 1);
 
     // przemieszczanie sie invaderow
     if (s_DirectionX == eInvaderDirection::RIGHT)
@@ -126,23 +132,33 @@ void SpaceInvader::Update(float DeltaTime)
     {
         // tworzenie particle'a
         auto pParticle = m_Game.CreateParticle(m_Position, 128, 1.75f, 0.5f);
-        pParticle->SetColor(m_Color);
-
+        // ustawianie koloru particle'a
+        Color color = m_Color;
+        if (m_AngryTimer > 0)
+        {
+            color = Color::RED;
+        }
+        pParticle->SetColor(color);
         // losowanie powerup'a
         int PowerUpType = GetRandInt(1, 10);
 
-        if (PowerUpType == 1)
+        if (PowerUpType == (int)ePowerUpType::GUN_IMPROVMENT)
         {
             auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Gun", m_Position, ePowerUpType::GUN_IMPROVMENT);
         }
-        else if (PowerUpType == 2)
+        else if (PowerUpType == (int)ePowerUpType::HEALTH)
         {
             auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Health", m_Position, ePowerUpType::HEALTH);
         }
-        else if (PowerUpType == 3)
+        else if (PowerUpType == (int)ePowerUpType::SHIELD)
         {
             auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Shield", m_Position, ePowerUpType::SHIELD);
             pPowerUp->SetScale(vec2{1.5f, 1.5f});
+        }
+        else if (PowerUpType == 4 || PowerUpType == 5)
+        {
+            PowerUpType = GetRandInt(1, 4);
+            auto pPowerUp = m_Game.CreatePowerUp("PowerUp_QuestionMark", m_Position, (ePowerUpType)PowerUpType);
         }
 
         // zmniejszenie liczby invaderow o jednego
@@ -161,7 +177,12 @@ void SpaceInvader::Update(float DeltaTime)
             if (m_InvaderID == GetRandInt(0, 12))
             {
                 m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), eTeamID::INVADER);
-                m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{255.f, 255.f, 255.f}, SHOT_SPEED);
+
+                if (m_AngryTimer > 0)
+                {
+                    m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, 3 * SHOT_SPEED);
+                }
+                else m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
             }
         }
     }
@@ -188,7 +209,20 @@ void SpaceInvader::Update(float DeltaTime)
 void SpaceInvader::Render(SDL_Renderer* pRenderer)
 {
     vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
-    DisplayTexture(m_Name + ".png", ObjectTopLeftCorner, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size });
+    
+    Color color = Color::WHITE;
+
+    if (m_AngryTimer > 0)
+    {
+        color = Color::RED;
+    }
+
+    DisplayTexture(m_Name + ".png", ObjectTopLeftCorner, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size, .DrawColor = color });
+}
+
+void SpaceInvader::SetAngryTimer(float Timer)
+{
+    m_AngryTimer = Timer;
 }
 
 string SpaceInvader::GetName()

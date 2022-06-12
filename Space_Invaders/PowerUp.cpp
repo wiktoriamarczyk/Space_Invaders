@@ -42,7 +42,7 @@ void PowerUp::Render(SDL_Renderer* pRenderer)
 {
     if (m_DisplayTexture)
     {
-        DisplayTexture(m_Name + ".png", m_Position, { .DrawMode = eDrawMode::NORMAL , .DrawScale = m_Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color });
+        DisplayTexture(m_Name + ".png", m_Position, { .DrawMode = eDrawMode::NORMAL , .DrawScale = m_Scale , .SrcTopLeft = vec2(0.0f,0.0f) , .DrawColor = m_Color });
     }
 
 }

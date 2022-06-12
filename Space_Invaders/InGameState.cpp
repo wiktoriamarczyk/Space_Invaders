@@ -8,6 +8,7 @@
 #include "PUp_Health.h"
 #include "PUp_GunSpeed.h"
 #include "PUp_Shield.h"
+#include "PUp_Angry.h"
 
 InGameState::InGameState(shared_ptr<Font> MyFont, shared_ptr<PlayerData> MyPlayerData) : GameState(eStateID::INGAME)
 {
@@ -199,8 +200,13 @@ shared_ptr<PowerUp> InGameState::CreatePowerUp(string Name, vec2 Position, ePowe
     case ePowerUpType::GUN_IMPROVMENT:
         pPowerUp = make_shared<PUp_GunSpeed>(Name, *this);
         break;
+
     case ePowerUpType::SHIELD:
         pPowerUp = make_shared<PUp_Shield>(Name, *this);
+        break;
+
+    case ePowerUpType::ANGRY_INVADER:
+        pPowerUp = make_shared<PUp_Angry>(Name, *this);
         break;
     }
 
@@ -258,4 +264,13 @@ void InGameState::SetPlayerLivesCount(int Value)
 int InGameState::GetPlayerLivesCount() const
 {
     return m_PlayerLives;
+}
+
+void InGameState::MakeInvaderAngry(float Timer)
+{
+    vector<shared_ptr<SpaceInvader>> Invaders = GetObjects<SpaceInvader>();
+    for (int i = 0; i < Invaders.size(); ++i)
+    {
+        Invaders[i]->SetAngryTimer(Timer);
+    }
 }

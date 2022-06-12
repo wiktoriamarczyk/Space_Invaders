@@ -32,6 +32,7 @@ public:
     int GetNumOfPoints()const;
     void SetPlayerLivesCount(int Value);
     int GetPlayerLivesCount()const;
+    void MakeInvaderAngry(float Timer);
 
 
 private:

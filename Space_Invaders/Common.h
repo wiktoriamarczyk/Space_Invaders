@@ -91,10 +91,11 @@ enum class eDrawMode
 
 enum class ePowerUpType
 {
-    UNKNOWN,
+    UNKNOWN = 0,
     GUN_IMPROVMENT,
     HEALTH,
     SHIELD,
+    ANGRY_INVADER,
 };
 
 struct Color
@@ -107,6 +108,9 @@ struct Color
     Color() = default;
     Color(float r, float g, float b, float a = 1.f) : R(r), G(g), B(b), A(a) {}
     Color(int r, int g, int b, int a = 255) : R(r / 255.f), G(g / 255.f), B(b / 255.f), A(a / 255.f) {}
+
+    static const Color RED;
+    static const Color WHITE;
 };
 
 struct DisplayParameters

@@ -81,8 +81,6 @@ void HighscoreState::WriteScoreToFile()
 
             stream << GetCurrentPlayerScore();
             stream << endline;
-
-            
         }
         stream.close();
     }

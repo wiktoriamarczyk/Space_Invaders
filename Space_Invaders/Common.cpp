@@ -12,7 +12,7 @@ int GetRandInt(int Min, int Max)
     {
         return Max;
     }
-    return rand() % (Max - Min) + Min;
+    return rand() % (Max - Min + 1) + Min;
 }
 
 float GetRandFloat(float Min, float Max)
@@ -29,3 +29,6 @@ float GetNormalizedFloat()
 {
     return rand() / float(RAND_MAX);
 }
+
+const Color Color::RED(255, 0, 0);
+const Color Color::WHITE(255, 255, 255);

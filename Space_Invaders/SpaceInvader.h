@@ -10,6 +10,7 @@ public:
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
 
+    void SetAngryTimer(float Timer);
     string GetName();
 
 private:
@@ -22,6 +23,7 @@ private:
     float                    m_TextureTimer = 0.0f;
     float                    m_ShootingTimer = GetRandFloat(1.f, 2.f);
     bool                     m_ChangeDirectionY = false;
+    float                    m_AngryTimer = 0.f;
 
     static eInvaderDirection s_DirectionX;
 };
