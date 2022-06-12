@@ -14,12 +14,14 @@ bool Sound::Load(const path& FileName, float Volume )
 
     m_pSoundData = Mix_LoadWAV((DataPath/FileName).string().c_str());
 
-    Mix_VolumeChunk( m_pSoundData, int(Volume * MIX_MAX_VOLUME) );
     if (m_pSoundData == nullptr)
     {
         printf("Sound could not be loaded! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
+
+    Mix_VolumeChunk( m_pSoundData, int(Volume * MIX_MAX_VOLUME) );
+    
     return true;
 }
 

@@ -1,4 +1,4 @@
-#include "Common.h"
+import Module_Common;
 #include "Engine.h"
 
 #ifdef main

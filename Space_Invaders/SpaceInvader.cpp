@@ -136,7 +136,8 @@ void SpaceInvader::Update(float DeltaTime)
         Color color = m_Color;
         if (m_AngryTimer > 0)
         {
-            color = Color::RED;
+            //color = Color::RED;
+            color = Color(255, 0, 0);
         }
         pParticle->SetColor(color);
         // losowanie powerup'a
@@ -210,11 +211,13 @@ void SpaceInvader::Render(SDL_Renderer* pRenderer)
 {
     vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
     
-    Color color = Color::WHITE;
+   // Color color = Color::WHITE;
+    Color color = Color(255, 255, 255);
 
     if (m_AngryTimer > 0)
     {
-        color = Color::RED;
+       // color = Color::RED;
+        color = Color(255, 0, 0);
     }
 
     DisplayTexture(m_Name + ".png", ObjectTopLeftCorner, { .DisplaySize = vec2i(m_Size) , .SrcTopLeft = m_MovementRect.TopLeft , .SrcSize = m_MovementRect.Size, .DrawColor = color });

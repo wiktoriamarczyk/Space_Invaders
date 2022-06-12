@@ -8,6 +8,8 @@
 #include "PlayerData.h"
 #include "HighscoreState.h"
 
+
+
 Engine* Engine::pSingleton = nullptr;
 
 Engine* Engine::GetSingleton()
@@ -28,7 +30,7 @@ Engine::~Engine()
 
 bool Engine::Initialize()
 {
-    srand(time(NULL));
+    //srand(time(NULL));
 
     pSingleton = this;
 

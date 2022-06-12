@@ -1,7 +1,10 @@
 #pragma once
-#include "Common.h"
+import Module_Common;
 #include "vec2.h"
 
+#include<SDL.h>;
+#include<SDL_Mixer.h>;
+#include<SDL_image.h>;
 class Texture
 {
 public:

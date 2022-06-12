@@ -4,6 +4,10 @@
 #include "Texture.h"
 #include "PlayerData.h"
 
+#include<SDL.h>;
+#include<SDL_Mixer.h>;
+#include<SDL_image.h>;
+
 class Engine
 {
 public:

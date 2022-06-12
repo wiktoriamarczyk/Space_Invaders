@@ -1,6 +1,9 @@
 #pragma once
-#include "Common.h"
+import Module_Common;
 
+#include<SDL.h>;
+#include<SDL_Mixer.h>;
+#include<SDL_image.h>;
 struct CharacterData
 {
     vector<string> m_ImageData;

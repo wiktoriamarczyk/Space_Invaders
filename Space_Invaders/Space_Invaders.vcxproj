@@ -159,6 +159,7 @@
     <ClCompile Include="HighscoreState.cpp" />
     <ClCompile Include="HowToPlayState.cpp" />
     <ClCompile Include="InGameState.cpp" />
+    <ClCompile Include="Module_Common.ixx" />
     <ClCompile Include="ParticleEmiter.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
