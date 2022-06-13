@@ -20,7 +20,7 @@ public:
     template<typename T>
     vector<shared_ptr<T>> GetObjects();
 
-    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, int ParticleScale, float MaxLifeTime);
+    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime);
     shared_ptr<PowerUp> CreatePowerUp(string Name, vec2 Position, ePowerUpType Type);
 
     void SetPointsInfoTimer(float Value);
@@ -38,12 +38,11 @@ public:
 private:
     vector<shared_ptr<GameObject>> m_AllGameObjects;
     int                            m_PlayerLives = 3;
-    SDL_Texture*                   m_GunIconTexture = nullptr;
-    float                          m_DyingTimer = 2.0f;
     int                            m_NumOfSpaceInvaders = 0;
     bool                           m_BossIsDead = false;
     shared_ptr<PlayerData>         m_PlayerData;
 
+    float                          m_DyingTimer = 2.0f;
     float                          m_PointsInfoTimer = 0.f;
 };
 
@@ -52,7 +51,7 @@ vector<shared_ptr<T>> InGameState::GetObjects()
 {
     vector<shared_ptr<T>> specific_objects;
 
-    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    for (size_t i = 0; i < m_AllGameObjects.size(); ++i)
     {
         shared_ptr<T> object = dynamic_pointer_cast<T>(m_AllGameObjects[i]);
 

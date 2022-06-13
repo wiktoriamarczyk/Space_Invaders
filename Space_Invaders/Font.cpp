@@ -7,7 +7,7 @@ void Font::LoadFont(const string& FileName)
 
 const CharacterData* Font::FindCharacter(char Character) const
 {
-    for (int i = 0; i < m_Dictionary.size(); ++i)
+    for (size_t i = 0; i < m_Dictionary.size(); ++i)
     {
         if (m_Dictionary[i].m_Character == Character)
             return &m_Dictionary[i];
@@ -96,7 +96,7 @@ vector<CharacterData> FillFontVector(const string& FileName)
 //==========================================================================================================
 void DrawLine(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const string& Pixels)
 {
-    for (int i = 0; i < Pixels.size(); ++i)
+    for (size_t i = 0; i < Pixels.size(); ++i)
     {
         if (Pixels[i] != ' ')
         {
@@ -115,7 +115,7 @@ void DrawLines(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const
     SDL_SetRenderDrawColor(pRenderer, MyColor.R, MyColor.G, MyColor.B, 255);
     //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
 
-    for (int i = 0; i < Lines.size(); ++i)
+    for (size_t i = 0; i < Lines.size(); ++i)
     {
         DrawLine(pRenderer, PixelSize, PosX, PosY + i * PixelSize, Lines[i]);
     }

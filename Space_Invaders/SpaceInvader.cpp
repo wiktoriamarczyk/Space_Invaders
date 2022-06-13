@@ -69,13 +69,13 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (m_ChangeDirectionY)
         {
-            SetPosition( { m_Position.x , m_Position.y + OBJECT_HEIGHT } );
+            SetPosition({ m_Position.x , m_Position.y + float(OBJECT_HEIGHT) });
             m_ChangeDirectionY = false;
         }
 
         SetPosition({ m_Position.x + FrameDistance , m_Position.y  });
 
-        if (ObjectBottomRightCorner.x >= SCREEN_WIDTH)
+        if (ObjectBottomRightCorner.x >= float(SCREEN_WIDTH))
         {
             s_DirectionX = eInvaderDirection::LEFT;
         }
@@ -85,7 +85,7 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (!m_ChangeDirectionY)
         {
-            SetPosition({ m_Position.x , m_Position.y + OBJECT_HEIGHT });
+            SetPosition({ m_Position.x , m_Position.y + float(OBJECT_HEIGHT) });
             m_ChangeDirectionY = true;
         }
 
@@ -98,13 +98,13 @@ void SpaceInvader::Update(float DeltaTime)
     }
 
     // inwazja invaderow
-    if (ObjectBottomRightCorner.y >= SCREEN_HEIGHT)
+    if (ObjectBottomRightCorner.y >= float(SCREEN_HEIGHT))
     {
         m_Game.SetPlayerLivesCount(m_Game.GetPlayerLivesCount() - 1);
     }
 
     // strzelanie do invaderow
-    for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
+    for (size_t i = 0; i < m_Gun->GetShots().size() ; ++i)
     {
         if (m_Gun->GetShots()[i]->GetTeamID() != eTeamID::INVADER)
         {
@@ -181,9 +181,9 @@ void SpaceInvader::Update(float DeltaTime)
 
                 if (m_AngryTimer > 0)
                 {
-                    m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, 3 * SHOT_SPEED);
+                    m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color::WHITE, 3 * SHOT_SPEED);
                 }
-                else m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
+                else m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color::WHITE, SHOT_SPEED);
             }
         }
     }

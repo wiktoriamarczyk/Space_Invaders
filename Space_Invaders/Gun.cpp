@@ -9,7 +9,7 @@ Gun::Gun()
 void Gun::Update(float DeltaTime)
 {
     // update strzal i usuwanie tych, ktore zostaly juz wystrzelone
-    for (int i = 0; i < m_Shots.size();)
+    for (size_t i = 0; i < m_Shots.size();)
     {
         m_Shots[i]->Update(DeltaTime);
 
@@ -26,7 +26,7 @@ void Gun::Update(float DeltaTime)
 
 void Gun::Render(SDL_Renderer* pRenderer)
 {
-   for (int i = 0; i < m_Shots.size(); ++i)
+   for (size_t i = 0; i < m_Shots.size(); ++i)
    {
        m_Shots[i]->Render(pRenderer);
    }

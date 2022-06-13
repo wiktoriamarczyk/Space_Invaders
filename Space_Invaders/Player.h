@@ -23,4 +23,3 @@ private:
     float                    m_SpecialShootingTimer = 0.f;
     float                    m_ShieldTimer = 0.f;
 };
-

@@ -1,5 +1,11 @@
 export module Module_Common;
 
+export import <SDL_image.h>;
+export import <SDL.h>;
+export import <SDL_Mixer.h>;
+
+import "vec2.h";
+
 export import <iostream>;
 export import <vector>;
 export import <string>;
@@ -16,12 +22,6 @@ export import <mutex>;
 export import <thread>;
 export import <chrono>;
 export import <sstream>;
-import "vec2.h";
-
-import <SDL.h>;
-import <SDL_Mixer.h>;
-import <SDL_image.h>;
-
 export using std::vector;
 export using std::unique_ptr;
 export using std::make_unique;
@@ -45,7 +45,7 @@ export using std::ofstream;
 export using std::getline;
 export using std::pair;
 
-export const path DataPath = "../Data";
+export extern const path DataPath = "../Data";
 
 export enum : int
 {
@@ -102,22 +102,23 @@ export enum class ePowerUpType
 
 export struct Color
 {
-    float R = 1.0f;
-    float G = 1.0f;
-    float B = 1.0f;
-    float A = 1.0f;
+    unsigned char R = 255;
+    unsigned char G = 255;
+    unsigned char B = 255;
+    unsigned char A = 255;
 
     Color() = default;
-    Color(float r, float g, float b, float a = 1.f) : R(r), G(g), B(b), A(a) {}
-    Color(int r, int g, int b, int a = 255) : R(r / 255.f), G(g / 255.f), B(b / 255.f), A(a / 255.f) {}
+    //Color(float r, float g, float b, float a = 1.f) : R(r), G(g), B(b), A(a) {}
+    Color(int r, int g, int b, int a = 255) : R(r), G(g), B(b), A(a) {}
 
     static const Color RED;
     static const Color WHITE;
+    static const Color YELLOW;
 };
 
-export const Color Color::RED(255, 0, 0); ///dzialaja te statici
+export const Color Color::RED(255, 0, 0);
 export const Color Color::WHITE(255, 255, 255);
-
+export const Color Color::YELLOW{ 249, 215, 28 };
 
 export struct DisplayParameters
 {
@@ -149,7 +150,6 @@ export int GetRandInt(int Min, int Max)
     }
     return rand() % (Max - Min + 1) + Min;
 }
-
 
 export float GetNormalizedFloat()
 {

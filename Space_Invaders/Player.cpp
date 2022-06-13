@@ -27,7 +27,7 @@ void Player::Update(float DeltaTime)
     }
     
     vec2 PaddleBottomRightCorner = m_Position + m_Size / 2;
-    if ((SDL_IsKeyPressed(SDL_SCANCODE_D) || (SDL_IsKeyPressed(SDL_SCANCODE_RIGHT))) && ObjectBottomRightCorner.x <= SCREEN_WIDTH && m_Game.GetPlayerLivesCount() > 0)
+    if ((SDL_IsKeyPressed(SDL_SCANCODE_D) || (SDL_IsKeyPressed(SDL_SCANCODE_RIGHT))) && ObjectBottomRightCorner.x <= float(SCREEN_WIDTH) && m_Game.GetPlayerLivesCount() > 0)
     {
         m_Position.x += FrameDistance;
     }
@@ -46,12 +46,12 @@ void Player::Update(float DeltaTime)
 
             if (m_SpecialShootingTimer >= 0)
             {
-                m_Gun->InitializeShotParams(vec2i(2 * SHOT_WIDTH, 2 * SHOT_HEIGHT), Color{1.f, 255.f, 1.f}, 2500);
+                m_Gun->InitializeShotParams(vec2i(2 * SHOT_WIDTH, 2 * SHOT_HEIGHT), Color{1, 255, 1}, 2500);
                 m_ShootingTimer = 0.25f;
             }
             else 
             {
-                m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255.f, 255.f, 255.f }, 1500);
+                m_Gun->InitializeShotParams(vec2i(SHOT_WIDTH, SHOT_HEIGHT), Color{ 255, 255, 255 }, 1500);
                 m_ShootingTimer = 0.4f;
             }
         }
@@ -60,7 +60,7 @@ void Player::Update(float DeltaTime)
     auto& Shots = m_Gun->GetShots();
 
     // strzelanie do gracza przez inavderow
-    for (int i = 0; i < Shots.size(); ++i)
+    for (size_t i = 0; i < Shots.size(); ++i)
     {
         if (Shots[i]->GetTeamID() != eTeamID::INVADER)
         {

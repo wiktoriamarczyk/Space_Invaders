@@ -1,9 +1,6 @@
 #pragma once
 import Module_Common;
 
-#include<SDL.h>;
-#include<SDL_Mixer.h>;
-#include<SDL_image.h>;
 struct CharacterData
 {
     vector<string> m_ImageData;
@@ -17,7 +14,7 @@ class Font
 public:
     void LoadFont(const string& FileName);
     const CharacterData* FindCharacter(char Character)const;
-    void DrawText(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const char* Text, Color MyColor = { 255.f,255.f,255.f });
+    void DrawText(SDL_Renderer* pRenderer, int PixelSize, int PosX, int PosY, const char* Text, Color MyColor = { 255,255,255 });
 };
 
 

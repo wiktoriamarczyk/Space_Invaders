@@ -7,7 +7,7 @@ Shield::Shield(float PosX, float PosY, shared_ptr<Gun> MyGun)
     m_Gun = MyGun;
     m_Position.x = PosX;
     m_Position.y = PosY;
-    m_Size.x = 1.2 * OBJECT_WIDTH;
+    m_Size.x = int(1.2f * float(OBJECT_WIDTH));
     m_Size.y = OBJECT_HEIGHT;
 
     m_TextureDestructionLevel.Size = vec2(0.5f, 0.5f);
@@ -34,7 +34,7 @@ void Shield::Update(float DeltaTime)
     vec2 ObjectTopLeftCorner = m_Position;
     vec2 ObjectBottomRightCorner = m_Position + m_Size;
 
-    for (int i = 0; i < m_Gun->GetShots().size(); ++i)
+    for (size_t i = 0; i < m_Gun->GetShots().size(); ++i)
     {
         if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
         {

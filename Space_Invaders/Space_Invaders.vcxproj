@@ -150,7 +150,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="Common.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -181,7 +180,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
-    <ClInclude Include="Common.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject.h" />

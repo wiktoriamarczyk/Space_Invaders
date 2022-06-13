@@ -18,13 +18,10 @@ struct ParticleData
 class ParticleEmiter : public GameObject
 {
 public:
-    ParticleEmiter(int ParticleCount, int Scale, float MaxLifeTime);
+    ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* Renderer)override;
 
 private:
     vector<ParticleData> m_Particles;
-
-
 };
-

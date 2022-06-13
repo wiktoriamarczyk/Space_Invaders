@@ -16,6 +16,5 @@ private:
     int                  m_Option = 0;
     bool                 m_PlayMusicAgain = true;
     float                m_ColorTimer = 0.0f;
-    Color                m_TxtColor{ 255.f,255.f ,255.f };
+    Color                m_TxtColor = Color::WHITE;
 };
-

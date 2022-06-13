@@ -28,7 +28,7 @@ void Shot::Update(float DeltaTime)
 
 void Shot::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect ShotRect = {m_Position.x, m_Position.y, m_Size.x, m_Size.y };
+    SDL_Rect ShotRect = {int(m_Position.x), int(m_Position.y), int(m_Size.x), int(m_Size.y) };
     SDL_SetRenderDrawColor(pRenderer, m_Color.R, m_Color.G, m_Color.B, 255);
     SDL_RenderFillRect(pRenderer, &ShotRect);
 }

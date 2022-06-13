@@ -1,9 +1,6 @@
 #pragma once
 import Module_Common;
 
-#include<SDL.h>;
-#include<SDL_Mixer.h>;
-#include<SDL_image.h>;
 class Sound
 {
 public:
@@ -21,4 +18,3 @@ private:
     Mix_Music* m_pMusic = nullptr;
     string m_FileName;
 };
-

@@ -3,9 +3,6 @@ import Module_Common;
 #include "Font.h"
 #include "vec2.h" 
 
-#include<SDL.h>;
-#include<SDL_Mixer.h>;
-#include<SDL_image.h>;
 class Engine;
 
 class GameState
@@ -27,6 +24,6 @@ protected:
     static bool        m_GameOver;
 
 private:
-    const eStateID   m_StateID = eStateID::UNKNOWN;
+    const eStateID     m_StateID = eStateID::UNKNOWN;
 };
 

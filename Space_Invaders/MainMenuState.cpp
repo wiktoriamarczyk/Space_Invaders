@@ -42,7 +42,7 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
     m_ColorTimer--;
     if (m_ColorTimer <= 0)
     {
-        m_TxtColor = { GetRandFloat(1.f, 255.f), GetRandFloat(1.f, 255.f), GetRandFloat(1.f, 255.f) };
+        m_TxtColor = { GetRandInt(1, 255), GetRandInt(1, 255), GetRandInt(1, 255) };
         m_ColorTimer = 10.f;
     }
 

@@ -34,7 +34,7 @@ void VictoryState::Render(SDL_Renderer* pRenderer)
 
     if (m_GameOver)
     {
-        m_Font->DrawText(pRenderer, 7, 140, 200, "GAME OVER!", Color{255.f, 1.f, 1.f});
+        m_Font->DrawText(pRenderer, 7, 140, 200, "GAME OVER!", Color{255, 1, 1});
         m_Font->DrawText(pRenderer, 2, 240, 330,  (m_PlayerData->GetName() + "'S SCORE: " + ToString(m_PlayerData->GetScore())).c_str());
 
         DisplayTexture("Boss.png", vec2i(60, 525), DisplayParameters{ .DisplaySize = vec2i(200, 100) });

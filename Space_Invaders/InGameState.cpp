@@ -46,7 +46,7 @@ void InGameState::Update(float DeltaTime)
         m_NextStateID = eStateID::VICTORY;
     }
 
-    for (int i = 0; i < m_AllGameObjects.size();)
+    for (size_t i = 0; i < m_AllGameObjects.size();)
     {
         m_AllGameObjects[i]->Update(DeltaTime);
     
@@ -67,7 +67,7 @@ void InGameState::Render(SDL_Renderer* pRenderer)
     SDL_RenderClear(pRenderer);
 
     // render wszystkich obiektow
-     for (int i = 0; i < m_AllGameObjects.size(); ++i)
+     for (size_t i = 0; i < m_AllGameObjects.size(); ++i)
      {
          m_AllGameObjects[i]->Render(pRenderer);
      }
@@ -98,7 +98,7 @@ void InGameState::Render(SDL_Renderer* pRenderer)
 
     if (m_PointsInfoTimer > 0)
     {
-        m_Font->DrawText(pRenderer, 2, 200, 10, "+ 200! ULTRA KILL", Color{ 249.f, 215.f, 28.f });
+        m_Font->DrawText(pRenderer, 2, 200, 10, "+ 200! ULTRA KILL", Color::YELLOW);
     }
 
     SDL_RenderPresent(pRenderer);
@@ -130,11 +130,6 @@ void InGameState::OnKeyDown(SDL_Scancode KeyCode)
     }
 }
 
-// SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
-// ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
-// z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
-// 800 pikseli szerokosci ekranu
-
 void InGameState::CreateObject()
 {
     // inicjalizacja broni
@@ -151,8 +146,8 @@ void InGameState::CreateObject()
     // inicjalizacja tarcz
     for (int ROW = 0; ROW < 4; ++ROW)
     {
-        PosX = ROW * 4.2f * OBJECT_WIDTH + OBJECT_WIDTH;
-        PosY = SCREEN_HEIGHT - 3 * OBJECT_HEIGHT;
+        PosX = ROW * 4.2f * int(OBJECT_WIDTH) + int(OBJECT_WIDTH);
+        PosY = SCREEN_HEIGHT - 3 * int(OBJECT_HEIGHT);
         m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY, MyGun));
     }
 
@@ -178,7 +173,7 @@ void InGameState::FreeResources()
     m_AllGameObjects.clear();
 }
 
-shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position, int ParticleCount, int ParticleScale, float MaxLifeTime)
+shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime)
 {
     shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>(ParticleCount, ParticleScale, MaxLifeTime);
     pEmiter->SetPosition(Position);
@@ -269,7 +264,7 @@ int InGameState::GetPlayerLivesCount() const
 void InGameState::MakeInvaderAngry(float Timer)
 {
     vector<shared_ptr<SpaceInvader>> Invaders = GetObjects<SpaceInvader>();
-    for (int i = 0; i < Invaders.size(); ++i)
+    for (size_t i = 0; i < Invaders.size(); ++i)
     {
         Invaders[i]->SetAngryTimer(Timer);
     }

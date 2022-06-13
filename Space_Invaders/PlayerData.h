@@ -17,5 +17,3 @@ private:
     string          m_Name;
     int             m_Score;
 };
-
-

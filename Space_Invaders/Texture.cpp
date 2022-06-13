@@ -45,26 +45,19 @@ void Texture::PrepareTexture()
 
 void Texture::Display(vec2 Position, DisplayParameters Param)const
 {
-    //int value = 0;
-    //if( w.has_value() )
-    //    value = w.value();
-
-    //if (w)
-    // value = *w;
-
     if (!m_pTexture)
     {
         return;
     }
 
     vec2 tmp = vec2(Param.DisplaySize.value_or(m_Size)) * Param.DrawScale;
-    SDL_Rect DstRect = {Position.x, Position.y, tmp.x, tmp.y };
+    SDL_Rect DstRect = {int(Position.x), int(Position.y), int(tmp.x), int(tmp.y) };
 
-    SDL_Rect SrcRect = {Param.SrcTopLeft.x * m_Size.x, Param.SrcTopLeft.y * m_Size.y, Param.SrcSize.x * m_Size.x, Param.SrcSize.y * m_Size.y };
+    SDL_Rect SrcRect = {int(Param.SrcTopLeft.x * m_Size.x), int(Param.SrcTopLeft.y * m_Size.y), int(Param.SrcSize.x * m_Size.x), int(Param.SrcSize.y * m_Size.y) };
 
-    SDL_SetTextureColorMod(m_pTexture, Uint8(Param.DrawColor.R*255), Uint8(Param.DrawColor.G*255), Uint8(Param.DrawColor.B*255));
+    SDL_SetTextureColorMod(m_pTexture, Uint8(Param.DrawColor.R), Uint8(Param.DrawColor.G), Uint8(Param.DrawColor.B));
 
-    SDL_SetTextureAlphaMod(m_pTexture, Uint8(Param.DrawColor.A * 255));
+    SDL_SetTextureAlphaMod(m_pTexture, Uint8(Param.DrawColor.A));
 
     if (Param.DrawMode == eDrawMode::ADDITIVE)
         SDL_SetTextureBlendMode(m_pTexture, SDL_BLENDMODE_ADD);

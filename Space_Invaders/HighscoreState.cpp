@@ -40,7 +40,7 @@ void HighscoreState::Render(SDL_Renderer* pRenderer)
     int x_spacing = 300;
     int y_spacing = 30;
 
-    for (int i = 0; i < m_AllPlayersScores.size(); ++i)
+    for (size_t i = 0; i < m_AllPlayersScores.size(); ++i)
     {
         m_Font->DrawText(pRenderer, 2, 220, 150 + (i + 1) * y_spacing, m_AllPlayersScores[i].first.c_str());
         m_Font->DrawText(pRenderer, 2, 220 + x_spacing, 150 + (i + 1) * y_spacing, ToString(m_AllPlayersScores[i].second).c_str());

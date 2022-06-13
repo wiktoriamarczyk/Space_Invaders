@@ -1,9 +1,7 @@
 #include "PlayerData.h"
 #include "Font.h"
 
-PlayerData::PlayerData(HighscoreState& Highscore) : m_Highscore(Highscore) 
-{
-}
+PlayerData::PlayerData(HighscoreState& Highscore) : m_Highscore(Highscore) {}
 
 string PlayerData::GetName() const
 {

@@ -16,7 +16,7 @@ void PowerUp::Update(float DeltaTime)
 
     SetPosition({ m_Position.x , m_Position.y + FrameDistance });
 
-    if (ObjectTopLeftCorner.y >= SCREEN_HEIGHT)
+    if (ObjectTopLeftCorner.y >= float(SCREEN_HEIGHT))
     {
         m_IsAlive = false;
     }

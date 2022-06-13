@@ -8,8 +8,6 @@
 #include "PlayerData.h"
 #include "HighscoreState.h"
 
-
-
 Engine* Engine::pSingleton = nullptr;
 
 Engine* Engine::GetSingleton()
@@ -40,21 +38,17 @@ bool Engine::Initialize()
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
     // zainicjalizowanie obrazkow
     if (!IMG_Init(IMG_INIT_PNG))
     {
         printf("IMG could not initialize! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
+    // sformatowanie audio
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
     {
         return false;
     }
-
-    //Mix_Volume(-1, 16);
-
     // utworzenie okna
     m_pWindow = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (m_pWindow == nullptr)
@@ -62,7 +56,6 @@ bool Engine::Initialize()
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
     // utworzenie renderera
     m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
     if (m_pWindow == nullptr)
@@ -71,29 +64,24 @@ bool Engine::Initialize()
         return false;
     }
 
-    ///SDL_Rect ViewPort = { 200, 0, WINDOW_WIDTH - 200, WINDOW_HEIGHT };
-    ///SDL_RenderSetViewport(m_pRenderer, &ViewPort);
-
     // stworzenie czcionki
     shared_ptr<Font> MyFont = make_shared<Font>();
     MyFont->LoadFont("../Data/FontData.txt");
-
-
-    unique_ptr<HighscoreState> highscore = make_unique<HighscoreState>(MyFont);
+    // utworzenie stanu Highscore
+    unique_ptr<HighscoreState> MyHighscoreState = make_unique<HighscoreState>(MyFont);
     // stworzenie gracza
-    shared_ptr<PlayerData> MyPlayer = make_shared<PlayerData>(*highscore);
-
+    shared_ptr<PlayerData> MyPlayer = make_shared<PlayerData>(*MyHighscoreState);
     // dodanie wszystkich stanow gry do wektora
-    m_AllStates.push_back(make_unique<InGameState>(MyFont, MyPlayer));
     m_AllStates.push_back(make_unique<MainMenuState>(MyFont));
-    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont));
-    m_AllStates.push_back(make_unique<VictoryState>(MyFont, MyPlayer));
     m_AllStates.push_back(make_unique<SetupState>(MyFont, MyPlayer));
-    m_AllStates.push_back(move(highscore));
+    m_AllStates.push_back(make_unique<InGameState>(MyFont, MyPlayer));
+    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont));
+    m_AllStates.push_back(move(MyHighscoreState));
+    m_AllStates.push_back(make_unique<VictoryState>(MyFont, MyPlayer));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);
-
+    // zaladowanie tekstur na watkach
     LoadResources();
 
     return true;
@@ -136,7 +124,7 @@ void Engine::Loop()
 
 void Engine::ChangeState(eStateID StateID)
 {
-    for (int i = 0; i < m_AllStates.size(); ++i)
+    for (size_t i = 0; i < m_AllStates.size(); ++i)
     {
         if (m_AllStates[i]->GetStateID() == StateID)
         {
@@ -154,7 +142,7 @@ void Engine::ExitGame()
 
 void Engine::PlaySound(const path& File, float Volume)
 {
-    for (int i = 0; i < m_LoadedSounds.size(); ++i)
+    for (size_t i = 0; i < m_LoadedSounds.size(); ++i)
     {
         if (m_LoadedSounds[i]->GetName() == File)
         {
@@ -170,7 +158,7 @@ void Engine::PlaySound(const path& File, float Volume)
 
 void Engine::FreeSounds()
 {
-    for (int i = 0; i < m_LoadedSounds.size(); ++i)
+    for (size_t i = 0; i < m_LoadedSounds.size(); ++i)
     {
         m_LoadedSounds[i]->FreeResources();
     }
@@ -180,7 +168,7 @@ shared_ptr<Texture> Engine::GetTexture(const path& FileName)const
 {
     scoped_lock<mutex> ScopedUnlock(m_EngineMutex);
 
-    for (int i = 0; i < m_LoadedTextures.size(); ++i)
+    for (size_t i = 0; i < m_LoadedTextures.size(); ++i)
     {
         if (m_LoadedTextures[i]->GetName() == FileName)
         {
@@ -203,7 +191,7 @@ void Engine::DestroyTextures()
 {
     scoped_lock<mutex> ScopedUnlock(m_EngineMutex);
 
-    for (int i = 0; i < m_LoadedTextures.size(); ++i)
+    for (size_t i = 0; i < m_LoadedTextures.size(); ++i)
     {
         m_LoadedTextures[i]->FreeResources();
     }
@@ -253,7 +241,7 @@ void Engine::TextureLoadThread()
             continue;
         }
         // jak zaladowalismy teksture, to zablokuj mutex, zeby moc wrzucic teksture do listy zaladowanych tekstur
-        // aby dwa watki nie chcialy NARAZ w tym samym momencie wpisac tekstury do wektora (wtedy aplikacja by sie scrushowala)
+        // aby dwa watki nie chcialy NARAZ w tym samym momencie wpisac tekstury do wektora (crash)
         else
         {
             m_EngineMutex.lock();
@@ -290,27 +278,15 @@ void Engine::LoadResources()
     }
 
     // poczekaj, az watki skoncza prace
-    for (int i = 0; i < m_LoadingThreads.size(); ++i)
+    for (size_t i = 0; i < m_LoadingThreads.size(); ++i)
     {
         m_LoadingThreads[i].join();
     }
 
     // funkcje korzystajce z SDL_Renderer nie moga byc zawolane w watku, wiec musimy dokonczyc ladowanie tekstur tutaj (w watku glownym)
-    for (int i = 0; i < m_LoadedTextures.size(); ++i)
+    for (size_t i = 0; i < m_LoadedTextures.size(); ++i)
     {
         m_LoadedTextures[i]->PrepareTexture();
     }
 
-}
-
-mutex* Engine::GetEngineMutex()
-{
-    auto pEngine = GetSingleton();
-
-    if (!pEngine)
-    {
-        return nullptr;
-    }
-
-    return &pEngine->m_EngineMutex;
 }

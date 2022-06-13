@@ -2,7 +2,7 @@
 
 #include "Engine.h"
 
-ParticleEmiter::ParticleEmiter(int ParticleCount, int Scale, float MaxLifeTime)
+ParticleEmiter::ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime)
 {    
     // ParticleCount - liczba partikli jak¹ stworzymy
 
@@ -54,7 +54,7 @@ ParticleEmiter::ParticleEmiter(int ParticleCount, int Scale, float MaxLifeTime)
 
 void ParticleEmiter::Update(float DeltaTime)
 {
-    for (int i = 0; i < m_Particles.size(); ++i)
+    for (size_t i = 0; i < m_Particles.size(); ++i)
     {
         // póki mamy jakiœ czas "opóŸnienia" to go zmiejszammy i nie robimy nic innego
         if (m_Particles[i].m_StartDelayTime > 0)
@@ -85,7 +85,7 @@ void ParticleEmiter::Render(SDL_Renderer* Renderer)
     vec2 Scale = vec2(2, 2);
     vec2i Size = vec2i(32, 32);
 
-    for (int i = 0; i < m_Particles.size(); ++i)
+    for (size_t i = 0; i < m_Particles.size(); ++i)
     {
         // póki mamy jakiœ czas "opóŸnienia" to siê nie rysujemy
         if (m_Particles[i].m_StartDelayTime > 0)

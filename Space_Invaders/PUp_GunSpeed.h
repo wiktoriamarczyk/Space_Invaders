@@ -7,4 +7,3 @@ public:
     using PowerUp::PowerUp;
     void Activate(shared_ptr<Player> MyPlayer)override;
 };
-

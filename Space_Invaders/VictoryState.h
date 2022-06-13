@@ -18,4 +18,3 @@ private:
     Vec2Rect               m_MovementRect;
     shared_ptr<PlayerData> m_PlayerData;
 };
-

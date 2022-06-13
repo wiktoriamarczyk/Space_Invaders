@@ -14,17 +14,10 @@ Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 
 void Boss::Update(float DeltaTime)
 {
-    if (SDL_IsKeyPressed(SDL_SCANCODE_1))
-    {
-        SetNumOfLives(0);
-    }
-
     float FrameDistance = m_Speed * DeltaTime;
     vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
     vec2 ObjectBottomRightCorner = m_Position + m_Size / 2;
     vec2 tempPos = m_Position;
-
-
 
     if (GetNumOfLives() <= 0)
     {
@@ -64,7 +57,7 @@ void Boss::Update(float DeltaTime)
         }
 
         // strzelanie do bossa
-        for (int i = 0; i < m_Gun->GetShots().size(); ++i)
+        for (size_t i = 0; i < m_Gun->GetShots().size(); ++i)
         {
             if (m_Gun->GetShots()[i]->GetTeamID() != eTeamID::INVADER)
             {
@@ -98,17 +91,17 @@ void Boss::Update(float DeltaTime)
                 if (GetRandInt(0, 3) == 0)
                 {
                     m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), eTeamID::INVADER);
-                    m_Gun->InitializeShotParams(BossShots, Color{255.f, 255.f, 255.f}, SHOT_SPEED);
+                    m_Gun->InitializeShotParams(BossShots, Color{255, 255, 255}, SHOT_SPEED);
                 }
                 else if (GetRandInt(0, 3) == 1)
                 {
                     m_Gun->Shoot(vec2(m_Position.x + 52, ObjectBottomRightCorner.y), eTeamID::INVADER);
-                    m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
+                    m_Gun->InitializeShotParams(BossShots, Color{ 255, 255, 255 }, SHOT_SPEED);
                 }
                 else if (GetRandInt(0, 3) == 2)
                 {
                     m_Gun->Shoot(vec2(m_Position.x - 52, ObjectBottomRightCorner.y), eTeamID::INVADER);
-                    m_Gun->InitializeShotParams(BossShots, Color{ 255.f, 255.f, 255.f }, SHOT_SPEED);
+                    m_Gun->InitializeShotParams(BossShots, Color{ 255, 255, 255 }, SHOT_SPEED);
                 }
             }
         }
@@ -137,7 +130,7 @@ void Boss::Render(SDL_Renderer* pRenderer)
 
         for (int i = 0; i < GetNumOfLives(); ++i)
         {
-            SDL_Rect BlocksOfLife = { 202 + i * Rect_width + i * 1.25f * Rect_width, 12, 2 * Rect_width, Rect_height };
+            SDL_Rect BlocksOfLife = { int(202 + i * Rect_width + i * 1.25f * Rect_width), 12, 2 * Rect_width, Rect_height };
             SDL_RenderFillRect(pRenderer, &BlocksOfLife);
         }
     }
