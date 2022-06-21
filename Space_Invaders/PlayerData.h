@@ -1,5 +1,5 @@
 #pragma once
-import Module_Common;
+#include "Common.h"
 #include "HighscoreState.h"
 
 class PlayerData
