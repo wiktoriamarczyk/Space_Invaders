@@ -12,7 +12,7 @@ public:
     void Render(SDL_Renderer* pRenderer)override;
     vector<shared_ptr<Shot>> GetShots();
     void Shoot(float PosX, float PosY);
-    static int NumOfLives();
+    static int m_NumOfLives;
 
 private:
     SDL_Texture* m_pTexture = nullptr;
@@ -22,6 +22,6 @@ private:
     float m_ShootingTimer = 20.0f;
     float m_TextureTimer = 25.0f;
     bool m_IsDying = false;
-    static int m_NumOfLives;
+
 };
 

@@ -1,5 +1,5 @@
 #include "Gun.h"
-#include "Game.h"
+#include "Engine.h"
 
 int Gun::m_NumOfLives = 3;
 
@@ -50,7 +50,7 @@ void Gun::Update(float DeltaTime)
         if (m_ShootingTimer <= 0)
         {
             m_Shots.push_back(make_shared<Shot>(m_StartingPointPosition));
-            Game::GetSingleton()->PlaySound("Shot.wav");
+            Engine::GetSingleton()->PlaySound("Shot.wav");
             m_ShootingTimer = 30.0f;
         }
     }
@@ -82,7 +82,7 @@ void Gun::Update(float DeltaTime)
             {
                 if (m_Shots[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Shots[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
                 {
-                    Game::GetSingleton()->PlaySound("Bum.wav");
+                    Engine::GetSingleton()->PlaySound("Bum.wav");
                     m_NumOfLives--;
                     m_IsDying = true;
                     m_Shots[i]->SetObjectStatus(false);
@@ -135,9 +135,4 @@ void Gun::Shoot(float PosX, float PosY)
     vec2 Tmp (PosX, PosY);
     m_Shots.push_back(make_shared<Shot>(Tmp));
     m_Shots.back()->SetDealingDamage(false);
-}
-
-int Gun::NumOfLives()
-{
-    return m_NumOfLives;
 }
