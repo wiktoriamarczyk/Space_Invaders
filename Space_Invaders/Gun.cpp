@@ -52,6 +52,7 @@ void Gun::Update(float DeltaTime)
         for (int i = 0; i < m_Shots.size();)
         {
             m_Shots[i]->Update(DeltaTime);
+
             if (m_Shots[i]->GetObjectStatus() == false)
             {
                 m_Shots.erase(m_Shots.begin() + i);
@@ -83,9 +84,4 @@ void Gun::Render(SDL_Renderer* pRenderer)
 vector<shared_ptr<Shot>> Gun::GetShots()
 {
     return m_Shots;
-}
-
-void Gun::SetShotStatus(bool ShotStatus)
-{
-    m_ShootYourShot = ShotStatus;
 }

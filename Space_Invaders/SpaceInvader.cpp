@@ -80,6 +80,7 @@ void SpaceInvader::Update(float DeltaTime)
             if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
             {
                 m_ObjectIsAlive = false;
+                m_Gun->GetShots()[i]->SetShotStatus(true);
             }
         }
     }

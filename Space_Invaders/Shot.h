@@ -7,9 +7,11 @@ public:
     Shot(vec2 Position);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
+    bool GetDealingDamageStatus();
+    void SetDealingDamage(bool DealingDamage);
 
 private:
     vec2 m_GunPosition;
-    bool m_ShootYourShot = false; // fajny 80s utwor
     float m_LivingTimer = 100.0f;
+    bool m_DealingDamage = true;
 };
