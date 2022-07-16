@@ -17,7 +17,7 @@ private:
     SDL_Rect m_MovementRect;
     int m_InvaderID = 0;
     float m_TextureTimer = 100.0f;
-    static float m_Speed;
+    float m_Speed;
     static int m_NumOfInvaders;
     static bool m_ChangeDirectionX;
     bool m_ChangeDirectionY = false;

@@ -140,17 +140,17 @@ void Game::CreateObject()
 
     for (int ROW = 0; ROW < 4; ++ROW)
     {
-        PosX = ROW * 4.2 * INVADER_WIDTH + INVADER_WIDTH;
-        PosY = SCREEN_HEIGHT - 3 * INVADER_HEIGHT;
+        PosX = ROW * 4.2 * OBJECT_WIDTH + OBJECT_WIDTH;
+        PosY = SCREEN_HEIGHT - 3 * OBJECT_HEIGHT;
         m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY));
     }
 
     for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
     {
-        for (int ROW = 0; ROW < SCREEN_WIDTH / INVADER_WIDTH - 3; ++ROW)
+        for (int ROW = 0; ROW < SCREEN_WIDTH / OBJECT_WIDTH - 3; ++ROW)
         {
-            PosX = ROW * INVADER_WIDTH + INVADER_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100);
-            PosY = SCREEN_HEIGHT / 6 + COLUMN * INVADER_HEIGHT;
+            PosX = ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100);
+            PosY = SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT;
             m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY));
         }
     }

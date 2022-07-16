@@ -2,7 +2,7 @@
 
 bool SpaceInvader::m_ChangeDirectionX = false;
 int SpaceInvader::m_NumOfInvaders = 0;
-float SpaceInvader::m_Speed = INVADER_SPEED;
+//float SpaceInvader::m_Speed = INVADER_SPEED;
 
 SDL_Surface* SpaceInvader::m_pImage = nullptr;
 
@@ -22,8 +22,10 @@ SpaceInvader::SpaceInvader(float PosX, float PosY)
     m_StartingPointPosition.x = PosX;
     m_StartingPointPosition.y = PosY;
 
-    m_ObjectSize.x = INVADER_WIDTH;
-    m_ObjectSize.y = INVADER_HEIGHT;
+    m_ObjectSize.x = OBJECT_WIDTH;
+    m_ObjectSize.y = OBJECT_HEIGHT;
+    
+    m_Speed = INVADER_SPEED;
 }
 
 void SpaceInvader::Update(float DeltaTime)
@@ -37,7 +39,7 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (m_ChangeDirectionY)
         {
-            m_StartingPointPosition.y += INVADER_HEIGHT;
+            m_StartingPointPosition.y += OBJECT_HEIGHT;
             if (m_StartingPointPosition.y >= tempPos.y)
             {
                 tempPos = m_StartingPointPosition;
@@ -54,7 +56,7 @@ void SpaceInvader::Update(float DeltaTime)
     {
         if (!m_ChangeDirectionY)
         {
-            m_StartingPointPosition.y += INVADER_HEIGHT;
+            m_StartingPointPosition.y += OBJECT_HEIGHT;
             if (m_StartingPointPosition.y >= tempPos.y)
             {
                 tempPos = m_StartingPointPosition;
@@ -84,6 +86,15 @@ void SpaceInvader::Update(float DeltaTime)
         m_TextureTimer = 100.0f;
     }
     
+    // =============TEST==========
+    if (SDL_IsKeyPressed(SDL_SCANCODE_W))
+    {
+        m_Speed = 0; 
+    }
+    if (SDL_IsKeyPressed(SDL_SCANCODE_S))
+    {
+        m_Speed = INVADER_SPEED;
+    }
     // =TODO= jesli Invader zostanie postrzelony -> m_Speed++
 }
 
@@ -115,6 +126,9 @@ SDL_Texture* SpaceInvader::GetTexture()
 
 void SpaceInvader::InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer)
 {
+    // ===================TEST======================================
+    std::cout << "W -> STOP INVADERS\nS -> START INVADERS AGAIN\n";
+
     m_pImage = IMG_Load("../Data/SpaceInvaders1.png");
     m_pTexture1 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     m_pImage = IMG_Load("../Data/SpaceInvaders2.png");
