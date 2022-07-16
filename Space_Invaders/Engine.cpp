@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "InGameState.h"
+#include "MainMenuState.h"
 #include "Font.h"
 
 Engine* Engine::pSingleton = nullptr;
@@ -67,9 +68,10 @@ bool Engine::Initialize()
 
     // dodanie wszystkich stanow gry do wektora
     m_AllStates.push_back(make_unique<InGameState>(MyFont, m_pRenderer));
+    m_AllStates.push_back(make_unique<MainMenuState>(MyFont, m_pRenderer));
 
-    // pierwszym stanem jest gra
-    ChangeState(eStateID::INGAME);
+    // pierwszym stanem jest Menu gry
+    ChangeState(eStateID::MAINMENU);
 
     return true;
 }
@@ -84,20 +86,21 @@ void Engine::Loop()
             if (EVENT.type == SDL_QUIT)
                 return;
 
-            //if (EVENT.type == SDL_KEYDOWN)
-            //{
-            //    m_pCurrentState->OnKeyDown(EVENT.key.keysym.scancode);
-            //}
+            if (EVENT.type == SDL_KEYDOWN)
+            {
+                m_pCurrentState->OnKeyDown(EVENT.key.keysym.scancode);
+            }
         }
 
         SDL_Delay(1000 / 60);
 
         m_pCurrentState->Update(1.0f / 60.0f);
-        m_pCurrentState->Render(m_pRenderer);
+        m_pCurrentState->Render();
 
         // domyslnie nastepny stan jest UNKNOWN, gdy nie chcemy przechodzic do nowego stanu, zatem jesli jest tam cos innego, tzn. ze bylo zazadanie zmiany stanu
         if (m_pCurrentState->GetNextStateID() != eStateID::UNKNOWN)
         {
+            SDL_Delay(100);
             ChangeState(m_pCurrentState->GetNextStateID());
         }
     }

@@ -38,7 +38,6 @@ enum class eStateID
     MAINMENU = 1,
     INGAME = 2,
     VICTORY = 3,
-    SETTINGS = 4,
 
 };
 

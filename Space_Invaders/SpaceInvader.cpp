@@ -132,26 +132,17 @@ void SpaceInvader::Update(float DeltaTime)
 
         if (m_TextureTimer == 50.0f)
         {
-            Engine::GetSingleton()->PlaySound("MovementSound.wav");
+            Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
             m_MovementRect = srcrect1;
         }
         if (m_TextureTimer <= 0)
         {
-            Engine::GetSingleton()->PlaySound("MovementSound.wav");
+            Engine::GetSingleton()->PlaySound("MovementSound.wav",0.125f);
             m_MovementRect = srcrect2;
             m_TextureTimer = 100.0f;
         }
     }
 
-    // =============TEST==========
-    if (SDL_IsKeyPressed(SDL_SCANCODE_W))
-    {
-        m_Speed = 0; 
-    }
-    if (SDL_IsKeyPressed(SDL_SCANCODE_S))
-    {
-        m_Speed = INVADER_SPEED;
-    }
     // =TODO= jesli Invader zostanie postrzelony -> m_Speed++
 }
 
@@ -186,15 +177,18 @@ SDL_Texture* SpaceInvader::GetTexture()
 
 void SpaceInvader::InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer)
 {
-    // ===================TEST======================================
-    std::cout << "W -> STOP INVADERS\nS -> START INVADERS AGAIN\n";
-
     m_pImage = IMG_Load("../Data/SpaceInvaders1.png");
     m_pTexture1 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
+
     m_pImage = IMG_Load("../Data/SpaceInvaders2.png");
     m_pTexture2 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
+
     m_pImage = IMG_Load("../Data/SpaceInvaders3.png");
     m_pTexture3 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
+
     m_pImage = IMG_Load("../Data/puf.png");
     m_pTexture4 = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     SDL_FreeSurface(m_pImage);
@@ -203,8 +197,13 @@ void SpaceInvader::InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer)
 void SpaceInvader::DestroyTextures()
 {
     SDL_DestroyTexture(m_pTexture1);
+    m_pTexture1 = nullptr;
     SDL_DestroyTexture(m_pTexture2);
+    m_pTexture2 = nullptr;
     SDL_DestroyTexture(m_pTexture3);
+    m_pTexture3 = nullptr;
+    SDL_DestroyTexture(m_pTexture4);
+    m_pTexture4 = nullptr;
 }
 
 int SpaceInvader::RandNumber()

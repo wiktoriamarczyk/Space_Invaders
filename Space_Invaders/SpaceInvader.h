@@ -14,6 +14,7 @@ public:
     static void DestroyTextures();
     static bool ExitGame;
     static int m_NumOfPoints;
+    static int m_NumOfInvaders;
     static int RandNumber();
 
 private:
@@ -28,7 +29,6 @@ private:
     float m_Speed;
     bool m_ChangeDirectionY = false;
     int m_PointsForInvader = 0;
-    static int m_NumOfInvaders;
     static bool m_ChangeDirectionX;
 
     static SDL_Surface* m_pImage;

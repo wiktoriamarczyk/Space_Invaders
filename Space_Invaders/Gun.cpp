@@ -5,7 +5,8 @@ int Gun::m_NumOfLives = 3;
 
 Gun::~Gun()
 {
-    SDL_DestroyTexture(m_pTexture);
+    SDL_DestroyTexture(m_pDyingTexture);
+    SDL_DestroyTexture(m_pNormalTexture);
 }
 
 void Gun::InitializeGun(SDL_Renderer* pRenderer, float PosX, float PosY)
@@ -18,6 +19,8 @@ void Gun::InitializeGun(SDL_Renderer* pRenderer, float PosX, float PosY)
 
     SDL_Surface* m_pImage = IMG_Load("../Data/Gun.png");
     m_pNormalTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
+
     m_pImage = IMG_Load("../Data/puf.png");
     m_pDyingTexture = SDL_CreateTextureFromSurface(pRenderer, m_pImage);
     SDL_FreeSurface(m_pImage);
@@ -56,40 +59,36 @@ void Gun::Update(float DeltaTime)
     }
 
     // update strzal i usuwanie strzal, ktorym zycie juz sie skonczylo
-    if (!m_Shots.empty())
+    for (int i = 0; i < m_Shots.size();)
     {
-        for (int i = 0; i < m_Shots.size();)
-        {
-            m_Shots[i]->Update(DeltaTime);
+        m_Shots[i]->Update(DeltaTime);
 
-            if (m_Shots[i]->GetObjectStatus() == false)
-            {
-                m_Shots.erase(m_Shots.begin() + i);
-            }
-            else
-            {
-                ++i;
-            }
+        if (m_Shots[i]->GetObjectStatus() == false)
+        {
+            m_Shots.erase(m_Shots.begin() + i);
+        }
+        else
+        {
+            ++i;
         }
     }
+    
 
     // strzelanie do broni przez inavderow
-    if (!m_Shots.empty())
-    {
-        for (int i = 0; i < m_Shots.size(); ++i)
-        {
-            if (m_Shots[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Shots[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
-            {
-                if (m_Shots[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Shots[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
-                {
-                    Engine::GetSingleton()->PlaySound("Bum.wav");
-                    m_NumOfLives--;
-                    m_IsDying = true;
-                    m_Shots[i]->SetObjectStatus(false);
-                }
-            }
-        }
-    }
+     for (int i = 0; i < m_Shots.size(); ++i)
+     {
+         if (m_Shots[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Shots[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
+         {
+             if (m_Shots[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Shots[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
+             {
+                 Engine::GetSingleton()->PlaySound("Bum.wav");
+                 m_NumOfLives--;
+                 m_IsDying = true;
+                 m_Shots[i]->SetObjectStatus(false);
+             }
+         }
+     }
+    
    
     if (m_IsDying)
     {
@@ -116,13 +115,12 @@ void Gun::Render(SDL_Renderer* pRenderer)
     //SDL_RenderFillRect(pRenderer, &dstrect);
     SDL_RenderCopy(pRenderer, m_pTexture, NULL, &dstrect);
 
-    if (!m_Shots.empty())
-    {
-        for (int i = 0; i < m_Shots.size(); ++i)
-        {
-            m_Shots[i]->Render(pRenderer);
-        }
-    }
+
+   for (int i = 0; i < m_Shots.size(); ++i)
+   {
+       m_Shots[i]->Render(pRenderer);
+   }
+
 }
 
 vector<shared_ptr<Shot>> Gun::GetShots()

@@ -1,4 +1,5 @@
 #include "Shield.h"
+#include "Engine.h"
 
 SDL_Texture* Shield::m_pTexture = nullptr;
 
@@ -20,6 +21,7 @@ Shield::Shield( float PosX, float PosY, shared_ptr<Gun> MyGun)
 void Shield::DestroyTexture()
 {
     SDL_DestroyTexture(m_pTexture);
+    m_pTexture= nullptr;
 }
 
 void Shield::InitializeShieldTexture(SDL_Renderer* pRenderer)
@@ -54,7 +56,7 @@ void Shield::Update(float DeltaTime)
     {
         if (m_Gun->GetShots()[i]->GetObjectPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetObjectPosition().x <= ObjectBottomRightCorner.x)
         {
-            if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
+            if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
             {
                 m_DestructionLevel++;
                 m_Gun->GetShots()[i]->SetObjectStatus(false);

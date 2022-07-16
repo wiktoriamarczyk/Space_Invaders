@@ -9,12 +9,13 @@ InGameState::InGameState(shared_ptr<Font> MyFont, SDL_Renderer* pRenderer) : Gam
     m_Font = MyFont;
     m_pRenderer = pRenderer;
     // przy kazdym tworzeniu InGameState wywoluj tworzenie obiektow gry
-    InitializeInGameStateTextures();
+
 }
 
 InGameState::~InGameState()
 {
     SDL_DestroyTexture(m_GunIconTexture);
+    m_GunIconTexture = nullptr;
     SpaceInvader::DestroyTextures();
     Shield::DestroyTexture();
 }
@@ -36,8 +37,7 @@ void InGameState::Update(float DeltaTime)
 {
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
-        //==TODO==
-        //m_NextStateID = eStateID::MAINMENU;
+        m_NextStateID = eStateID::MAINMENU;
     }
 
     if (Gun::m_NumOfLives <= 0)
@@ -61,7 +61,7 @@ void InGameState::Update(float DeltaTime)
     }
 }
 
-void InGameState::Render(SDL_Renderer* pRenderer)
+void InGameState::Render()
 {
     SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(m_pRenderer);
@@ -108,6 +108,7 @@ void InGameState::CreateObject()
 {
     m_AllGameObjects.clear();
     SpaceInvader::m_NumOfPoints = 0;
+    SpaceInvader::m_NumOfInvaders = 0;
     Gun::m_NumOfLives = 3;
 
     // inicjalizacja broni
@@ -144,5 +145,6 @@ void InGameState::CreateObject()
 void InGameState::OnEnter()
 {
     GameState::OnEnter();
+    InitializeInGameStateTextures();
     CreateObject();
 }

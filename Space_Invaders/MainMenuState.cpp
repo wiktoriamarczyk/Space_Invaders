@@ -20,9 +20,7 @@ void MainMenuState::InitializeMainMenuStateTextures()
     SDL_FreeSurface(m_pImage);
 }
 
-void MainMenuState::Update(float DeltaTime)
-{
-}
+void MainMenuState::Update(float DeltaTime) {}
 
 void MainMenuState::Render()
 {
