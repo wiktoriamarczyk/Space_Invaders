@@ -1,7 +1,8 @@
 #include "Engine.h"
+#include "Font.h"
 #include "InGameState.h"
 #include "MainMenuState.h"
-#include "Font.h"
+#include "HowToPlayState.h"
 
 Engine* Engine::pSingleton = nullptr;
 
@@ -69,6 +70,7 @@ bool Engine::Initialize()
     // dodanie wszystkich stanow gry do wektora
     m_AllStates.push_back(make_unique<InGameState>(MyFont, m_pRenderer));
     m_AllStates.push_back(make_unique<MainMenuState>(MyFont, m_pRenderer));
+    m_AllStates.push_back(make_unique<HowToPlayState>(MyFont, m_pRenderer));
 
     // pierwszym stanem jest Menu gry
     ChangeState(eStateID::MAINMENU);

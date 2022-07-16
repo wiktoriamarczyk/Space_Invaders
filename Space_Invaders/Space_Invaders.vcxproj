@@ -148,6 +148,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HowToPlayState.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shot.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="HowToPlayState.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shield.h" />
