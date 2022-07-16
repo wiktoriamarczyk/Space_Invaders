@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Gun.h"
+#include "Shot.h"
 
 class SpaceInvader : public GameObject
 {
@@ -12,6 +13,7 @@ public:
     static void InitializeSpaceInvaderTexture(SDL_Renderer* pRenderer);
     static void DestroyTextures();
     static bool ExitGame;
+    static int m_NumOfPoints;
 
 private:
     shared_ptr<Gun> m_Gun;
@@ -23,6 +25,7 @@ private:
     static int m_NumOfInvaders;
     static bool m_ChangeDirectionX;
     bool m_ChangeDirectionY = false;
+    int m_PointsForInvader = 0;
 
     static SDL_Surface* m_pImage;
     static SDL_Texture* m_pTexture1;

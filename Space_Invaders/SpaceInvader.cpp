@@ -2,6 +2,7 @@
 
 bool SpaceInvader::m_ChangeDirectionX = false;
 int SpaceInvader::m_NumOfInvaders = 0;
+int SpaceInvader::m_NumOfPoints = 0;
 //float SpaceInvader::m_Speed = INVADER_SPEED;
 
 SDL_Surface* SpaceInvader::m_pImage = nullptr;
@@ -80,7 +81,8 @@ void SpaceInvader::Update(float DeltaTime)
             if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y)
             {
                 m_ObjectIsAlive = false;
-                m_Gun->GetShots()[i]->SetShotStatus(true);
+                m_Gun->GetShots()[i]->SetObjectStatus(false);
+                m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
             }
         }
     }
@@ -127,14 +129,17 @@ SDL_Texture* SpaceInvader::GetTexture()
     if (m_InvaderID <= 12)
     {
         m_pTexture = m_pTexture1;
+        m_PointsForInvader = 30;
     }
     if (m_InvaderID >= 13 && m_InvaderID <= 38)
     {
         m_pTexture = m_pTexture2;
+        m_PointsForInvader = 20;
     }
     if (m_InvaderID >= 39 && m_InvaderID <= 64)
     {
         m_pTexture = m_pTexture3;
+        m_PointsForInvader = 10;
     }
     return m_pTexture;
 }
