@@ -1,5 +1,7 @@
 #include "Gun.h"
 
+int Gun::m_NumOfLives = 3;
+
 Gun::~Gun()
 {
     SDL_DestroyTexture(m_pTexture);
@@ -67,7 +69,7 @@ void Gun::Update(float DeltaTime)
 
 void Gun::Render(SDL_Renderer* pRenderer)
 {
-    SDL_Rect dstrect = { m_StartingPointPosition.x, m_StartingPointPosition.y, m_ObjectSize.x, m_ObjectSize.y };
+    SDL_Rect dstrect = { int(m_StartingPointPosition.x), int(m_StartingPointPosition.y), int(m_ObjectSize.x), int(m_ObjectSize.y) };
     //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     //SDL_RenderFillRect(pRenderer, &dstrect);
     SDL_RenderCopy(pRenderer, m_pTexture, NULL, &dstrect);

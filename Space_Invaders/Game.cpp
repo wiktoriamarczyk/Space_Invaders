@@ -9,6 +9,8 @@ Game::~Game()
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
     SDL_CloseAudio();
+    SDL_DestroyTexture(m_GunIconTexture);
+    SDL_DestroyTexture(m_GameOverTexture);
     SpaceInvader::DestroyTextures();
     Shield::DestroyTexture();
 }
@@ -50,6 +52,13 @@ bool Game::Initialize()
         return false;
     }
 
+    // stworzenie ikon gry
+    SDL_Surface* m_pImage = IMG_Load("../Data/Icon.png");
+    m_GunIconTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
+    m_pImage = IMG_Load("../Data/GameOver.png");
+    m_GameOverTexture = SDL_CreateTextureFromSurface(m_pRenderer, m_pImage);
+    SDL_FreeSurface(m_pImage);
+
     // stworzenie obiektow gry
     CreateObject();
 
@@ -80,7 +89,6 @@ void Game::Loop()
         {
             ExitGame();
         }
-
     }
 }
 
@@ -98,19 +106,27 @@ void Game::Update(float DeltaTime)
         ExitGame();
     }
 
-    if (!m_AllGameObjects.empty())
+    if (Gun::m_NumOfLives <= 0)
     {
-        for (int i = 0; i < m_AllGameObjects.size();)
-        {
-            m_AllGameObjects[i]->Update(DeltaTime);
+        m_GameOver = true;
+    }
 
-            if (m_AllGameObjects[i]->GetObjectStatus() == false)
+    if (!m_GameOver)
+    {
+        if (!m_AllGameObjects.empty())
+        {
+            for (int i = 0; i < m_AllGameObjects.size();)
             {
-                m_AllGameObjects.erase(m_AllGameObjects.begin() + i);
-            }
-            else
-            {
-                ++i;
+                m_AllGameObjects[i]->Update(DeltaTime);
+
+                if (m_AllGameObjects[i]->GetObjectStatus() == false)
+                {
+                    m_AllGameObjects.erase(m_AllGameObjects.begin() + i);
+                }
+                else
+                {
+                    ++i;
+                }
             }
         }
     }
@@ -122,15 +138,53 @@ void Game::Render()
     SDL_RenderClear(m_pRenderer);
 
     // render wszystkich obiektow
-    if (!m_AllGameObjects.empty())
+    if (!m_GameOver)
     {
-        for (int i = 0; i < m_AllGameObjects.size(); ++i)
+        if (!m_AllGameObjects.empty())
         {
-            m_AllGameObjects[i]->Render(m_pRenderer);
+            for (int i = 0; i < m_AllGameObjects.size(); ++i)
+            {
+                m_AllGameObjects[i]->Render(m_pRenderer);
+            }
         }
-    }
 
-    SDL_RenderPresent(m_pRenderer);
+        SDL_Rect dstrect = {};
+        SDL_Rect srcrect = {};
+
+        switch (Gun::m_NumOfLives)
+        {
+        case 3:
+            dstrect = { 600, 40, 100, 25 };
+            srcrect = { 0, 0, 1500, 300 };
+            break;
+        case 2:
+            dstrect = { 600, 40, 75, 25 };
+            srcrect = { 0, 0, 960, 300 };
+            break;
+        case 1:
+            dstrect = { 600, 40, 50, 25 };
+            srcrect = { 0, 0, 480, 300 };
+            break;
+        case 0:
+            dstrect = { 0, 0, 0, 0 };
+            break;
+        }
+
+        SDL_RenderCopy(m_pRenderer, m_GunIconTexture, &srcrect, &dstrect);
+
+        m_Font->DrawText(m_pRenderer, 3, 10, 10, "SCORE:");
+        m_Font->DrawText(m_pRenderer, 3, 10, 40, ToString(SpaceInvader::m_NumOfPoints).c_str());
+        m_Font->DrawText(m_pRenderer, 3, 250, 10, "HI-SCORE:");
+        m_Font->DrawText(m_pRenderer, 3, 600, 10, "LIVES:");
+
+        SDL_RenderPresent(m_pRenderer);
+    }
+    else
+    {
+        SDL_Rect dstrect = { 0, 0, 800, 600 };
+        SDL_RenderCopy(m_pRenderer, m_GameOverTexture, NULL, &dstrect);
+        SDL_RenderPresent(m_pRenderer);
+    }
 }
 
 void Game::CreateObject()
