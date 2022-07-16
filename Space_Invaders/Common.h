@@ -32,4 +32,14 @@ enum : int
     SHOT_HEIGHT = 9,
 };
 
+enum class eStateID
+{
+    UNKNOWN = 0,
+    MAINMENU = 1,
+    INGAME = 2,
+    VICTORY = 3,
+    SETTINGS = 4,
+
+};
+
 bool SDL_IsKeyPressed(SDL_Scancode Code);
