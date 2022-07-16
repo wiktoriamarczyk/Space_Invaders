@@ -1,11 +1,5 @@
 #include "Game.h"
-
-Game::Game()
-{
-    // m_Font = Font;
-    CreateObject();
-}
-
+#include "SpaceInvader.h"
 
 Game::~Game()
 {
@@ -13,8 +7,6 @@ Game::~Game()
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
     SDL_CloseAudio();
-   // SDL_DestroyTexture(m_pTexture);
-   // SDL_FreeSurface(m_pImage);
 }
 
 bool Game::Initialize()
@@ -54,12 +46,11 @@ bool Game::Initialize()
         return false;
     }
 
+    // stworzenie obiektow gry
+    CreateObject();
+
     // stworzenie czcionki ==TODO==
-
-
-    SDL_Surface* pImage = IMG_Load("../Data/SpaceInvader.png");
-    m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pImage);
-
+    // m_Font = Font;
 
     return true;
 }
@@ -78,7 +69,7 @@ void Game::Loop()
         SDL_Delay(1000 / 60);
 
         Update(1.0f / 60.0f);
-        Render(m_pRenderer);
+        Render();
     }
 }
 
@@ -89,28 +80,57 @@ void Game::ExitGame()
 
 // void Game::PlaySound() {} 
 
-
-void Game::Update(float Deltatime)
+void Game::Update(float DeltaTime)
 {
     if (SDL_IsKeyPressed(SDL_SCANCODE_ESCAPE))
     {
         ExitGame();
     }
+
+    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    {
+        if (m_AllGameObjects[i]->GetObjectStatus())
+        {
+            m_AllGameObjects[i]->Update(DeltaTime);
+        }
+    }
 }
 
-void Game::Render(SDL_Renderer* pRenderer)
+void Game::Render()
 {
-    SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
-    SDL_RenderClear(pRenderer);
+    SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(m_pRenderer);
 
-    SDL_Rect dstrect = { 0, 0, 200, 200 };
+    // render wszystkich obiektow
+    for (int i = 0; i < m_AllGameObjects.size(); ++i)
+    {
+        if (m_AllGameObjects[i]->GetObjectStatus())
+        {
+            m_AllGameObjects[i]->Render(m_pRenderer);
+        }
+    }
 
-    SDL_RenderCopy(pRenderer, m_pTexture, NULL, &dstrect);
-    //SDL_RenderCopy(m_pRenderer, m_pTexture, NULL, NULL);
-    SDL_RenderPresent(pRenderer);
+    SDL_RenderPresent(m_pRenderer);
 }
 
 void Game::CreateObject()
 {
+    m_AllGameObjects.clear();
 
+    // inicjalizacja Space Invaderow
+    float PosX = 0.0f, PosY = 0.0f;
+    // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
+    // ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
+    // z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
+    // 800 pikseli szerokosci ekranu rozdysponowane
+
+    for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
+    {
+        for (int ROW = 0; ROW < SCREEN_WIDTH / INVADER_WIDTH - 3; ++ROW)
+        {
+            PosX = ROW * INVADER_WIDTH + INVADER_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100);
+            PosY = SCREEN_HEIGHT / 6 + COLUMN * INVADER_HEIGHT;
+            m_AllGameObjects.push_back(make_shared<SpaceInvader>(m_pRenderer, PosX, PosY));
+        }
+    }
 }

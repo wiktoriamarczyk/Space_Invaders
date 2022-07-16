@@ -1,13 +1,14 @@
 #pragma once
 #include "Common.h"
+#include "GameObject.h"
 
 class Game
 {
 public:
-    Game();
+    Game()=default;
     ~Game();
     void Update(float DeltaTime);
-    void Render(SDL_Renderer* pRenderer);
+    void Render();
     void CreateObject();
     bool Initialize();
     void Loop();
@@ -17,8 +18,7 @@ private:
     bool m_IsRunning = true;
     SDL_Renderer* m_pRenderer = nullptr;
     SDL_Window* m_pWindow = nullptr;
-    SDL_Texture* m_pTexture;
+    vector<shared_ptr<GameObject>> m_AllGameObjects;
     //Font m_Font;
-    // vector<shared_ptr<GameObject>> m_AllGameObjects;
 };
 
