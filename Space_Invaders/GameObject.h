@@ -12,7 +12,7 @@ public:
     void SetObjectPosition(vec2 ObjectPos);
     void SetObjectStatus(bool ObjectStatus);
 protected:
-    vec2 m_ObjectCenterPosition;
+    vec2 m_StartingPointPosition;
     vec2 m_ObjectSize;
     bool m_ObjectIsAlive = true;
 };

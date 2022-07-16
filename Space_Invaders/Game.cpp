@@ -124,6 +124,8 @@ void Game::CreateObject()
     // z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
     // 800 pikseli szerokosci ekranu rozdysponowane
 
+    SpaceInvader::LoadTexture();
+
     for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
     {
         for (int ROW = 0; ROW < SCREEN_WIDTH / INVADER_WIDTH - 3; ++ROW)
