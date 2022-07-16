@@ -1,4 +1,5 @@
 ﻿#include "SpaceInvader.h"
+#include "Game.h"
 
 bool SpaceInvader::m_ChangeDirectionX = false;
 int SpaceInvader::m_NumOfInvaders = 0;
@@ -86,6 +87,7 @@ void SpaceInvader::Update(float DeltaTime)
             {
                 if (m_Gun->GetShots()[i]->GetObjectPosition().y <= ObjectBottomRightCorner.y && m_Gun->GetShots()[i]->GetObjectPosition().y >= ObjectTopLeftCorner.y)
                 {
+                    Game::GetSingleton()->PlaySound("ShootingSpaceInvaderSound.wav");
                     m_IsDying = true;
                     m_Gun->GetShots()[i]->SetObjectStatus(false);
                     m_NumOfPoints = m_NumOfPoints + m_PointsForInvader;
@@ -130,10 +132,12 @@ void SpaceInvader::Update(float DeltaTime)
 
         if (m_TextureTimer == 50.0f)
         {
+            Game::GetSingleton()->PlaySound("MovementSound.wav");
             m_MovementRect = srcrect1;
         }
         if (m_TextureTimer <= 0)
         {
+            Game::GetSingleton()->PlaySound("MovementSound.wav");
             m_MovementRect = srcrect2;
             m_TextureTimer = 100.0f;
         }

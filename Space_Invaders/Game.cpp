@@ -48,6 +48,8 @@ bool Game::Initialize()
         return false;
     }
 
+    Mix_Volume(-1, 16);
+
     // utworzenie okna
     m_pWindow = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (m_pWindow == nullptr)
@@ -57,7 +59,7 @@ bool Game::Initialize()
     }
 
     // utworzenie renderera
-     m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
     if (m_pWindow == nullptr)
     {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -238,3 +240,19 @@ void Game::CreateObject()
 // ROW * (SCREEN_WIDTH / 100): z odstepami po 8 pikseli miedzy kazdym (lacznie 100 pikseli)
 // z 50 pikselowymi przerwami na poczatku i koncu ekranu (100 pikseli)
 // 800 pikseli szerokosci ekranu
+
+void Game::PlaySound(const string& FileName)
+{
+    for (int i = 0; i < m_LoadedSounds.size(); ++i)
+    {
+        if (m_LoadedSounds[i]->GetName() == FileName)
+        {
+            m_LoadedSounds[i]->Play();
+            return;
+        }
+    }
+    shared_ptr<Sound> temp_sound = make_shared<Sound>();
+    temp_sound->Load(FileName);
+    m_LoadedSounds.push_back(temp_sound);
+    m_LoadedSounds.back()->Play();
+}

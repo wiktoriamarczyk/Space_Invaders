@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Font.h"
+#include "Sound.h"
 
 class Game
 {
@@ -14,6 +15,7 @@ public:
     bool Initialize();
     void Loop();
     void ExitGame();
+    void PlaySound(const string& FileName);
     
 private:
     static Game* pSingleton;
@@ -23,6 +25,7 @@ private:
     SDL_Window* m_pWindow = nullptr;
     vector<shared_ptr<GameObject>> m_AllGameObjects;
     shared_ptr<Font> m_Font;
+    vector<shared_ptr<Sound>> m_LoadedSounds;
 
     SDL_Texture* m_GunIconTexture = nullptr;
     SDL_Texture* m_GameOverTexture = nullptr;

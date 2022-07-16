@@ -149,6 +149,7 @@
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shot.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpaceInvader.cpp" />
     <ClCompile Include="vec2.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Gun.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shot.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="SpaceInvader.h" />
     <ClInclude Include="vec2.h" />
   </ItemGroup>
