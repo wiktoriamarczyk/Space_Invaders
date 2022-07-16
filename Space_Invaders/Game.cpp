@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "SpaceInvader.h"
+#include "Shield.h"
 
 Game::~Game()
 {
@@ -8,6 +9,7 @@ Game::~Game()
     SDL_Quit();
     SDL_CloseAudio();
     SpaceInvader::FreeSurfaces();
+    Shield::DestroyTexture();
 }
 
 bool Game::Initialize()
@@ -128,6 +130,15 @@ void Game::CreateObject()
     float PosX = 0.0f, PosY = 0.0f;
 
     SpaceInvader::LoadTexture();
+    // inicjalizacja tarcz
+    Shield::InitializeShieldTexture(m_pRenderer);
+
+    for (int ROW = 0; ROW < 4; ++ROW)
+    {
+        PosX = ROW * 4.2 * INVADER_WIDTH + INVADER_WIDTH;
+        PosY = SCREEN_HEIGHT - 3 * INVADER_HEIGHT;
+        m_AllGameObjects.push_back(make_shared<Shield>(PosX, PosY));
+    }
 
     for (int COLUMN = 0; COLUMN < 5; ++COLUMN)
     {
