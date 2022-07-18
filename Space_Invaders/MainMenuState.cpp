@@ -32,7 +32,14 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
 
     DisplayTexture("SpaceInvader.png", vec2(300, 140), DisplayParameters{.DisplaySize = vec2i(200, 200)});
 
-    m_Font->DrawText(pRenderer, 5, 130, SCREEN_HEIGHT / 2 - 50, "SPACE INVADERS");
+    m_ColorTimer--;
+    if (m_ColorTimer <= 0)
+    {
+        m_TxtColor = { GetRandFloat(1.f, 255.f), GetRandFloat(1.f, 255.f), GetRandFloat(1.f, 255.f) };
+        m_ColorTimer = 10.f;
+    }
+
+    m_Font->DrawText(pRenderer, 5, 130, SCREEN_HEIGHT / 2 - 50, "SPACE INVADERS", m_TxtColor);
 
     if (m_Option == 0)
         m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 40, "->NEW GAME");
@@ -50,8 +57,7 @@ void MainMenuState::Render(SDL_Renderer* pRenderer)
         m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 160, "->EXIT");
     else m_Font->DrawText(pRenderer, 3, 270, SCREEN_HEIGHT / 2 + 160, "  EXIT");
 
-    m_Font->DrawText(pRenderer, 1, SCREEN_WIDTH/2 - SCREEN_WIDTH/10, SCREEN_HEIGHT - 140, "AUTHOR: WIKTORIA MARCZYK");
-
+    m_Font->DrawText(pRenderer, 1, SCREEN_WIDTH/2 - SCREEN_WIDTH/10, SCREEN_HEIGHT - 150, "AUTHOR: WIKTORIA MARCZYK");
 
     SDL_RenderPresent(pRenderer);
 }
