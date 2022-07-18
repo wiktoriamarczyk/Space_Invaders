@@ -1,6 +1,6 @@
 #include "Shot.h"
 
-Shot::Shot(vec2 Position, vec2i Size, int Speed)
+Shot::Shot(vec2 Position, vec2i Size, int Speed, eTeamID Team)
 {
     m_GunPosition = Position;
 
@@ -11,17 +11,18 @@ Shot::Shot(vec2 Position, vec2i Size, int Speed)
     m_Position.y = m_GunPosition.y - m_Size.y;
 
     m_Speed = Speed;
+    m_TeamID = Team;
 }
 
 void Shot::Update(float DeltaTime)
 {
     float FrameDistance = m_Speed * DeltaTime;
 
-    if (m_DealingDamage)
+    if (m_TeamID == eTeamID::PLAYER)
     {
         m_Position.y -= FrameDistance;
     }
-    else
+    else if (m_TeamID == eTeamID::INVADER)
     {
         m_Position.y += FrameDistance;
     }
@@ -41,12 +42,7 @@ void Shot::Render(SDL_Renderer* pRenderer)
     SDL_RenderFillRect(pRenderer, &ShotRect);
 }
 
-bool Shot::GetDealingDamageStatus()
+eTeamID Shot::GetTeamID()const
 {
-    return m_DealingDamage;
-}
-
-void Shot::SetDealingDamage(bool DealingDamage)
-{
-    m_DealingDamage = DealingDamage;
+    return m_TeamID;
 }

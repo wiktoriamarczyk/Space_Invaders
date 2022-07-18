@@ -37,7 +37,7 @@ enum : int
     INVADER_SPEED = 10,
     GUN_SPEED = 500,
     BOSS_SPEED = 50,
-    SHOT_SPEED = 750,
+    SHOT_SPEED = 500,
     SHOT_WIDTH = 3,
     SHOT_HEIGHT = 9,
 };
@@ -49,6 +49,13 @@ enum class eStateID
     INGAME,
     VICTORY, 
     HOWTOPLAY,
+};
+
+enum class eTeamID
+{
+    UNKNOWN,
+    PLAYER,
+    INVADER,
 };
 
 bool SDL_IsKeyPressed(SDL_Scancode Code);

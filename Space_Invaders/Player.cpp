@@ -11,8 +11,8 @@ Player::Player(shared_ptr<Gun> MyGun, vec2 Position)
 void Player::Update(float DeltaTime)
 {
     float FrameDistance = GUN_SPEED * DeltaTime;
-    vec2 ObjectTopLeftCorner = m_Position;
-    vec2 ObjectBottomRightCorner = m_Position + m_Size;
+    vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
 
     if ((SDL_IsKeyPressed(SDL_SCANCODE_A) || (SDL_IsKeyPressed(SDL_SCANCODE_LEFT))) && ObjectTopLeftCorner.x >= 0)
     {
@@ -43,6 +43,11 @@ void Player::Update(float DeltaTime)
     // strzelanie do gracza przez inavderow
     for (int i = 0; i < Shots.size(); ++i)
     {
+        if (Shots[i]->GetTeamID() == eTeamID::PLAYER)
+        {
+            continue;
+        }
+
         if (Shots[i]->GetPosition().x >= ObjectTopLeftCorner.x && Shots[i]->GetPosition().x <= ObjectBottomRightCorner.x)
         {
             if (Shots[i]->GetPosition().y <= ObjectBottomRightCorner.y && Shots[i]->GetPosition().y >= ObjectTopLeftCorner.y)
@@ -78,12 +83,12 @@ void Player::Update(float DeltaTime)
 
 void Player::Render(SDL_Renderer* pRenderer)
 {
+    vec2 ObjectTopLeftCorner = m_Position - m_Size / 2;
     if (m_IsHurt)
     {
         DisplayTexture("puf.png", (vec2i)m_Position, m_Size);
     }
-    else  DisplayTexture("Gun.png", (vec2i)m_Position, m_Size);
-
+    else DisplayTexture("Gun.png", ObjectTopLeftCorner, DisplayParameters{ .DisplaySize = m_Size });
 }
 
 void Player::SetLivesCount(int NumOfLives)

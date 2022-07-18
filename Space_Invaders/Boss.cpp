@@ -5,7 +5,7 @@
 bool Boss::m_BossIsDead = false;
 int Boss::m_LifeStatus = 30;
 
-Boss::Boss(SDL_Renderer* pRenderer, shared_ptr<Gun> MyGun)
+Boss::Boss(SDL_Renderer* pRenderer, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_pRenderer = pRenderer;
     m_Gun = MyGun;
@@ -62,7 +62,7 @@ void Boss::Update(float DeltaTime)
         // strzelanie do bossa
         for (int i = 0; i < m_Gun->GetShots().size(); ++i)
         {
-            if (m_Gun->GetShots()[i]->GetDealingDamageStatus() == true)
+            if (m_Gun->GetShots()[i]->GetTeamID() == eTeamID::PLAYER)
             {
                 if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
                 {
@@ -90,15 +90,15 @@ void Boss::Update(float DeltaTime)
 
                 if (GetRandNumber() == 0)
                 {
-                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED);
+                    m_Gun->Shoot(vec2(ObjectTopLeftCorner.x - 2, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
                 else if (GetRandNumber() == 1)
                 {
-                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED);
+                    m_Gun->Shoot(vec2(m_Position.x + 50, ObjectBottomRightCorner.y - 30), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
                 else if (GetRandNumber() == 2)
                 {
-                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED);
+                    m_Gun->Shoot(vec2(ObjectBottomRightCorner.x - 90, ObjectBottomRightCorner.y), BossShots, SHOT_SPEED, eTeamID::INVADER);
                 }
             }
         }

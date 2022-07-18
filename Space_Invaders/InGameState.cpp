@@ -25,7 +25,7 @@ void InGameState::Update(float DeltaTime)
         m_NextStateID = eStateID::MAINMENU;
     }
 
-    if (Gun::m_NumOfLives <= 0)
+    if (m_Player->GetLivesCount() <= 0)
     {
         m_DyingTimer--;
         if (m_DyingTimer <= 0)
@@ -72,7 +72,7 @@ void InGameState::Render()
     SDL_Rect dstrect = {};
     SDL_Rect srcrect = {};
 
-    switch (Gun::m_NumOfLives)
+    switch (m_Player->GetLivesCount())
     {
     case 3:
         dstrect = { 600, 40, 115, 30 };
@@ -105,16 +105,17 @@ void InGameState::CreateObject()
     SpaceInvader::m_NumOfPoints = 0;
     SpaceInvader::m_NumOfInvaders = 0;
     SpaceInvader::m_Speed = INVADER_SPEED;
-    Gun::m_NumOfLives = 3;
     Boss::m_LifeStatus = 30;
     Boss::m_BossIsDead = false;
 
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();
-    MyGun->InitializeGun(m_pRenderer, SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT);
+
+    // inicjalizacja gracza
+    m_Player = make_shared<Player>(MyGun, vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT - OBJECT_HEIGHT));
 
     // inicjalizacja bossa
-    shared_ptr<Boss> MyBoss = make_shared<Boss>(m_pRenderer, MyGun);
+    shared_ptr<Boss> MyBoss = make_shared<Boss>(m_pRenderer, MyGun, *this);
 
     float PosX = 0.0f, PosY = 0.0f;
 
@@ -133,12 +134,18 @@ void InGameState::CreateObject()
         {
             PosX = float(ROW * OBJECT_WIDTH + OBJECT_WIDTH / 2 + ROW * (SCREEN_WIDTH / 100));
             PosY = float(SCREEN_HEIGHT / 6 + COLUMN * OBJECT_HEIGHT);
-            m_AllGameObjects.push_back(make_shared<SpaceInvader>(PosX, PosY, MyGun));
+            m_AllGameObjects.push_back(make_shared<SpaceInvader>(vec2(PosX, PosY), MyGun, *this));
         }
     }
 
     m_AllGameObjects.push_back(move(MyGun));
     m_AllGameObjects.push_back(move(MyBoss));
+    m_AllGameObjects.push_back(m_Player);
+}
+
+shared_ptr<Player> InGameState::GetPlayer()const
+{
+    return m_Player;
 }
 
 // SCREEN_WIDTH / INVADER_WIDTH - 3: 12 invaderow po 50 pikseli (lacznie zajmuja 600 pikseli)
@@ -159,7 +166,7 @@ void InGameState::DisplayTexture(const string& FileName, vec2i Position, optiona
     Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Size);
 }
 
-void InGameState::DisplayTexture(const string& FileName, SDL_Rect dstrect, SDL_Rect srcrect)
+void InGameState::DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect)
 {
     Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), srcrect, dstrect);
 }

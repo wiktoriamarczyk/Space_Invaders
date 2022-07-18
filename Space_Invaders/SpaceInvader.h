@@ -1,11 +1,12 @@
 #pragma once
 #include "GameObject.h"
 #include "Gun.h"
+#include "InGameState.h"
 
 class SpaceInvader : public GameObject
 {
 public:
-    SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun);
+    SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     string GetName();
@@ -17,11 +18,12 @@ public:
 
 private:
 public:
+    InGameState&    m_Game;
     int             m_InvaderID = 0;
     string          m_Name;
     shared_ptr<Gun> m_Gun;
     SDL_Rect        m_MovementRect;
-    float           m_TextureTimer = 100.0f;
+    float           m_TextureTimer = 0.0f;
     float           m_ShootingTimer = 50.0f;
     float           m_DyingTimer = 25.0f;
     bool            m_IsDying = false;

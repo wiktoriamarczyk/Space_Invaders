@@ -7,7 +7,7 @@ int SpaceInvader::m_NumOfPoints = 0;
 float SpaceInvader::m_Speed = INVADER_SPEED;
 
 
-SpaceInvader::SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun)
+SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
 
@@ -16,11 +16,9 @@ SpaceInvader::SpaceInvader(float PosX, float PosY, shared_ptr<Gun> MyGun)
 
     m_Name = GetName();
 
-    m_Position.x = PosX;
-    m_Position.y = PosY;
+    m_Position = Position;
 
-    m_Size.x = OBJECT_WIDTH;
-    m_Size.y = OBJECT_HEIGHT;
+    m_Size = vec2i(OBJECT_WIDTH, OBJECT_HEIGHT);
 }
 
 void SpaceInvader::Update(float DeltaTime)
@@ -30,8 +28,8 @@ void SpaceInvader::Update(float DeltaTime)
     vec2 ObjectBottomRightCorner = m_Position + m_Size;
     vec2 tempPos = m_Position;
 
-    SDL_Rect srcrect1 = { 0, 0, 26, 26 };
-    SDL_Rect srcrect2 = { 26, 0, 26, 26 };
+    vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
+    vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
 
     if (!m_ChangeDirectionX)
     {
@@ -72,13 +70,13 @@ void SpaceInvader::Update(float DeltaTime)
 
     if (ObjectBottomRightCorner.y >= SCREEN_HEIGHT)
     {
-        m_Gun->m_NumOfLives--;
+        m_Game.GetPlayer()->SetLivesCount(m_Game.GetPlayer()->GetLivesCount() - 1);
     }
 
     // strzelanie do invaderow
     for (int i = 0; i < m_Gun->GetShots().size() ; ++i)
     {
-        if (m_Gun->GetShots()[i]->GetDealingDamageStatus() == true)
+        if (m_Gun->GetShots()[i]->GetTeamID() == eTeamID::PLAYER)
         {
             if (m_Gun->GetShots()[i]->GetPosition().x >= ObjectTopLeftCorner.x && m_Gun->GetShots()[i]->GetPosition().x <= ObjectBottomRightCorner.x)
             {
@@ -118,7 +116,7 @@ void SpaceInvader::Update(float DeltaTime)
 
             if (m_InvaderID == RandNumber())
             {
-                m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED);
+                m_Gun->Shoot(vec2(m_Position.x, ObjectBottomRightCorner.y), vec2i(SHOT_WIDTH, SHOT_HEIGHT), SHOT_SPEED, eTeamID::INVADER);
             }
         }
     }
