@@ -189,3 +189,19 @@ void InGameState::OnEnter()
     // inicjalizacja zasobow
     CreateObject();
 }
+
+void InGameState::FreeResources()
+{
+    Engine::GetSingleton()->DestroyTextures();
+    Engine::GetSingleton()->FreeSounds();
+    m_AllGameObjects.clear();
+}
+
+shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
+{
+    shared_ptr<ParticleEmiter> PEmiter = make_shared<ParticleEmiter>();
+    PEmiter->SetPosition(Position);
+    m_AllGameObjects.push_back(PEmiter);
+
+    return PEmiter;
+}

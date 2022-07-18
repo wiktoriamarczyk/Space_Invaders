@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "ParticleEmiter.h"
 
 class InGameState : public GameState
 {
@@ -13,9 +14,8 @@ public:
     void OnEnter()override;
     void CreateObject();
     shared_ptr<Player> GetPlayer()const;
-    void DisplayTexture(const string& FileName, vec2i Position, optional<vec2i> Size = nullopt);
-    void DisplayTexture(const string& FileName, SDL_Rect srcrect, SDL_Rect dstrect);
     void FreeResources();
+    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
 
     int GetRandomValue(int Range);
     void SetSpaceInvadersNum(int Value);
