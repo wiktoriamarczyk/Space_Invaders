@@ -15,17 +15,23 @@ SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Ga
         m_PointsForInvader = 30;
         m_Color = Color(255, 106, 0);
     }
-    if (m_InvaderID >= 13 && m_InvaderID <= 26)
+    if (m_InvaderID >= 13 && m_InvaderID <= 25)
     {
         m_Name = "SpaceInvaders2";
         m_PointsForInvader = 20;
         m_Color = Color(87, 0, 127);
     }
-    if (m_InvaderID >= 26 && m_InvaderID <= 39)
+    if (m_InvaderID >= 26 && m_InvaderID <= 38)
     {
         m_Name = "SpaceInvaders3";
         m_PointsForInvader = 10;
         m_Color = Color(31, 73, 135);
+    }
+    if (m_InvaderID >= 39)
+    {
+        m_Name = "SpaceInvaders4";
+        m_PointsForInvader = 10;
+        m_Color = Color(255, 251, 58);
     }
 
     m_Position = Position;
@@ -49,6 +55,8 @@ void SpaceInvader::Update(float DeltaTime)
 
     Vec2Rect srcrect1 = { { 0   , 0} , {0.5, 1} };
     Vec2Rect srcrect2 = { { 0.5 , 0} , {0.5, 1} };
+
+    m_Speed = 10 + 250 / (m_Game.GetSpaceInvadersNum() + 1);
 
     // przemieszczanie sie invaderow
     if (s_DirectionX == eInvaderDirection::RIGHT)
@@ -86,7 +94,7 @@ void SpaceInvader::Update(float DeltaTime)
     // inwazja invaderow
     if (ObjectBottomRightCorner.y >= SCREEN_HEIGHT)
     {
-        m_Game.GetPlayer()->SetLivesCount(m_Game.GetPlayer()->GetLivesCount() - 1);
+        m_Game.SetPlayerLivesCount(m_Game.GetPlayerLivesCount() - 1);
     }
 
     // strzelanie do invaderow
@@ -119,14 +127,12 @@ void SpaceInvader::Update(float DeltaTime)
 
         if (PowerUpType == 1)
         {
-            auto pPowerUp = m_Game.CreatePowerUp(m_Position, ePowerUpType::GUN_IMPROVMENT);
-            pPowerUp->SetName("PowerUp_Gun");
+            auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Gun", m_Position, ePowerUpType::GUN_IMPROVMENT);
             pPowerUp->SetScale(vec2{ 0.5, 0.5 });
         }
         else if (PowerUpType == 2)
         {
-            auto pPowerUp = m_Game.CreatePowerUp(m_Position, ePowerUpType::HEALTH);
-            pPowerUp->SetName("PowerUp_Health");
+            auto pPowerUp = m_Game.CreatePowerUp("PowerUp_Health", m_Position, ePowerUpType::HEALTH);
         }
 
         // zmniejszenie liczby invaderow o jednego
@@ -140,7 +146,7 @@ void SpaceInvader::Update(float DeltaTime)
 
         if (m_ShootingTimer <= 0)
         {
-            m_ShootingTimer = GetRandFloat(1.f, 2.f);
+            m_ShootingTimer = GetRandFloat(0.5f, 0.75f);
 
             if (m_InvaderID == GetRandInt(0, 12))
             {
