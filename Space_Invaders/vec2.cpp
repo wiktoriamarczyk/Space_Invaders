@@ -54,6 +54,20 @@ vec2 vec2::operator-()const
     return result;
 }
 
+vec2 vec2::operator+=(const vec2& other)
+{
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+vec2 vec2::operator-=(const vec2& other)
+{
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
 vec2 vec2::operator*(const vec2& other)const
 {
     vec2 result;
@@ -143,6 +157,20 @@ vec2i vec2i::operator-()const
     result.y = -y;
 
     return result;
+}
+
+vec2i vec2i::operator+=(const vec2i& other)
+{
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+vec2i vec2i::operator-=(const vec2i& other)
+{
+    x -= other.x;
+    y -= other.y;
+    return *this;
 }
 
 vec2i vec2i::operator*(const vec2i& other)const

@@ -20,6 +20,8 @@ public:
     vec2 operator+(const vec2& other)const;
     vec2 operator-(const vec2& other)const;
     vec2 operator-()const;
+    vec2 operator+=(const vec2& other);
+    vec2 operator-=(const vec2& other);
     vec2 operator*(const vec2& other)const;
     vec2 operator*(float scalar)const;
     vec2 operator / (float scalar)const;
@@ -43,6 +45,8 @@ public:
     vec2i operator+(const vec2i& other)const;
     vec2i operator-(const vec2i& other)const;
     vec2i operator-()const;
+    vec2i operator+=(const vec2i& other);
+    vec2i operator-=(const vec2i& other);
     vec2i operator*(const vec2i& other)const;
     vec2i operator*(int scalar)const;
     vec2i operator / (int scalar)const;
