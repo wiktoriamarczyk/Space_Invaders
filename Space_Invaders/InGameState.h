@@ -18,6 +18,7 @@ public:
     void FreeResources();
 
     shared_ptr<ParticleEmiter> CreateParticle(vec2 Position);
+    shared_ptr<PowerUp> CreatePowerUp(vec2 Position, ePowerUpType Type);
 
     void SetSpaceInvadersNum(int Value);
     int GetSpaceInvadersNum()const;

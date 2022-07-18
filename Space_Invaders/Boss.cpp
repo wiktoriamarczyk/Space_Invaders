@@ -7,7 +7,8 @@ Boss::Boss(shared_ptr<Gun> MyGun, InGameState& Game) : m_Game(Game)
 {
     m_Gun = MyGun;
     m_Position = vec2(-200, 100);
-    m_Size = vec2i(BOSS_WIDTH, BOSS_HEIGHT);
+    m_Size = vec2i(200, 100);
+    m_Speed = 50;
 }
 
 void Boss::Update(float DeltaTime)
@@ -41,7 +42,7 @@ void Boss::Update(float DeltaTime)
             m_PlayMusic = false;
         }
 
-        float FrameDistance = BOSS_SPEED * DeltaTime;
+        float FrameDistance = m_Speed * DeltaTime;
         vec2 ObjectTopLeftCorner = m_Position;
         vec2 ObjectBottomRightCorner = m_Position + m_Size;
         vec2 tempPos = m_Position;

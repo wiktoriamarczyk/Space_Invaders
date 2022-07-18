@@ -1,6 +1,11 @@
 #include "Gun.h"
 #include "Engine.h"
 
+Gun::Gun()
+{
+    m_Speed = 500;
+}
+
 void Gun::Update(float DeltaTime)
 {
     // update strzal i usuwanie tych, ktore zostaly juz wystrzelone

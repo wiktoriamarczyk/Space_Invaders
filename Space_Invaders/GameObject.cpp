@@ -35,6 +35,16 @@ void GameObject::SetColor(Color color)
     m_Color = color;
 }
 
+void GameObject::SetSpeed(int Value)
+{
+    m_Speed = Value;
+}
+
+int GameObject::GetSpeed()
+{
+    return m_Speed;
+}
+
 void GameObject::DisplayTexture(const string& FileName, vec2 Position, DisplayParameters Param)
 {
     Engine::GetSingleton()->DisplayTexture(("../Data/" + FileName).c_str(), Position, Param);

@@ -30,7 +30,7 @@ SpaceInvader::SpaceInvader(vec2 Position, shared_ptr<Gun> MyGun, InGameState& Ga
 
     m_Position = Position;
     m_Size = vec2i(OBJECT_WIDTH, OBJECT_HEIGHT);
-    m_Speed = INVADER_SPEED;
+    m_Speed = 10;
 }
 
 void SpaceInvader::Update(float DeltaTime)
@@ -107,12 +107,29 @@ void SpaceInvader::Update(float DeltaTime)
         }
     }
 
-    // zmiana tekstury umierajacych invaderow
+    // smierc invader'a
     if (!m_IsAlive)
     {
+        // tworzenie particle'a
         auto pParticle = m_Game.CreateParticle(m_Position);
         pParticle->SetColor(m_Color);
 
+        // losowanie powerup'a
+        int PowerUpType = GetRandInt(1, 3);
+
+        if (PowerUpType == 1)
+        {
+            auto pPowerUp = m_Game.CreatePowerUp(m_Position, ePowerUpType::GUN_IMPROVMENT);
+            pPowerUp->SetName("PowerUp_Gun");
+            pPowerUp->SetScale(vec2{ 0.5, 0.5 });
+        }
+        else if (PowerUpType == 2)
+        {
+            auto pPowerUp = m_Game.CreatePowerUp(m_Position, ePowerUpType::HEALTH);
+            pPowerUp->SetName("PowerUp_Health");
+        }
+
+        // zmniejszenie liczby invaderow o jednego
         m_Game.SetSpaceInvadersNum(m_Game.GetSpaceInvadersNum() - 1);
     }
 

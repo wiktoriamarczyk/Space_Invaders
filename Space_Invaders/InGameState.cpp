@@ -199,3 +199,12 @@ shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position)
 
     return pEmiter;
 }
+
+shared_ptr<PowerUp> InGameState::CreatePowerUp(vec2 Position, ePowerUpType Type)
+{
+    shared_ptr<PowerUp> pPowerUp = make_shared<PowerUp>(Type);
+    pPowerUp->SetPosition(Position);
+    m_AllGameObjects.push_back(pPowerUp);
+
+    return pPowerUp;
+}

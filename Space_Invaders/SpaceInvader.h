@@ -17,7 +17,6 @@ private:
     int                      m_InvaderID = 0;
     string                   m_Name;
     int                      m_PointsForInvader = 0;
-    int                      m_Speed = 0;
     shared_ptr<Gun>          m_Gun;
     Vec2Rect                 m_MovementRect;
     float                    m_TextureTimer = 0.0f;

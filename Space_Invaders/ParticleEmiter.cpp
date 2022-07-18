@@ -2,7 +2,7 @@
 
 ParticleEmiter::ParticleEmiter()
 {
-    const int ParticleCount = 5;
+    const int ParticleCount = 10;
 
     float AngleDistance = 3.14f * 2 / ParticleCount;
 
@@ -20,7 +20,7 @@ ParticleEmiter::ParticleEmiter()
 
         // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
         tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
-        tmp.m_LifeTime = GetRandFloat(20.0f, 35.0f);
+        tmp.m_LifeTime = GetRandFloat(15.0f, 25.0f);
 
         m_Particles.push_back(tmp);
     }

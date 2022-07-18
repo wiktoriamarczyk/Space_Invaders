@@ -33,11 +33,6 @@ enum : int
     SCREEN_HEIGHT = 600,
     OBJECT_HEIGHT = 50,
     OBJECT_WIDTH = 50,
-    BOSS_WIDTH = 200,
-    BOSS_HEIGHT = 100,
-    INVADER_SPEED = 10,
-    GUN_SPEED = 500,
-    BOSS_SPEED = 50,
     SHOT_SPEED = 500,
     SHOT_WIDTH = 3,
     SHOT_HEIGHT = 9,
@@ -70,6 +65,14 @@ enum class eDrawMode
 {
     NORMAL,
     ADDITIVE,
+};
+
+enum class ePowerUpType
+{
+    UNKNOWN,
+    GUN_IMPROVMENT,
+    HEALTH,
+    SHIELD,
 };
 
 struct Color

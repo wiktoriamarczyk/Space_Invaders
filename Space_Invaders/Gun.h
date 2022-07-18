@@ -5,7 +5,7 @@
 class Gun : public GameObject
 {
 public:
-    Gun() = default;
+    Gun();
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* pRenderer)override;
     vector<shared_ptr<Shot>>& GetShots();

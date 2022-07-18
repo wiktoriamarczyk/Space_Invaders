@@ -158,6 +158,7 @@
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="ParticleEmiter.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="ParticleEmiter.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="Sound.h" />

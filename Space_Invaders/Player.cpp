@@ -10,7 +10,7 @@ Player::Player(shared_ptr<Gun> MyGun, vec2 Position)
 
 void Player::Update(float DeltaTime)
 {
-    float FrameDistance = GUN_SPEED * DeltaTime;
+    float FrameDistance = m_Gun->GetSpeed() * DeltaTime;
     vec2 ObjectTopLeftCorner = m_Position - m_Size/2;
     vec2 ObjectBottomRightCorner = m_Position + m_Size/2;
 
@@ -62,6 +62,10 @@ void Player::Update(float DeltaTime)
             }
         }
     }
+
+    // lapanie PowerUpow przez gracza
+
+
 
     if (m_IsHurt)
     {
