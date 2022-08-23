@@ -132,6 +132,9 @@ void InGameState::OnKeyDown(SDL_Scancode KeyCode)
 
 void InGameState::CreateObject()
 {
+    // inicjalizacja partikla gwiazd
+    CreateParticle(vec2(0, -10), 8, 1, 1, eParticleMode::STARS_BACKGROUND);
+
     // inicjalizacja broni
     shared_ptr<Gun> MyGun = make_shared<Gun>();
 
@@ -173,9 +176,9 @@ void InGameState::FreeResources()
     m_AllGameObjects.clear();
 }
 
-shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime)
+shared_ptr<ParticleEmiter> InGameState::CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime, eParticleMode Mode)
 {
-    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>(ParticleCount, ParticleScale, MaxLifeTime);
+    shared_ptr<ParticleEmiter> pEmiter = make_shared<ParticleEmiter>(ParticleCount, ParticleScale, MaxLifeTime, Mode);
     pEmiter->SetPosition(Position);
     m_AllGameObjects.push_back(pEmiter);
 

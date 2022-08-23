@@ -2,22 +2,32 @@
 
 #include "Engine.h"
 
-ParticleEmiter::ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime)
-{    
-    // ParticleCount - liczba partikli jak¹ stworzymy
+ParticleEmiter::ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime, eParticleMode Mode)
+{
+    m_Mode = Mode;
 
+    if (m_Mode == eParticleMode::STARS_BACKGROUND)
+    {
+        m_TimeToNextParticle = 1.f / ParticleCount;
+        m_Timer = m_TimeToNextParticle;
 
-    // k¹t pomiêdzy poszczególnymi partiklami -> pe³ne ko³o / liczba partikli
+        for (int i = 0; i < 180*8; ++i)
+            UpdateState(1.0f / 60.0f);
+        return;
+    }
+    // ParticleCount - liczba partikli jakÄ… stworzymy
+
+    // kÄ…t pomiÄ™dzy poszczegÃ³lnymi partiklami -> peÅ‚ne koÅ‚o / liczba partikli
     float AngleDistance = 3.14f * 2 / ParticleCount;
 
-    // tworzymy poszczególne partikle
+    // tworzymy poszczegÃ³lne partikle
     for (int i = 0; i < ParticleCount; ++i)
     {
         ParticleData tmp;
 
-        // k¹t pod jakim leci ten partikiel
+        // kÄ…t pod jakim leci ten partikiel
         float Angle = AngleDistance * i;
-        // uwtwórz wektor jednostkowy kierunku z k¹ta u¿ywaj¹c:
+        // uwtwÃ³rz wektor jednostkowy kierunku z kÄ…ta uÅ¼ywajÄ…c:
         //
         //         /|
         //        / |
@@ -28,25 +38,27 @@ ParticleEmiter::ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime
         //    -------
         //      Y
         //
-        // a - k¹t
-        // Z = 1 -> wektor ma d³ugoœæ 1
+        // a - kÄ…t
+        // Z = 1 -> wektor ma dÅ‚ugoÅ›Ä‡ 1
         // sin(a) = X/Z ->  X = sin(a)
         // cos(a) = Y/Z ->  Y = cos(a)
 
         vec2 Vec2Dir(sin(Angle), cos(Angle));
 
-        // losujemy prêdkoœæ pomiêdzy 80 a 130 pixeli na sekundê
+        // losujemy prÄ™dkoÅ›Ä‡ pomiÄ™dzy 80 a 130 pixeli na sekundÄ™
         float ParticleSpeed = GetRandFloat(80.0f, 130.0f);
 
         // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
         tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
-        // losujemy czas ¿ycia w sekundach
+        // losujemy czas Å¼ycia w sekundach
         tmp.m_LifeTime = GetRandFloat(MaxLifeTime / 2.f, MaxLifeTime);
-        // losujemy czas "opóŸnienia" - czas na pocz¹tku w którym partikle nic nie robi i siê nie renderuje
+        // losujemy czas "opÃ³Åºnienia" - czas na poczÄ…tku w ktÃ³rym partikle nic nie robi i siÄ™ nie renderuje
         tmp.m_StartDelayTime = GetRandFloat(0.0f, 0.15f);
-        // losujemy skalê
+        // losujemy skalÄ™
         tmp.m_Scale = GetRandFloat(Scale/2.f, Scale);
-           
+
+        tmp.m_Texture = m_ParticleTexture.c_str();
+
         // wrzucamy dane partikla do wektora
         m_Particles.push_back(tmp);
     }
@@ -54,9 +66,70 @@ ParticleEmiter::ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime
 
 void ParticleEmiter::Update(float DeltaTime)
 {
+    UpdateState(DeltaTime);
+}
+
+void ParticleEmiter::UpdateState(float DeltaTime)
+{
+    if (m_Mode == eParticleMode::STARS_BACKGROUND)
+    {
+        m_Timer -= DeltaTime;
+
+        if (m_Timer <= 0)
+        {
+            vec2 Vec2Dir(0, 1);
+
+            ParticleData tmp;
+
+            // losujemy prÄ™dkoÅ›Ä‡ pomiÄ™dzy 80 a 130 pixeli na sekundÄ™
+            float ParticleSpeed = GetRandFloat(120.0f, 180.0f)/3;
+            // poczÄ…tkowa pozycja partikla na osi X
+            tmp.m_ParticlePosition.x = GetRandFloat(0, SCREEN_WIDTH);
+            // wektor kierunku, ktorego dlugosc wyznacza predkosc poruszania particla na sekunde (dlatego przemnazamy przez particlespeed)
+            tmp.m_DirectionVector = Vec2Dir * ParticleSpeed;
+            // losujemy czas "opÃ³Åºnienia" - czas na poczÄ…tku w ktÃ³rym partikle nic nie robi i siÄ™ nie renderuje
+            tmp.m_StartDelayTime = 0.f;
+            // losujemy skalÄ™
+            tmp.m_Scale = GetRandFloat(0.25f, 7.5f);
+            // losujemy obrÃ³t
+            tmp.m_Rotation = GetRandFloat(0.0f, 360.f);
+
+            // losujemy jedna z 8 tekstur dla particla
+            switch (GetRandInt(0, 7))
+            {
+            case 0: tmp.m_Texture = "Particle7.png"; break;
+            case 1: tmp.m_Texture = "Particle8.png"; break;
+            case 2: tmp.m_Texture = "Particle9.png"; break;
+            case 3: tmp.m_Texture = "Particle10.png";break;
+            case 4: tmp.m_Texture = "Particle11.png";break;
+            case 5: tmp.m_Texture = "Particle12.png";break;
+            case 6: tmp.m_Texture = "Particle13.png";break;
+            case 7: tmp.m_Texture = "Particle14.png";break;
+            }
+
+            // losujemy odcieÅ„ niebieskiego dla czÄ…steczki
+            tmp.m_Color.R = tmp.m_Color.G = 96 +GetRandInt(0, 64);
+            tmp.m_Color.R -= 15;
+            tmp.m_Color.G += 15;
+            tmp.m_Color.B  = 240;
+            tmp.m_Color.A = 255;
+
+            // uzaleÅ¼niamy predkosc od skali - male gwiazdki lecÄ… wolniej Å¼eby udawaÅ‚y Å¼e sa dalej
+            tmp.m_DirectionVector = tmp.m_DirectionVector * ( 0.5f + tmp.m_Scale/5);
+
+            // czas Å¼ycia na tyle dlugi Å¼eby zdÄ…Å¼yÄ‡ dolecieÄ‡ za ekran
+            tmp.m_LifeTime = (float(SCREEN_HEIGHT)*1.5f) / tmp.m_DirectionVector.GetLength();
+
+            // wrzucamy dane partikla do wektora
+            m_Particles.push_back(tmp);
+
+            m_Timer = m_TimeToNextParticle;
+        }
+    }
+
     for (size_t i = 0; i < m_Particles.size(); ++i)
     {
-        // póki mamy jakiœ czas "opóŸnienia" to go zmiejszammy i nie robimy nic innego
+        // pÃ³ki mamy jakiÅ› czas "opÃ³Åºnienia" to go zmiejszammy i nie robimy nic innego
         if (m_Particles[i].m_StartDelayTime > 0)
         {
             m_Particles[i].m_StartDelayTime -= DeltaTime;
@@ -64,6 +137,7 @@ void ParticleEmiter::Update(float DeltaTime)
         }
 
         m_Particles[i].m_ParticlePosition += m_Particles[i].m_DirectionVector * DeltaTime;
+        m_Particles[i].m_Rotation         += m_Particles[i].m_RotationSpeed * DeltaTime;
 
         m_Particles[i].m_LifeTime-=DeltaTime;
 
@@ -74,7 +148,7 @@ void ParticleEmiter::Update(float DeltaTime)
         }
     }
 
-    if (m_Particles.empty())
+    if (m_Mode == eParticleMode::POINT_EXPLOSION && m_Particles.empty())
     {
         SetStatus(false);
     }
@@ -87,14 +161,37 @@ void ParticleEmiter::Render(SDL_Renderer* Renderer)
 
     for (size_t i = 0; i < m_Particles.size(); ++i)
     {
-        // póki mamy jakiœ czas "opóŸnienia" to siê nie rysujemy
+        // pÃ³ki mamy jakiÅ› czas "opÃ³Åºnienia" to siÄ™ nie rysujemy
         if (m_Particles[i].m_StartDelayTime > 0)
             continue;
 
-        const auto FinalScale = Scale * m_Particles[i].m_Scale;
+        const vec2   ParticleScale   = Scale * m_Particles[i].m_Scale;
+        const float  ParticleRotation= m_Particles[i].m_Rotation;
+        const vec2   ParticlePos     = m_Particles[i].m_ParticlePosition + m_Position;
+        const Color  ParticleColor   = m_Particles[i].m_Color * m_Color;
+        const string ParticleName    = m_Particles[i].m_Texture;
 
-        vec2 Pos = m_Particles[i].m_ParticlePosition + m_Position - ((FinalScale*Size)/2);
+        if (m_Mode == eParticleMode::POINT_EXPLOSION)
+        {
 
-        DisplayTexture("Particle3.jpg", Pos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = FinalScale , .SrcTopLeft = vec2(0.0f,0.0f) , .SrcSize = vec2(1.0f,1.0f), .DrawColor = m_Color } );
+            DisplayTexture(ParticleName, ParticlePos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = ParticleScale , .Pivot = vec2(0.5f,0.5f), .DrawColor = ParticleColor, .Rotation = ParticleRotation });
+
+        }
+        else if( m_Mode == eParticleMode::STARS_BACKGROUND )
+        {
+            // najpierw poÅ›wiata 
+            vec2  FinalScale = ParticleScale;
+            Color FinalColor = ParticleColor * Color(255,255,255,8);
+            DisplayTexture("Particle6.png", ParticlePos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = FinalScale , .Pivot = vec2(0.5f,0.5f), .DrawColor = FinalColor } );
+
+            // teraz wÅ‚aÅ›ciwy particle
+            FinalScale = FinalScale / 4;
+            FinalColor = ParticleColor;
+            DisplayTexture(ParticleName, ParticlePos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = FinalScale , .Pivot = vec2(0.5f,0.5f), .DrawColor = FinalColor , .Rotation = ParticleRotation });
+
+            // teraz pomniejszony particle dla efektu "przepalenia"
+            FinalScale = FinalScale / 2;
+            DisplayTexture(ParticleName, ParticlePos, { .DisplaySize = Size , .DrawMode = eDrawMode::ADDITIVE , .DrawScale = FinalScale , .Pivot = vec2(0.5f,0.5f), .DrawColor = FinalColor , .Rotation = ParticleRotation });
+        }
     }
 }

@@ -51,7 +51,9 @@ void Texture::Display(vec2 Position, DisplayParameters Param)const
     }
 
     vec2 tmp = vec2(Param.DisplaySize.value_or(m_Size)) * Param.DrawScale;
-    SDL_Rect DstRect = {int(Position.x), int(Position.y), int(tmp.x), int(tmp.y) };
+    vec2 finalPos = Position - tmp * Param.Pivot;
+
+    SDL_Rect DstRect = {int(finalPos.x), int(finalPos.y), int(tmp.x), int(tmp.y) };
 
     SDL_Rect SrcRect = {int(Param.SrcTopLeft.x * m_Size.x), int(Param.SrcTopLeft.y * m_Size.y), int(Param.SrcSize.x * m_Size.x), int(Param.SrcSize.y * m_Size.y) };
 
@@ -64,7 +66,10 @@ void Texture::Display(vec2 Position, DisplayParameters Param)const
     else
         SDL_SetTextureBlendMode(m_pTexture, SDL_BLENDMODE_BLEND);
     
-    SDL_RenderCopy(m_pRenderer, m_pTexture, &SrcRect, &DstRect);
+    if (Param.Rotation)
+        SDL_RenderCopyEx(m_pRenderer, m_pTexture, &SrcRect, &DstRect, Param.Rotation, nullptr, SDL_FLIP_NONE);
+    else
+        SDL_RenderCopy(m_pRenderer, m_pTexture, &SrcRect, &DstRect);
 }
 
 void Texture::FreeResources()

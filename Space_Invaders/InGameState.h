@@ -20,7 +20,7 @@ public:
     template<typename T>
     vector<shared_ptr<T>> GetObjects();
 
-    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime);
+    shared_ptr<ParticleEmiter> CreateParticle(vec2 Position, int ParticleCount, float ParticleScale, float MaxLifeTime, eParticleMode Mode=eParticleMode::POINT_EXPLOSION);
     shared_ptr<PowerUp> CreatePowerUp(string Name, vec2 Position, ePowerUpType Type);
 
     void SetPointsInfoTimer(float Value);

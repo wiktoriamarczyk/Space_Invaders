@@ -31,5 +31,16 @@ float GetNormalizedFloat()
 }
 
 const Color Color::RED(255, 0, 0);
+const Color Color::BLUE(0, 0, 255);
 const Color Color::WHITE(255, 255, 255);
 const Color Color::YELLOW{ 249, 215, 28 };
+
+Color Color::operator*(const Color& other)const
+{
+    Color Result;
+    Result.R = char(((R / 255.0f) * (other.R / 255.0f)) * 255);
+    Result.G = char(((G / 255.0f) * (other.G / 255.0f)) * 255);
+    Result.B = char(((B / 255.0f) * (other.B / 255.0f)) * 255);
+    Result.A = char(((A / 255.0f) * (other.A / 255.0f)) * 255);
+    return Result;
+}

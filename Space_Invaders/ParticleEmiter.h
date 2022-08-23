@@ -12,16 +12,28 @@ struct ParticleData
     // pocz¹tkowy czas "pauzy" - przez ten czas partikiel nic nie robi ani siê nie rysuje
     float m_StartDelayTime;
     // skala partikla
-    float m_Scale;
+    float m_Scale = 1.0f;
+    float m_Rotation = 0.0f;
+    float m_RotationSpeed = 0.0f;
+
+    Color m_Color = Color::WHITE;
+
+    const char* m_Texture = "";
 };
 
 class ParticleEmiter : public GameObject
 {
 public:
-    ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime);
+    ParticleEmiter(int ParticleCount, float Scale, float MaxLifeTime, eParticleMode Mode);
     void Update(float DeltaTime)override;
     void Render(SDL_Renderer* Renderer)override;
 
 private:
+    void UpdateState(float DeltaTime);
+
     vector<ParticleData> m_Particles;
+    eParticleMode        m_Mode;
+    float                m_TimeToNextParticle = 0.f;
+    float                m_Timer = 0.f;
+    string               m_ParticleTexture = "Particle3.jpg";
 };

@@ -99,6 +99,12 @@ enum class ePowerUpType
     ANGRY_INVADER,
 };
 
+enum class eParticleMode
+{
+    POINT_EXPLOSION,
+    STARS_BACKGROUND
+};
+
 struct Color
 {
     unsigned char R = 255;
@@ -111,8 +117,11 @@ struct Color
     Color(int r, int g, int b, int a = 255) : R(r), G(g), B(b), A(a) {}
 
     static const Color RED;
+    static const Color BLUE;
     static const Color WHITE;
     static const Color YELLOW;
+
+    Color operator*(const Color& other)const;
 };
 
 struct DisplayParameters
@@ -122,7 +131,9 @@ struct DisplayParameters
     vec2 DrawScale = vec2(1.0f, 1.0f);
     vec2 SrcTopLeft = vec2(0, 0);
     vec2 SrcSize = vec2(1, 1);
+    vec2 Pivot = vec2(0, 0);
     Color DrawColor;
+    float Rotation = 0.0f;
 };
 
 struct Vec2Rect

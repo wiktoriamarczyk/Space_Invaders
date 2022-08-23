@@ -265,6 +265,17 @@ void Engine::LoadResources()
     m_TexturesToLoad.push_back("Gun_Shield.png");
     m_TexturesToLoad.push_back("Life_Banner.png");
     m_TexturesToLoad.push_back("Particle3.jpg");
+    m_TexturesToLoad.push_back("Particle4.jpg");
+    m_TexturesToLoad.push_back("Particle5.png");
+    m_TexturesToLoad.push_back("Particle6.png");
+    m_TexturesToLoad.push_back("Particle7.png");
+    m_TexturesToLoad.push_back("Particle8.png");
+    m_TexturesToLoad.push_back("Particle9.png");
+    m_TexturesToLoad.push_back("Particle10.png");
+    m_TexturesToLoad.push_back("Particle11.png");
+    m_TexturesToLoad.push_back("Particle12.png");
+    m_TexturesToLoad.push_back("Particle13.png");
+    m_TexturesToLoad.push_back("Particle14.png");
     m_TexturesToLoad.push_back("PowerUp_Gun.png");
     m_TexturesToLoad.push_back("PowerUp_Health.png");
     m_TexturesToLoad.push_back("PowerUp_Shield.png");
